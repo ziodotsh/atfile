@@ -32,8 +32,11 @@ function com.atproto.repo.listRecords() {
     repo="$1"
     collection="$2"
     cursor="$3"
+
+    query="repo=$repo&collection=$collection&limit=$_max_list"
+    [[ -n "$cursor" ]] && query+="&cursor=$cursor"
     
-    atfile.xrpc.pds.get "com.atproto.repo.listRecords" "repo=$repo&collection=$collection&limit=$_max_list&cursor=$cursor"
+    atfile.xrpc.pds.get "com.atproto.repo.listRecords" "$query"
 }
 
 function com.atproto.repo.putRecord() {
@@ -65,8 +68,11 @@ function com.atproto.sync.getBlob() {
 function com.atproto.sync.listBlobs() {
     did="$1"
     cursor="$2"
+
+    query="did=$did&limit=$_max_list"
+    [[ -n "$cursor" ]] && query+="&cursor=$cursor"
     
-    atfile.xrpc.pds.get "com.atproto.sync.listBlobs" "did=$did&limit=$_max_list&cursor=$cursor"
+    atfile.xrpc.pds.get "com.atproto.sync.listBlobs" "$query"
 }
 
 function com.atproto.sync.uploadBlob() {
