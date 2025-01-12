@@ -42,10 +42,10 @@ function dww.util.get_change_phrase() {
     type="$1"
 
     case $type in
-        "high-score") echo "🥳" ;;
-        "upward") echo "😁" ;;
-        "steady") echo "😊" ;;
-        "downward") echo "😞" ;;
+        "high-score") echo "🏆" ;;
+        "upward") echo "↗️" ;;
+        "steady") echo "➡️" ;;
+        "downward") echo "↘️" ;;
         *) echo "🤔" ;;
     esac
 }
@@ -147,12 +147,9 @@ function dww.bot() {
         fi
     fi
 
-    (( $dw_users_total > $dw_users_max )) && dw_users_max=$dw_users_total
-    [[ $dw_dist == "."* ]] && dw_dist="0$dw_dist"
-
     if (( $dw_users_total > $dw_users_max )); then
         change_phrase="$(dww.util.get_change_phrase "high-score")"
-    elif (( $dw_users_total == $dw_users_max )); then
+    elif (( $dw_users_active == $dw_users_active_prev )); then
         change_phrase="$(dww.util.get_change_phrase "steady")"
     elif (( $dw_users_active == $dw_users_active_prev )); then
         change_phrase="$(dww.util.get_change_phrase "steady")"
@@ -161,6 +158,9 @@ function dww.bot() {
     elif (( $dw_users_active < $dw_users_active_prev )); then
         change_phrase="$(dww.util.get_change_phrase "downward")"
     fi
+
+    (( $dw_users_total > $dw_users_max )) && dw_users_max=$dw_users_total
+    [[ $dw_dist == "."* ]] && dw_dist="0$dw_dist"
 
     stats_record="{
         \"cursor\": \"$dw_cursor\",
@@ -293,7 +293,7 @@ function dww.bot_error() {
 }
 
 function dww.reset() {
-    echo "🗑️ Deleting stats...\n---"
+    echo -e "🗑️ Deleting stats...\n---"
     com.atproto.repo.deleteRecord "$_username" "$_stats_record_nsid" "self"
     echo "---"
 }
