@@ -27,6 +27,7 @@
 #   Published releases are also done from here. This is done with:
 #    * Setting ATFILE_DEVEL_PUBLISH to '1'
 #    * Setting ATFILE_DIST_USERNAME to 'did:web:zio.sh' (default)
+#     * This account will become the source of updates for this published build
 #    * Setting ATFILE_DIST_PASSWORD to the above account's password
 #    * Running `./atfile.sh release`. After build, the resulting file is uploaded
 #
