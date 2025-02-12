@@ -67,8 +67,6 @@ function atfile.release() {
                     fi
                 done < "$s"
             fi
-        else
-            echo "↳ Skipping: $s"
         fi
     done
     
