@@ -20,7 +20,7 @@
 ## ✨ Quick Start
 
 ```sh
-curl -sSL https://raw.githubusercontent.com/ziodotsh/atfile/refs/heads/main/atfile-install.sh | bash
+curl -sSL https://zio.sh/atfile/install.sh | bash
 echo 'ATFILE_USERNAME="<your-atproto-username>"' > ~/.config/atfile.env  # e.g. alice.bsky.social, did:plc:vdjlpwlhbnug4fnjodwr3vzh, did:web:twitter.com
 echo 'ATFILE_PASSWORD="<your-atproto-password>"' >> ~/.config/atfile.env
 atfile help
