@@ -90,7 +90,7 @@ _(Todo)_
     * Set `ATFILE_FORCE_OS=<os>`<br />This overrides the OS detected. Possible values:
        * BSD: `bsd-freebsd`, `bsd-netbsd`, `bsd-openbsd`
        * Linux: `linux`, `linux-mingw`, `linux-musl`, `linux-termux`
-       * Other: `haiku`, `macos`, `solaris`, `unknown`
+       * Other: `haiku`, `macos`, `solaris`
 * **²** musl-powered distros do not use GNU/glibc packages, and have problems currently
     * Known musl distros: Alpine, Chimera, Dragora, Gentoo (musl), Morpheus, OpenWrt, postmarketOS, Sabotage, Void
     * Bypassing OS detection (see ¹) will work, but dates will not be handled correctly
