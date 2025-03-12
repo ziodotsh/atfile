@@ -21,7 +21,7 @@
 
 ```sh
 curl -sSL https://raw.githubusercontent.com/ziodotsh/atfile/refs/heads/main/atfile-install.sh | bash
-echo 'ATFILE_USERNAME="<your-atproto-username>"' > ~/.config/atfile.env  # e.g. alice.bsky.social, did:plc:vdjlpwlhbnug4fnjodwr3vzh
+echo 'ATFILE_USERNAME="<your-atproto-username>"' > ~/.config/atfile.env  # e.g. alice.bsky.social, did:plc:vdjlpwlhbnug4fnjodwr3vzh, did:web:twitter.com
 echo 'ATFILE_PASSWORD="<your-atproto-password>"' >> ~/.config/atfile.env
 atfile help
 ```
@@ -51,13 +51,15 @@ atfile help
     * [`websocat`](https://github.com/vi/websocat) _(optional: needed for `stream`)_
 * **PDS:** [Bluesky PDS](https://github.com/bluesky-social/pds)
     * Other PDSs (such as [millipds](https://github.com/DavidBuchanan314/millipds)) remain untested, but if they implement standard `com.atproto.*` endpoints, there should be no reason these won't work
-    * Filesize limits cannot be automatically detected. By default, this is 50MB
+    * Filesize limits cannot be automatically detected. By default, this is 100MB
         * To change this on Bluesky PDS, set `PDS_BLOB_UPLOAD_LIMIT=<bytes>`
         * If the PDS is running behind Cloudflare, the Free plan imposes a 100MB upload limit
         * This tool, nor setting a higher filesize limit, does not workaround [video upload limits on Bluesky](https://bsky.social/about/blog/09-11-2024-video). Videos are served via a [CDN](https://video.bsky.app), and adding larger videos to post records yields errors on the app
 * **ATProto account**
-    * `bsky.network` (`*.bsky.social`) accounts supported<br />If you can, limit the amount of files you upload to Bluesky's servers. It's a miracle this even works with, what's currently, an entirely free service. Heed the copyright warning too: **do not upload copyrighted files.**
-    * `did:web` is supported!<br ><em><a href="https://bsky.app/profile/did:web:didd.uk/post/3lccdv7uvjs2o">(Seriously, it ain't hard)</a></em>
+    * `bsky.network` (`@*.bsky.social`) accounts supported
+      * If you can, limit the amount of files you upload to Bluesky's servers. It's a miracle this even works with, what's currently, an entirely free service.
+      * Heed the copyright warning: **do not upload copyrighted files.**
+    * `did:web` accounts supported!
 
 ### 🤔 _(Todo)_
 
