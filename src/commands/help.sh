@@ -187,9 +187,10 @@ function atfile.help() {
     Version $_version
     (c) $_meta_year $_meta_author <$_meta_repo>
     Licensed as MIT License ✨\n
-    😎 Stay updated with \`$_prog update\`
-    🦋 Follow @$handle on Bluesky
-       ↳ https://bsky.app/profile/$handle\n
+    🦋 Follow @$handle on ATProto
+       ↳ Bluesky: https://bsky.app/profile/$handle
+       ↳ Tangled: https://tangled.sh/@$handle
+
 Usage
     $_prog <command> [<arguments>]
     $_prog at://<actor>[/<collection>/<rkey>]
