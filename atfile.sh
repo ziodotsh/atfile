@@ -63,7 +63,7 @@ ATFILE_DEVEL_DIR="$(dirname "$(realpath "$0")")"
 ATFILE_DEVEL_ENTRY="$(realpath "$0")"
 
 if [ ! -x "$(command -v git)" ]; then
-    atfile.devel.die "'git' not installed (download: https://git-scm.com/downloads/linux)"
+    atfile.devel.die "'git' not installed (download: https://git-scm.com/downloads)"
 fi
 
 git describe --exact-match --tags > /dev/null 2>&1
