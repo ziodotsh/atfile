@@ -32,7 +32,7 @@ function atfile.release() {
     echo "↳ Creating '$dist_file'..."
     echo "#!/usr/bin/env bash" > "$dist_path"
 
-    echo -e "\n# ATFile <https://github.com/ziodotsh/atfile>
+    echo -e "\n# ATFile <https://tangled.sh/@zio.sh/atfile>
 # ---
 # Version: $_version
 # Commit:  $commit_hash

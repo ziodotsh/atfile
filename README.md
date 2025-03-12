@@ -9,8 +9,8 @@
 
 <p align="center">
     <strong>
-        <a href="https://github.com/electricduck/atfile/releases/latest">⬇️ Get ATFile</a> &nbsp;|&nbsp;
-        <a href="https://github.com/electricduck/atfile/issues/new">💣 Submit Issue</a> &nbsp;|&nbsp;
+        <a href="https://github.com/ziodotsh/atfile/releases/latest">⬇️ Get ATFile</a> &nbsp;|&nbsp;
+        <a href="https://tangled.sh/@zio.sh/atfile/issues/new">💣 Submit Issue</a> &nbsp;|&nbsp;
         <a href="https://bsky.app/profile/did:web:zio.sh"> 🦋 @zio.sh</a>
     </strong>
 </p>
@@ -94,4 +94,4 @@ _(Todo)_
 * **²** musl-powered distros do not use GNU/glibc packages, and have problems currently
     * Known musl distros: Alpine, Chimera, Dragora, Gentoo (musl), Morpheus, OpenWrt, postmarketOS, Sabotage, Void
     * Bypassing OS detection (see ¹) will work, but dates will not be handled correctly
-* **³** As long as you have Bash installed, running from another shell will not be problematic ([`#!/usr/bin/env bash`](https://github.com/ziodotsh/atfile/blob/main/atfile.sh#L1) forces Bash)
+* **³** As long as you have Bash installed, running from another shell will not be problematic ([`#!/usr/bin/env bash`](https://tangled.sh/@zio.sh/atfile/blob/main/atfile-install.sh#L1) forces Bash)

@@ -43,7 +43,7 @@
 
 author="zio"
 did="did:web:zio.sh"
-repo="https://github.com/ziodotsh/atfile"
+repo="https://tangled.sh/@zio.sh/atfile"
 version="0.10.10"
 year="$(date +%Y)"
 

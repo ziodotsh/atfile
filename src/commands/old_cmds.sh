@@ -617,7 +617,7 @@ function atfile.invoke.toggle_desktop() {
     unset mime_dir
 
     [[ $_os == "haiku" ]] && atfile.die "Not available on Haiku"
-    [[ $_os == "macos" ]] && atfile.die "Not available on macOS\nThink you could help? See: https://github.com/electricduck/atfile/issues/9"
+    [[ $_os == "macos" ]] && atfile.die "Not available on macOS\nThink you could help? See: https://tangled.sh/@zio.sh/atfile/issues/9"
 
     if [[ $uid == 0 ]]; then
         desktop_dir="/usr/local/share/applications"
