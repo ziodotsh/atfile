@@ -73,7 +73,9 @@ _(Todo)_
 
 ## ⌨️ Contributing
 
-_(Todo)_
+Development mainly takes place on [Tangled](https://tangled.sh/@zio.sh/tangled), with [GitHub](https://github.com/ziodotsh/tangled) acting as a mirror. If possible, please use Tangled for your contributions: since it is powered by ATProto, you can log in using your Bluesky account.
+
+When submitting Pull Requests, **target the `dev` branch**: `main` is the current stable production version, and PRs will be rejected targeting this branch.
 
 ## 🤝 Acknowledgements
 
