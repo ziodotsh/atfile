@@ -283,6 +283,7 @@ if [[ $_is_sourced == 0 ]]; then
         "at") _command="handle" ;;
         "get"|"i") _command="info" ;;
         "ls") _command="list" ;;
+        "build") _command="release" ;;
         "did") _command="resolve" ;;
         "sb") _command="something-broke" ;;
         "js") _command="stream" ;;

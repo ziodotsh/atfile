@@ -53,10 +53,21 @@ function atfile.release() {
 
                 while IFS="" read -r line
                 do
-                    if [[ $line != "#"* ]] &&\
-                       [[ $line != *"    #"* ]] &&\
-                       [[ $line != "    " ]] &&\
-                       [[ $line != "" ]]; then
+                    include_line=1
+
+                    if [[ $line == "#"* ]] ||\
+                       [[ $line == *"    #"* ]] ||\
+                       [[ $line == "    " ]] ||\
+                       [[ $line == "" ]]; then
+                        include_line=0
+                    fi
+
+                    if [[ $line == *"# shellcheck disable"* ]]; then
+                        include_line=1
+                    fi
+
+
+                    if [[ $include_line == 1 ]]; then
                         if [[ $line == *"{:"* && $line == *":}"* ]]; then
                             # NOTE: Not using atfile.util.get_envvar() here, as confusion can arise from config file
                             line="$(atfile.release.replace_template_var "$line" "meta_author" $ATFILE_FORCE_META_AUTHOR)"
@@ -101,7 +112,7 @@ function atfile.release() {
             "warning") level="⚠️  Warning"; (( test_warning_count++ )) ;;
         esac
 
-        echo "↳ $level ($line:$col): [$code] $message"
+        echo "↳ $level ($line:$col): [SC$code] $message"
     done <<< "$(echo "$shellcheck_output" | jq -c '.[]')"
 
     test_total_count=$(( test_error_count + test_info_count + test_style_count + test_warning_count ))
@@ -110,7 +121,7 @@ function atfile.release() {
 ↳ Path: ./$dist_path_relative
  ↳ Check: $checksum
  ↳ Size: $(atfile.util.get_file_size_pretty "$(stat -c %s "$dist_path")")
- ↳ Lines: $(atfile.util.fmt_int "$(cat "$dist_path" | wc -l)")
+ ↳ Lines: $(atfile.util.fmt_int "$(wc -l < "$dist_path")")
 ↳ Issues: $(atfile.util.fmt_int "$test_total_count")
  ↳ Error: $(atfile.util.fmt_int "$test_error_count")
  ↳ Warn:  $(atfile.util.fmt_int "$test_warning_count")

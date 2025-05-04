@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC2120
 function atfile.auth() {
     override_username="$1"
     override_password="$2"

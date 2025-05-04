@@ -41,7 +41,7 @@ function blue.zio.atfile.meta__audio() {
     
     parsed_tag_date=""
     
-    if [[ "${#tag_date}" > 4 ]]; then
+    if [[ "${#tag_date}" -gt 4 ]]; then
         parsed_tag_date="$(atfile.util.get_date "$tag_date")"
     elif [[ "${#tag_date}" == 4 ]]; then
         parsed_tag_date="$(atfile.util.get_date "${tag_date}-01-01")"
