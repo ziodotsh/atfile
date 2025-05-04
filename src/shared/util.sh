@@ -159,7 +159,7 @@ function atfile.util.get_app_url_for_at_uri() {
                 ;;
         esac
     elif [[ -n "$actor" ]]; then
-        resolved_url="https://pdsls.dev/at/$actor"
+        resolved_url="https://pdsls.dev/at://$actor"
     fi
 
     if [[ -n "$resolved_url" && $ignore_url_validation == 0 ]]; then
@@ -882,9 +882,9 @@ function atfile.util.map_http_to_at() {
         "atproto-browser.vercel.app"|\
         "pdsls.dev"|\
         "pdsls.pages.dev")
-            actor="$(atfile.util.get_uri_segment $http_uri 5)"
-            collection="$(atfile.util.get_uri_segment $http_uri 6)"
-            rkey="$(atfile.util.get_uri_segment $http_uri 7)"
+            actor="$(atfile.util.get_uri_segment $http_uri 6)"
+            collection="$(atfile.util.get_uri_segment $http_uri 7)"
+            rkey="$(atfile.util.get_uri_segment $http_uri 8)"
             ;;
     esac
 

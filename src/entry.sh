@@ -280,7 +280,6 @@ if [[ $_is_sourced == 0 ]]; then
         "rm") _command="delete" ;;
         "download"|"f"|"d") _command="fetch" ;;
         "download-crypt"|"fc"|"dc") _command="fetch-crypt" ;;
-        "fp") _command="fyi" ;;
         "at") _command="handle" ;;
         "get"|"i") _command="info" ;;
         "ls") _command="list" ;;
@@ -321,12 +320,12 @@ if [[ $_is_sourced == 0 ]] && [[ $ATFILE_DEVEL_NO_INVOKE != 1 ]]; then
                 *) atfile.die.unknown_command "$(echo "$_command $2" | xargs)" ;;
             esac  
             ;;
-        "bsky"|"fyi")
+        "bsky")
             if [[ -z "$2" ]]; then
                 atfile.util.override_actor "$_username"
-                atfile.profile "$_command" "$_username"
+                atfile.bsky_profile "$_username"
             else
-                atfile.profile "$_command" "$2"
+                atfile.bsky_profile "$2"
             fi
             ;;
         #"bsky-video")

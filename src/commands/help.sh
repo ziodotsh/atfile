@@ -64,12 +64,6 @@ function atfile.help() {
     toggle-mime
         Install/uninstall desktop file to handle atfile:/at: protocol"
 
-    usage_commands_profiles="Commands (AppViews)
-    bsky [<actor>]
-        Get Bluesky profile for <actor>\n
-    fyi [actor]
-        Get Frontpage profile for <actor>"
-
     usage_commands_tools="Commands (Tools)
     blob list
         List blobs on authenticated repository\n
@@ -77,6 +71,8 @@ function atfile.help() {
         Upload blobs to authenticated repository
         ℹ️  Unless referenced by a record shortly after uploading, blob will be
            garbage collected by the PDS\n
+    bsky [<actor>]
+        Get Bluesky profile for <actor>\n
     handle <at-uri>
         Open at:// URI with relevant App\n
     handle <atfile-uri> [<handler>]
@@ -200,7 +196,6 @@ Usage
     usage+="$usage_commands\n\n"
     usage+="$usage_commands_lifecycle\n\n"
     usage+="$usage_commands_tools\n\n"
-    usage+="$usage_commands_profiles\n\n"
     usage+="$usage_envvars\n\n"
     usage+="$usage_paths\n"
 
