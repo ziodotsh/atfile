@@ -768,7 +768,7 @@ function atfile.util.get_var_from_file() {
 
     if [[ -f "$file" ]]; then
         variable="$2"
-        found_line="$(cat "$file" | grep "\b${variable}=")"
+        found_line="$(grep "\b${variable}=" "$file")"
         
         if [[ -n "$found_line" ]] && [[ ! "$found_line" == \#* ]]; then
             output="$(echo "$found_line" | sed "s|${variable}=||g")"
