@@ -3,6 +3,7 @@
 function atfile.bsky_profile() {
     actor="$1"
 
+    # shellcheck disable=SC2154
     [[ $_output_json == 1 ]] && atfile.die "Command not available as JSON"
 
     function atfile.bsky_profile.get_pretty_date() {
