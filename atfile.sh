@@ -54,12 +54,14 @@ function atfile.devel.die() {
     exit 255
 }
 
-if [[ "$0" != "$BASH_SOURCE" ]]; then
+if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
     atfile.devel.die "Unable to source"
 fi
 
+# shellcheck disable=SC2034
 ATFILE_DEVEL=1
 ATFILE_DEVEL_DIR="$(dirname "$(realpath "$0")")"
+# shellcheck disable=SC2034
 ATFILE_DEVEL_ENTRY="$(realpath "$0")"
 
 if [ ! -x "$(command -v git)" ]; then
@@ -89,5 +91,6 @@ do
         atfile.devel.die "Unable to find source for '$path'"
     fi
 
+    # shellcheck disable=SC1090
     source "$path"
 done
