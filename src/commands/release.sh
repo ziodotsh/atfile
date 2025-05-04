@@ -115,7 +115,7 @@ function atfile.release() {
  ↳ Error: $(atfile.util.fmt_int "$test_error_count")
  ↳ Warn:  $(atfile.util.fmt_int "$test_warning_count")
  ↳ Info:  $(atfile.util.fmt_int "$test_info_count")
- ↳ Style: $(atfile.util.fmt_int "$test_error_count")
+ ↳ Style: $(atfile.util.fmt_int "$test_style_count")
 ↳ ID: $id"
 
     chmod +x "$dist_path"
