@@ -39,6 +39,7 @@ _path_blobs_tmp="/tmp"
 _path_cache="$_path_home/.cache"
 _path_envvar="$_path_home/.config"
 
+# BUG: ATFILE_FORCE_OS cannot overwrite this
 case $_os in
     "haiku")
         _path_blobs_tmp="/boot/system/cache/tmp"
@@ -49,9 +50,14 @@ case $_os in
         _path_blobs_tmp="/data/data/com.termux/files/tmp"
         ;;
     "macos")
+        _path_envvar="$_path_home/Library/Application Support"
         _path_blobs_tmp="/private/tmp"
         ;;
 esac
+
+if [[ -n "$XDG_CONFIG_HOME" ]]; then
+    _path_envvar="$XDG_CONFIG_HOME"
+fi
 
 _path_blobs_tmp="$_path_blobs_tmp/at-blobs"
 _path_cache="$_path_cache/atfile"

@@ -7,7 +7,7 @@ function die() {
 
 function check_prog() {
     prog="$1"
-    ! [ -x "$(command -v $prog)" ] && die "'$prog' not installed"
+    ! [ -x "$(command -v "$prog")" ] && die "'$prog' not installed"
 }
 
 function get_os() {
@@ -34,10 +34,10 @@ function get_os() {
 
 function parse_version() {
     version="$1"
-    version="$(echo $version | cut -d "+" -f 1)"
-    v_major="$(printf "%04d\n" "$(echo $version | cut -d "." -f 1)")"
-    v_minor="$(printf "%04d\n" "$(echo $version | cut -d "." -f 2)")"
-    v_rev="$(printf "%04d\n" "$(echo $version | cut -d "." -f 3)")"
+    version="$(echo "$version" | cut -d "+" -f 1)"
+    v_major="$(printf "%04d\n" "$(echo "$version" | cut -d "." -f 1)")"
+    v_minor="$(printf "%04d\n" "$(echo "$version" | cut -d "." -f 2)")"
+    v_rev="$(printf "%04d\n" "$(echo "$version" | cut -d "." -f 3)")"
     echo "$(echo ${v_major}${v_minor}${v_rev} | sed 's/^0*//')"
 }
 
@@ -64,7 +64,7 @@ latest_version_record="$(xrpc_get "com.atproto.repo.getRecord" "self.atfile.late
 [[ $? != 0 ]] && die "Unable to get latest version"
 
 latest_version="$(echo "$latest_version_record" | jq -r '.value.version')"
-parsed_latest_version="$(parse_version $latest_version)"
+parsed_latest_version="$(parse_version "$latest_version")"
 found_version_record="$(xrpc_get "com.atproto.repo.getRecord" "blue.zio.atfile.upload" "atfile-$parsed_latest_version")"
 [[ $? != 0 ]] && die "Unable to fetch record for '$parsed_latest_version'"
 
@@ -81,11 +81,26 @@ else
         if [[ -z $SUDO_DIR ]]; then
             conf_dir="/root/.config"
         else
-            conf_dir="$(eval echo ~$SUDO_USER)/.config"
+            if [[ $(get_os) == "macos" ]]; then
+                conf_dir="$(eval echo ~"$SUDO_USER")/Library/Application Support"
+            else
+                conf_dir="$(eval echo ~"$SUDO_USER")/.config"
+            fi
         fi
     else
-        install_dir="$(eval echo ~$USER)/.local/bin"
-        conf_dir="$(eval echo ~$USER)/.config"
+        install_dir="$(eval echo ~"$USER")/.local/bin"
+        conf_dir="$(eval echo ~"$USER")/.config"
+
+        if [[ $(get_os) == "macos" ]]; then
+            conf_dir="$(eval echo ~"$USER")/Library/Application Support"
+        else
+            conf_dir="$(eval echo ~"$USER")/.config"
+        fi
+    fi
+
+    # INVESTIGATE: What happens during `sudo`?
+    if [[ -n "$XDG_CONFIG_HOME" ]]; then
+        conf_dir="$XDG_CONFIG_HOME"
     fi
 fi
 
