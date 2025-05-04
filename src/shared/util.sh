@@ -541,7 +541,7 @@ function atfile.util.get_mediainfo_audio_json() {
     for ((i = 0 ; i < $lines ; i++ )); do
         lossy=true
         
-        [[ \"$(atfile.util.get_line "$compressionss" $i)\" == "Lossless" ]] && lossy=false
+        [[ \"$(atfile.util.get_line "$compressions" $i)\" == "Lossless" ]] && lossy=false
     
         output+="{
     \"bitRate\": $(atfile.util.get_line "$bitRates" $i),
@@ -552,7 +552,7 @@ function atfile.util.get_mediainfo_audio_json() {
         \"name\": \"$(atfile.util.get_line "$formats" $i)\",
         \"profile\": \"$(atfile.util.get_line "$format_profiles" $i)\"
     },
-    \"mode\": \"$(atfile.util.get_line "$bitrate_modes" $i)\",
+    \"mode\": \"$(atfile.util.get_line "$bitRate_modes" $i)\",
     \"lossy\": $lossy,
     \"sampling\": $(atfile.util.get_line "$samplings" $i),
     \"title\": \"$(atfile.util.get_line "$titles" $i)\"
@@ -579,7 +579,7 @@ function atfile.util.get_mediainfo_video_json() {
     lines="$(echo "$bitrates" | wc -l)"
     output=""
 
-    for ((i = 0 ; i < $lines ; i++ )); do    
+    for ((i = 0 ; i < lines ; i++ )); do    
         output+="{
     \"bitRate\": $(atfile.util.get_line "$bitRates" $i),
     \"dimensions\": {
@@ -660,8 +660,8 @@ function atfile.util.get_pds_pretty() {
     unset pds_emoji
 
     if [[ $pds_host == *".host.bsky.network" ]]; then
-        bsky_host="$(echo $pds_host | cut -d "." -f 1)"
-        bsky_region="$(echo $pds_host | cut -d "." -f 2)"
+        bsky_host="$(echo "$pds_host" | cut -d "." -f 1)"
+        bsky_region="$(echo "$pds_host" | cut -d "." -f 2)"
 
         pds_name="${bsky_host^} ($(atfile.util.get_region_pretty "$bsky_region"))"
         pds_emoji="🍄"
@@ -671,10 +671,10 @@ function atfile.util.get_pds_pretty() {
     else
         pds_oauth_url="$pds/oauth/authorize"
         pds_oauth_page="$(curl -H "User-Agent: $(atfile.util.get_uas)" -s -L -X GET "$pds_oauth_url")"
-        pds_customization_data="$(echo $pds_oauth_page | sed -s s/.*_customizationData\"]=//g | sed -s s/\;document\.currentScript\.remove.*//g)"
+        pds_customization_data="$(echo "$pds_oauth_page" | sed -s s/.*_customizationData\"]=//g | sed -s s/\;document\.currentScript\.remove.*//g)"
 
         if [[ $pds_customization_data == "{"* ]]; then
-            pds_name="$(echo $pds_customization_data | jq -r '.name')"
+            pds_name="$(echo "$pds_customization_data" | jq -r '.name')"
             pds_emoji="🟦"
         else
             pds_name="$pds_host"
@@ -692,13 +692,13 @@ function atfile.util.get_realpath() {
     path="$1"
 
     if [[ $_os == "solaris" ]]; then
-        # INVESTIGATE: Use this for every OS?
+        # INVESTIGATE: Use this for every OS? What does this even do?
         [ -d "$path" ] && (
             cd_path= \cd "$1"
             /bin/pwd
         ) || (
             cd_path= \cd "$(dirname "$1")" &&
-            printf "%s/%s\n" "$(/bin/pwd)" "$(basename $1)"
+            printf "%s/%s\n" "$(/bin/pwd)" "$(basename "$1")"
         )
     else
         realpath "$path"
@@ -708,15 +708,15 @@ function atfile.util.get_realpath() {
 function atfile.util.get_region_pretty() {
     region="$1"
 
-    region_sub="$(echo $1 | cut -d "-" -f 2)"
-    region="$(echo $1 | cut -d "-" -f 1)"
+    region_sub="$(echo "$region" | cut -d "-" -f 2)"
+    region="$(echo "$region" | cut -d "-" -f 1)"
 
     echo "${region^^} ${region_sub^}"
 }
 
 function atfile.util.get_rkey_from_at_uri() {
     at_uri="$1"
-    echo $at_uri | cut -d "/" -f 5
+    echo "$at_uri" | cut -d "/" -f 5
 }
 
 function atfile.util.get_seconds_since_start() {
@@ -733,7 +733,7 @@ function atfile.util.get_term_cols() {
     fi
 
     if [[ -n $cols ]]; then
-        echo $cols
+        echo "$cols"
     else
         echo 80
     fi
@@ -747,7 +747,7 @@ function atfile.util.get_term_rows() {
     fi
 
     if [[ -n $rows ]]; then
-        echo $rows
+        echo "$rows"
     else
         echo 30
     fi
@@ -775,6 +775,7 @@ function atfile.util.get_var_from_file() {
 }
 
 function atfile.util.get_uas() {
+    # shellcheck disable=SC2154
     echo "ATFile/$_version"
 }
 
@@ -803,6 +804,7 @@ function atfile.util.get_xrpc_error() {
 function atfile.util.get_yn() {
     yn="$1"
     
+    # shellcheck disable=SC2154
     if [[ $_output_json == 0 ]]; then
         if [[ $yn == 0 ]]; then
             echo "No"
@@ -828,6 +830,7 @@ function atfile.util.is_null_or_empty() {
 
 function atfile.util.is_url_accessible_in_browser() {
     url="$1"
+    # shellcheck disable=SC2154
     atfile.util.is_url_okay "$url" "$_test_desktop_uas"
 }
 
@@ -866,9 +869,9 @@ function atfile.util.get_uri_segment() {
     unset parsed_uri
 
     case $segment in
-        "host") echo $uri | cut -d "/" -f 3 ;;
-        "protocol") echo $uri | cut -d ":" -f 1 ;;
-        *) echo $uri | cut -d "/" -f $segment ;;
+        "host") echo "$uri" | cut -d "/" -f 3 ;;
+        "protocol") echo "$uri" | cut -d ":" -f 1 ;;
+        *) echo "$uri" | cut -d "/" -"f $segme"nt ;;
     esac
 }
 
@@ -879,13 +882,13 @@ function atfile.util.map_http_to_at() {
     unset collection
     unset rkey
 
-    case "$(atfile.util.get_uri_segment $http_uri host)" in
+    case "$(atfile.util.get_uri_segment "$http_uri" host)" in
         "atproto-browser.vercel.app"|\
         "pdsls.dev"|\
         "pdsls.pages.dev")
-            actor="$(atfile.util.get_uri_segment $http_uri 6)"
-            collection="$(atfile.util.get_uri_segment $http_uri 7)"
-            rkey="$(atfile.util.get_uri_segment $http_uri 8)"
+            actor="$(atfile.util.get_uri_segment "$http_uri" 6)"
+            collection="$(atfile.util.get_uri_segment "$http_uri" 7)"
+            rkey="$(atfile.util.get_uri_segment "$http_uri" 8)"
             ;;
     esac
 
@@ -912,15 +915,16 @@ function atfile.util.override_actor() {
     
     [[ -z "$_server_original" ]] && _server_original="$_server"
     [[ -z "$_username_original" ]] && _username_original="$_username"
-    [[ -z "$_fmt_blob_url_original" ]] && _fmt_blob_url_original="$fmt_blob_url"
+    [[ -z "$_fmt_blob_url_original" ]] && _fmt_blob_url_original="$_fmt_blob_url"
     
     resolved_did="$(atfile.util.resolve_identity "$actor")"
     error="$(atfile.util.get_xrpc_error $? "$resolved_did")"
     [[ -n "$error" ]] && atfile.die.xrpc_error "Unable to resolve '$actor'" "$resolved_did"
 
-    _username="$(echo $resolved_did | cut -d "|" -f 1)"
-    _server="$(echo $resolved_did | cut -d "|" -f 2)"
+    _username="$(echo "$resolved_did" | cut -d "|" -f 1)"
+    _server="$(echo "$resolved_did" | cut -d "|" -f 2)"
 
+    # shellcheck disable=SC2154
     if [[ "$_fmt_blob_url" != "$_fmt_blob_url_default" ]]; then
         export _fmt_blob_url="$_fmt_blob_url_default"
     fi
@@ -948,10 +952,10 @@ function atfile.util.parse_exiftool_date() {
 
 function atfile.util.parse_version() {
     version="$1"
-    version="$(echo $version | cut -d "+" -f 1)"
-    v_major="$(printf "%04d\n" "$(echo $version | cut -d "." -f 1)")"
-    v_minor="$(printf "%04d\n" "$(echo $version | cut -d "." -f 2)")"
-    v_rev="$(printf "%04d\n" "$(echo $version | cut -d "." -f 3)")"
+    version="$(echo "$version" | cut -d "+" -f 1)"
+    v_major="$(printf "%04d\n" "$(echo "$version" | cut -d "." -f 1)")"
+    v_minor="$(printf "%04d\n" "$(echo "$version" | cut -d "." -f 2)")"
+    v_rev="$(printf "%04d\n" "$(echo "$version" | cut -d "." -f 3)")"
     echo "$(echo ${v_major}${v_minor}${v_rev} | sed 's/^0*//')"
 }
 
@@ -979,7 +983,7 @@ function atfile.util.print_copyright_warning() {
 
 function atfile.util.print_seconds_since_start_debug() {
     seconds=$(atfile.util.get_seconds_since_start)
-    second_unit="$(atfile.util.get_int_suffix $seconds "second" "seconds")"
+    second_unit="$(atfile.util.get_int_suffix "$seconds" "second" "seconds")"
 
     atfile.say.debug "$seconds $second_unit since start"
 }
@@ -988,9 +992,11 @@ function atfile.util.print_table_paginate_hint() {
     cursor="$1"
     count="$2"
     
-    if [[ -z $count ]] || (( ( $record_count + $_max_list_buffer ) >= $_max_list )); then
+    # shellcheck disable=SC2154
+    if [[ -z $count ]] || (( ( count + _max_list_buffer ) >= _max_list )); then
         first_line="List is limited to $_max_list results. To print more results,"
         first_line_length=$(( ${#first_line} + 3 ))
+        # shellcheck disable=SC2154
         echo -e "$(atfile.util.repeat_char "-" $first_line_length)\nℹ️  $first_line\n   run \`$_prog $_command $cursor\`"
     fi
 }
@@ -1000,7 +1006,7 @@ function atfile.util.repeat_char() {
     amount="$2"
     
     if [ -x "$(command -v seq)" ]; then
-        printf "%0.s$char" $(seq 1 $amount)
+        printf "%0.s$char" $(seq 1 "$amount")
     else
         echo "$char"
     fi
@@ -1010,6 +1016,7 @@ function atfile.util.resolve_identity() {
     actor="$1"
     
     if [[ "$actor" != "did:"* ]]; then
+        # shellcheck disable=SC2154
         resolved_handle="$(atfile.xrpc.bsky.get "com.atproto.identity.resolveHandle" "handle=$actor" "" "$_endpoint_resolve_handle")"
         error="$(atfile.util.get_xrpc_error $? "$resolved_handle")"
 
