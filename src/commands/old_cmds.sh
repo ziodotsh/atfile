@@ -766,6 +766,7 @@ function atfile.invoke.upload() {
         atfile.say.debug "Uploading blob...\n↳ Ref: $(echo "$blob" | jq -r ".ref.\"\$link\"")"
     
         if [[ -z "$error" ]]; then
+            # shellcheck disable=SC2154
             file_record="$(blue.zio.atfile.upload "$blob" "$_now" "$file_hash_checksum" "$file_hash_type" "$file_date" "$file_name" "$file_size" "$file_type" "$file_meta_record" "$file_finger_record")"
             
             if [[ -n "$key" ]]; then
@@ -786,11 +787,11 @@ function atfile.invoke.upload() {
 
     if [[ -z "$error" ]]; then
         unset recipient_key
-        blob_uri="$(atfile.util.build_blob_uri "$(echo $record | jq -r ".uri" | cut -d "/" -f 3)" "$(echo $blob | jq -r ".ref.\"\$link\"")")"
-        key="$(atfile.util.get_rkey_from_at_uri "$(echo $record | jq -r ".uri")")"
+        blob_uri="$(atfile.util.build_blob_uri "$(echo "$record" | jq -r ".uri" | cut -d "/" -f 3)" "$(echo $blob | jq -r ".ref.\"\$link\"")")"
+        key="$(atfile.util.get_rkey_from_at_uri "$(echo "$record" | jq -r ".uri")")"
         
         if [[ -n "$recipient" ]]; then
-            recipient_key="$(gpg --list-keys $recipient | sed -n 2p | xargs)"
+            recipient_key="$(gpg --list-keys "$recipient" | sed -n 2p | xargs)"
         fi
 
         if [[ $_output_json == 1 ]]; then
