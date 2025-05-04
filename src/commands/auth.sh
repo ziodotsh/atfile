@@ -5,6 +5,7 @@ function atfile.auth() {
     override_password="$2"
 
     function atfile.auth.get_command_segment() {
+        # shellcheck disable=SC2154
         IFS=' ' read -r -a command_array <<< "$_command_full"
         index=$1
 
@@ -58,8 +59,8 @@ function atfile.auth() {
             error="$(atfile.util.get_xrpc_error $? "$resolved_did")"
             [[ -n "$error" ]] && atfile.die.xrpc_error "Unable to resolve '$_username'" "$resolved_did"
 
-            _username="$(echo $resolved_did | cut -d "|" -f 1)"
-            _server="$(echo $resolved_did | cut -d "|" -f 2)"
+            _username="$(echo "$resolved_did" | cut -d "|" -f 1)"
+            _server="$(echo "$resolved_did" | cut -d "|" -f 2)"
             
             atfile.say.debug "Resolved identity\n↳ DID: $_username\n↳ PDS: $_server"
         fi
@@ -69,6 +70,7 @@ function atfile.auth() {
     fi
 
     if [[ -n $_server ]]; then
+        # shellcheck disable=SC2154
         if [[ $_skip_auth_check == 0 ]]; then
             atfile.say.debug "Checking authentication is valid..."
             
@@ -78,7 +80,7 @@ function atfile.auth() {
             if [[ -n "$error" ]]; then
                 atfile.die.xrpc_error "Unable to authenticate" "$error"
             else
-                _username="$(echo $session | jq -r ".did")"
+                _username="$(echo "$session" | jq -r ".did")"
             fi
         else
             atfile.say.debug "Skipping checking authentication validity\n↳ ${_envvar_prefix}_SKIP_AUTH_CHECK is set ($_skip_auth_check)"
