@@ -13,23 +13,26 @@ function atfile.release() {
 
     atfile.util.check_prog "git"
     atfile.util.check_prog "md5sum"
+    atfile.util.check_prog "shellcheck"
 
     id="$(tr -dc A-Za-z0-9 </dev/urandom | head -c 13; echo)"
     commit_author="$(git config user.name) <$(git config user.email)>"
     commit_hash="$(git rev-parse HEAD)"
-    commit_date="$(git show --no-patch --format=%ci $commit_hash)"
+    commit_date="$(git show --no-patch --format=%ci "$commit_hash")"
+    # shellcheck disable=SC2154
     dist_file="$(echo "$_prog" | cut -d "." -f 1)-${_version}.sh"
+    # shellcheck disable=SC2154
     dist_dir="$_prog_dir/bin"
     dist_path="$dist_dir/$dist_file"
     dist_path_relative="$(realpath --relative-to="$(pwd)" "$dist_path")"
     parsed_version="$(atfile.util.parse_version "$_version")"
     version_record_id="atfile-$parsed_version"
 
-    atfile.say "Building ATFile $_version ($id)..."
+    atfile.say "Building..."
 
     mkdir -p "$dist_dir"
 
-    echo "↳ Creating '$dist_file'..."
+    echo "↳ Compiling '$dist_file'..."
     echo "#!/usr/bin/env bash" > "$dist_path"
 
     echo -e "\n# ATFile <https://tangled.sh/@zio.sh/atfile>
@@ -40,13 +43,13 @@ function atfile.release() {
 # Build:   $id ($(hostname):$(atfile.util.get_os))     
 # ---
 # Psst! You can \`source atfile\` in your own Bash scripts!
-" >> $dist_path
+" >> "$dist_path"
 
     for s in "${ATFILE_DEVEL_SOURCES[@]}"
     do
         if [[ "$s" != *"/src/commands/release.sh" ]]; then
             if [[ -f "$s" ]]; then
-                echo "↳ Compiling: $s"
+                echo " ↳ Adding: $s"
 
                 while IFS="" read -r line
                 do
@@ -74,16 +77,55 @@ function atfile.release() {
 
     checksum="$(atfile.util.get_md5 "$dist_path")"
 
+    echo "$dist_path"
+
+    echo "Testing..."
+    shellcheck_output="$(shellcheck --format=json "$dist_path" 2>&1)"
+
+    test_error_count=0
+    test_info_count=0
+    test_style_count=0
+    test_warning_count=0
+
+    while read -r item; do
+        code="$(echo "$item" | jq -r '.code')"
+        col="$(echo "$item" | jq -r '.column')"
+        line="$(echo "$item" | jq -r '.line')"
+        level="$(echo "$item" | jq -r '.level')"
+        message="$(echo "$item" | jq -r '.message')"
+
+        case "$level" in
+            "error") level="🛑 Error"; (( test_error_count++ )) ;;
+            "info") level="ℹ️  Info"; (( test_info_count++ )) ;;
+            "style") level="🎨 Style"; (( test_style_count++ )) ;;
+            "warning") level="⚠️  Warning"; (( test_warning_count++ )) ;;
+        esac
+
+        echo "↳ $level ($line:$col): [$code] $message"
+    done <<< "$(echo "$shellcheck_output" | jq -c '.[]')"
+
+    test_total_count=$(( test_error_count + test_info_count + test_style_count + test_warning_count ))
+
     echo -e "Built: $_version
 ↳ Path: ./$dist_path_relative
  ↳ Check: $checksum
- ↳ Size: "$(atfile.util.get_file_size_pretty "$(stat -c %s "$dist_path")")"
+ ↳ Size: $(atfile.util.get_file_size_pretty "$(stat -c %s "$dist_path")")
  ↳ Lines: $(atfile.util.fmt_int "$(cat "$dist_path" | wc -l)")
+↳ Issues: $(atfile.util.fmt_int "$test_total_count")
+ ↳ Error: $(atfile.util.fmt_int "$test_error_count")
+ ↳ Warn:  $(atfile.util.fmt_int "$test_warning_count")
+ ↳ Info:  $(atfile.util.fmt_int "$test_info_count")
+ ↳ Style: $(atfile.util.fmt_int "$test_error_count")
 ↳ ID: $id"
 
     chmod +x "$dist_path"
 
+    # shellcheck disable=SC2154
     if [[ $_devel_publish == 1 ]]; then
+        if [[ $test_error_count -gt 0 ]]; then
+            atfile.die "Unable to publish ($test_error_count errors detected)"
+        fi
+
         echo "---"
         atfile.auth "$_dist_username" "$_dist_password"
         [[ $_version == *"+"* ]] && atfile.die "Cannot publish a Git version ($_version)"
@@ -95,13 +137,14 @@ function atfile.release() {
 
         latest_release_record="{
     \"version\": \"$_version\",
-    \"releasedAt\": \"$(atfile.util.get_date "$_commit_date")\",
+    \"releasedAt\": \"$(atfile.util.get_date "$commit_date")\",
     \"commit\": \"$commit_hash\",
     \"id\": \"$id\",
     \"checksum\": \"$checksum\"
 }"
 
         atfile.say "Updating latest record to $_version..."
+        # shellcheck disable=SC2154
         atfile.invoke.manage_record put "at://$_username/self.atfile.latest/self" "$latest_release_record" &> /dev/null
     fi
 }
