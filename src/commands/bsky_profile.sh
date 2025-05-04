@@ -1,23 +1,24 @@
 #!/usr/bin/env bash
 
 function atfile.bsky_profile() {
-    app="$1"
-    actor="$2"
+    actor="$1"
 
     [[ $_output_json == 1 ]] && atfile.die "Command not available as JSON"
 
     function atfile.bsky_profile.get_pretty_date() {
+        # shellcheck disable=SC2317
         atfile.util.get_date "$1" "%Y-%m-%d %H:%M:%S"
     }
 
     if [[ -z "$actor" ]]; then
+        # shellcheck disable=SC2154
         actor="$_username"
     else
         resolved_did="$(atfile.util.resolve_identity "$actor")"
         error="$(atfile.util.get_xrpc_error $? "$resolved_did")"
         [[ -n "$error" ]] && atfile.die.xrpc_error "Unable to resolve '$actor'" "$resolved_did"
     
-        actor="$(echo $resolved_did | cut -d "|" -f 1)"
+        actor="$(echo "$resolved_did" | cut -d "|" -f 1)"
     fi
 
     bsky_profile="$(app.bsky.actor.getProfile "$actor")"
@@ -34,9 +35,9 @@ function atfile.bsky_profile() {
         count_packs="$(echo "$bsky_profile" | jq -r '.associated.starterPacks')"
         count_posts="$(echo "$bsky_profile" | jq -r '.postsCount')"
         date_created="$(echo "$bsky_profile" | jq -r '.createdAt')"
-        date_created="$(atfile.profile.get_pretty_date "$date_created")"
+        date_created="$(atfile.bsky_profile.get_pretty_date "$date_created")"
         date_indexed="$(echo "$bsky_profile" | jq -r '.indexedAt')"
-        date_indexed="$(atfile.profile.get_pretty_date "$date_indexed")"
+        date_indexed="$(atfile.bsky_profile.get_pretty_date "$date_indexed")"
         did="$(echo "$bsky_profile" | jq -r '.did')"
         handle="$(echo "$bsky_profile" | jq -r '.handle')"
         name="$(echo "$bsky_profile" | jq -r '.displayName')"
@@ -60,13 +61,13 @@ function atfile.bsky_profile() {
             type="🟦 Labeler"
         fi
 
-        [[ $(atfile.util.is_null_or_empty "$count_feeds") == 1 ]] && count_feeds="0" || count_feeds="$(atfile.util.fmt_int $count_feeds)"
-        [[ $(atfile.util.is_null_or_empty "$count_followers") == 1 ]] && count_followers="0" || count_followers="$(atfile.util.fmt_int $count_followers)"
-        [[ $(atfile.util.is_null_or_empty "$count_following") == 1 ]] && count_following="0" || count_following="$(atfile.util.fmt_int $count_following)"
-        [[ $(atfile.util.is_null_or_empty "$count_likes") == 1 ]] && count_likes="0" || count_likes="$(atfile.util.fmt_int $count_likes)"
-        [[ $(atfile.util.is_null_or_empty "$count_lists") == 1 ]] && count_lists="0" || count_lists="$(atfile.util.fmt_int $count_lists)"
-        [[ $(atfile.util.is_null_or_empty "$count_packs") == 1 ]] && count_packs="0" || count_packs="$(atfile.util.fmt_int $count_packs)"
-        [[ $(atfile.util.is_null_or_empty "$count_posts") == 1 ]] && count_posts="0" || count_posts="$(atfile.util.fmt_int $count_posts)"
+        [[ $(atfile.util.is_null_or_empty "$count_feeds") == 1 ]] && count_feeds="0" || count_feeds="$(atfile.util.fmt_int "$count_feeds")"
+        [[ $(atfile.util.is_null_or_empty "$count_followers") == 1 ]] && count_followers="0" || count_followers="$(atfile.util.fmt_int "$count_followers")"
+        [[ $(atfile.util.is_null_or_empty "$count_following") == 1 ]] && count_following="0" || count_following="$(atfile.util.fmt_int "$count_following")"
+        [[ $(atfile.util.is_null_or_empty "$count_likes") == 1 ]] && count_likes="0" || count_likes="$(atfile.util.fmt_int "$count_likes")"
+        [[ $(atfile.util.is_null_or_empty "$count_lists") == 1 ]] && count_lists="0" || count_lists="$(atfile.util.fmt_int "$count_lists")"
+        [[ $(atfile.util.is_null_or_empty "$count_packs") == 1 ]] && count_packs="0" || count_packs="$(atfile.util.fmt_int "$count_packs")"
+        [[ $(atfile.util.is_null_or_empty "$count_posts") == 1 ]] && count_posts="0" || count_posts="$(atfile.util.fmt_int "$count_posts")"
         [[ $(atfile.util.is_null_or_empty "$handle") == 1 ]] && handle="handle.invalid"
         [[ $(atfile.util.is_null_or_empty "$name") == 1 ]] && name="$handle"
 
@@ -78,8 +79,8 @@ function atfile.bsky_profile() {
   \e[37m$(atfile.util.repeat_char "-" $name_length)\e[0m
  $bio_formatted \e[37m$(atfile.util.repeat_char "-" 3)\e[0m
   🔌 @$handle ∙ #️⃣  $did 
-  ⬇️  $count_followers $(atfile.util.get_int_suffix $count_followers "\e[37mFollower\e[0m" "\e[37mFollowers\e[0m") ∙ ⬆️  $count_following \e[37mFollowing\e[0m ∙ ⭐️ $count_likes \e[37mLikes\e[0m
-  📃 $count_posts $(atfile.util.get_int_suffix $count_followers "\e[37mPost\e[0m" "\e[37mPosts\e[0m") ∙ ⚙️  $count_feeds $(atfile.util.get_int_suffix $count_feeds "\e[37mFeed\e[0m" "\e[37mFeeds\e[0m") ∙ 📋 $count_lists $(atfile.util.get_int_suffix $count_lists "\e[37mList\e[0m" "\e[37mLists\e[0m") ∙ 👥 $count_packs $(atfile.util.get_int_suffix $count_packs "\e[37mPack\e[0m" "\e[37mPacks\e[0m")
+  ⬇️  $count_followers $(atfile.util.get_int_suffix "$count_followers" "\e[37mFollower\e[0m" "\e[37mFollowers\e[0m") ∙ ⬆️  $count_following \e[37mFollowing\e[0m ∙ ⭐️ $count_likes $(atfile.util.get_int_suffix "$count_likes" "\e[37mLike\e[0m" "\e[37mLikes\e[0m")
+  📃 $count_posts $(atfile.util.get_int_suffix "$count_followers" "\e[37mPost\e[0m" "\e[37mPosts\e[0m") ∙ ⚙️  $count_feeds $(atfile.util.get_int_suffix "$count_feeds" "\e[37mFeed\e[0m" "\e[37mFeeds\e[0m") ∙ 📋 $count_lists $(atfile.util.get_int_suffix "$count_lists" "\e[37mList\e[0m" "\e[37mLists\e[0m") ∙ 👥 $count_packs $(atfile.util.get_int_suffix "$count_packs" "\e[37mPack\e[0m" "\e[37mPacks\e[0m")
   $type ∙ ✨ $date_created ∙ 🕷️  $date_indexed
   \e[37m$(atfile.util.repeat_char "-" 3)\e[0m
   🦋 https://bsky.app/profile/$actor\n"
