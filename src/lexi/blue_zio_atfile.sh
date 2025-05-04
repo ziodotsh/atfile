@@ -132,7 +132,7 @@ function blue.zio.atfile.meta__photo() {
     \"gps\": {
         \"alt\": $gps_alt,
         \"lat\": $gps_lat,
-        \"long\": "$gps_long"
+        \"long\": $gps_long
     },
     \"orientation\": \"$orientation\",
     \"software\": \"$software\",

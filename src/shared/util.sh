@@ -387,11 +387,11 @@ function atfile.util.get_file_size_pretty() {
     size="$1"
     suffix=""
     
-    if (( $size >= 1048576 )); then
-        size=$(( $size / 1048576 ))
+    if (( size >= 1048576 )); then
+        size=$(( size / 1048576 ))
         suffix="MiB"
-    elif (( $size >= 1024 )); then
-        size=$(( $size / 1024 ))
+    elif (( size >= 1024 )); then
+        size=$(( size / 1024 ))
         suffix="KiB"
     else
         suffix="B"
@@ -408,13 +408,13 @@ function atfile.util.get_file_size_surplus_for_pds() {
     unset max_filesize
 
     case $pds in
-        *".host.bsky.network") max_filesize=52428800 ;;
+        *".host.bsky.network") max_filesize=1073741824 ;;
     esac
 
     if [[ -z $max_filesize ]] || [[ $max_filesize == 0 ]] || (( $size < $max_filesize )); then
         echo 0
     else
-        echo $(( $size - $max_filesize ))
+        echo $(( size - max_filesize ))
     fi
 }
 
@@ -721,7 +721,8 @@ function atfile.util.get_rkey_from_at_uri() {
 
 function atfile.util.get_seconds_since_start() {
     current="$(atfile.util.get_date "" "%s")"
-    echo "$(( $current - $_start ))"
+    # shellcheck disable=SC2154
+    echo "$(( current - _start ))"
 }
 
 function atfile.util.get_term_cols() {

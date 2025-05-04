@@ -14,6 +14,7 @@ function atfile.cache.set() {
     key="$(atfile.util.get_cache_path $1)"
     value="$2"
 
+    # shellcheck disable=SC2154
     mkdir -p "$_path_cache"
     echo "$value" > "$key"
     echo "$value"

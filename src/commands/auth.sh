@@ -19,6 +19,7 @@ function atfile.auth() {
     if [[ -z "$_server" ]]; then
         skip_resolving=0
         
+        # shellcheck disable=SC2154
         if [[ -z $override_username ]] && [[ $_is_sourced == 0 ]]; then
             # NOTE: Speeds things up a little if the user is overriding actor
             #       Keep this in-sync with the main case in `../entry.sh`!

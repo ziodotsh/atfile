@@ -6,19 +6,23 @@ function atfile.update() {
     unset error
 
     if [[ "$cmd" == "check-only" ]]; then
+        # shellcheck disable=SC2154
         [[ $_disable_update_checking == 1 ]] && return
+        # shellcheck disable=SC2154
         [[ $_disable_updater == 1 ]] && return
+        # shellcheck disable=SC2154
         [[ $_is_git == 1 && $_enable_update_git_clobber == 0 ]] && return
+        # shellcheck disable=SC2154
         [[ $_output_json == 1 ]] && return
 
         last_checked="$(atfile.cache.get "update-check")"
         current_checked="$(atfile.util.get_date "" "%s")"
         check_sleep=3600
-        next_check=$(( $last_checked + $check_sleep ))
+        next_check=$(( last_checked + check_sleep ))
 
         atfile.say.debug "Checking for last update check...\n↳ Last: $last_checked\n↳ Cur.: $current_checked\n↳ Next: $next_check"
 
-        if [[ $(( $next_check < $current_checked )) == 0 ]]; then
+        if [[ $(( next_check < current_checked )) == 0 ]]; then
             return
         else
             last_checked="$(atfile.cache.set "update-check" "$current_checked")"
@@ -27,6 +31,7 @@ function atfile.update() {
 
     [[ $_output_json == 1 ]] && atfile.die "Command not available as JSON"
 
+    # shellcheck disable=SC2154
     update_did="$_dist_username"
 
     atfile.util.override_actor "$update_did"
@@ -47,7 +52,7 @@ function atfile.update() {
     
     atfile.say.debug "Checking version...\n↳ Latest: $latest_version ($parsed_latest_version)\n ↳ Date: $latest_version_date\n ↳ Commit: $latest_version_commit\n↳ Running: $_version ($parsed_running_version)"
 
-    if [[ $(( $parsed_latest_version > $parsed_running_version )) == 1 ]]; then
+    if [[ $(( parsed_latest_version > parsed_running_version )) == 1 ]]; then
         update_available=1
     fi
 
@@ -76,6 +81,7 @@ function atfile.update() {
             [[ $_disable_updater == 1 ]] &&\
                 atfile.die "Cannot update system-managed version: update from your package manager" # NOTE: This relies on packaged versions having a wrapper that sets this var
 
+            # shellcheck disable=SC2154
             temp_updated_path="$_prog_dir/${_prog}-${latest_version}.tmp"
             
             atfile.say.debug "Touching temporary path ($temp_updated_path)..."

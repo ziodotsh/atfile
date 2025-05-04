@@ -11,12 +11,12 @@ function atfile.resolve() {
     error="$(atfile.util.get_xrpc_error $? "$resolved_did")"
     [[ -n "$error" ]] && atfile.die.xrpc_error "Unable to resolve '$actor'" "$resolved_did"
 
-    aliases="$(echo $resolved_did | cut -d "|" -f 5)"
-    did="$(echo $resolved_did | cut -d "|" -f 1)"
-    did_doc="$(echo $resolved_did | cut -d "|" -f 4)/$did"
-    did_type="did:$(echo $did | cut -d ":" -f 2)"
-    handle="$(echo $resolved_did | cut -d "|" -f 3 | cut -d "/" -f 3)"
-    pds="$(echo $resolved_did | cut -d "|" -f 2)"
+    aliases="$(echo "$resolved_did" | cut -d "|" -f 5)"
+    did="$(echo "$resolved_did" | cut -d "|" -f 1)"
+    did_doc="$(echo "$resolved_did" | cut -d "|" -f 4)/$did"
+    did_type="did:$(echo "$did" | cut -d ":" -f 2)"
+    handle="$(echo "$resolved_did" | cut -d "|" -f 3 | cut -d "/" -f 3)"
+    pds="$(echo "$resolved_did" | cut -d "|" -f 2)"
     pds_name="$(atfile.util.get_pds_pretty "$pds")"
     pds_software="Bluesky PDS"
     atfile.say.debug "Getting PDS version for '$pds'..."
@@ -32,22 +32,18 @@ function atfile.resolve() {
     fi
 
     case "$did_type" in
-        "did:plc")
-            # SEE: https://bsky.app/profile/did:web:bhh.sh/post/3lc2jkmhxq225
-            #      pls stop breaking my shit, @benharri.org
-            [[ $actor == "did:web:"* ]] && did_doc="$(atfile.util.get_didweb_doc_url "$actor")"
-            ;;
         "did:web")
             did_doc="$(atfile.util.get_didweb_doc_url "$did")"
             ;;
     esac
 
+    # shellcheck disable=SC2154
     if [[ $_output_json == 1 ]]; then
         did_doc_data="$(curl -H "User-Agent: $(atfile.util.get_uas)" -s -l -X GET "$did_doc")"
         aliases_json="$(echo "$did_doc_data" | jq -r ".alsoKnownAs")"
 
         echo -e "{
-    \"aka\": "$aliases_json",
+    \"aka\": $aliases_json,
     \"did\": \"$did\",
     \"doc\": {
         \"data\": $did_doc_data,

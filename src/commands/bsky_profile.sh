@@ -77,7 +77,7 @@ function atfile.bsky_profile() {
         # Do not modify the spacing here!
         bsky_profile_output="
   \e[1;37m$name\e[0m
-  \e[37m$(atfile.util.repeat_char "-" $name_length)\e[0m
+  \e[37m$(atfile.util.repeat_char "-" "$name_length")\e[0m
  $bio_formatted \e[37m$(atfile.util.repeat_char "-" 3)\e[0m
   🔌 @$handle ∙ #️⃣  $did 
   ⬇️  $count_followers $(atfile.util.get_int_suffix "$count_followers" "\e[37mFollower\e[0m" "\e[37mFollowers\e[0m") ∙ ⬆️  $count_following \e[37mFollowing\e[0m ∙ ⭐️ $count_likes $(atfile.util.get_int_suffix "$count_likes" "\e[37mLike\e[0m" "\e[37mLikes\e[0m")

@@ -10,6 +10,7 @@ function atfile.stream() {
 
     [[ "$compress" == 1 ]] && compress="true"
 
+    # shellcheck disable=SC2154
     atfile.say.debug "Streaming: $_endpoint_jetstream\n↳ Collection: $(echo "$collection" | sed -s 's/;/, /g')\n↳ DID: $(echo "$did" | sed -s 's/;/, /g')\n↳ Cursor: $cursor\n↳ Cursor: $compress"
 
     collection_query="$(atfile.util.build_query_array "wantedCollections" "$collection")"

@@ -9,7 +9,7 @@ function atfile.invoke.blob_list() {
     error="$(atfile.util.get_xrpc_error $? "$blobs")"
 
     if [[ -z "$error" ]]; then
-        records="$(echo $blobs | jq -c '.cids[]')"
+        records="$(echo "$blobs" | jq -c '.cids[]')"
         if [[ -z "$records" ]]; then
             if [[ -n "$cursor" ]]; then
                 atfile.die "No more blobs for '$_username'"
@@ -24,6 +24,7 @@ function atfile.invoke.blob_list() {
         unset record_count
         unset json_output
     
+        # shellcheck disable=SC2154
         if [[ $_output_json == 0 ]]; then
             echo -e "Blob"
             echo -e "----"
@@ -60,7 +61,7 @@ function atfile.invoke.blob_list() {
         else
             json_output="${json_output::-1}"
             json_output+="],"
-            json_output+="\"browser_accessible\": $(atfile.util.get_yn $browser_accessible),"
+            json_output+="\"browser_accessible\": $(atfile.util.get_yn "$browser_accessible"),"
             json_output+="\"cursor\": \"$last_cid\"}"
             echo -e "$json_output" | jq
         fi
@@ -90,9 +91,11 @@ function atfile.invoke.delete() {
     lock_record="$(com.atproto.repo.getRecord "$_username" "blue.zio.atfile.lock" "$key")"
 
     if [[ $(echo "$lock_record" | jq -r ".value.lock") == true ]]; then
+        # shellcheck disable=SC2154
         atfile.die "Unable to delete '$key' — file is locked\n       Run \`$_prog unlock $key\` to unlock file"
     fi
 
+    # shellcheck disable=SC2154
     record="$(com.atproto.repo.deleteRecord "$_username" "$_nsid_upload" "$key")"
     error="$(atfile.util.get_xrpc_error $? "$record")"
     
@@ -118,9 +121,9 @@ function atfile.invoke.download() {
     [[ $? != 0 || -z "$record" || "$record" == "{}" || "$record" == *"\"error\":"* ]] && success=0
     
     if [[ $success == 1 ]]; then
-        blob_uri="$(atfile.util.build_blob_uri "$(echo $record | jq -r ".uri" | cut -d "/" -f 3)" "$(echo $record | jq -r ".value.blob.ref.\"\$link\"")")"
+        blob_uri="$(atfile.util.build_blob_uri "$(echo "$record" | jq -r ".uri" | cut -d "/" -f 3)" "$(echo "$record" | jq -r ".value.blob.ref.\"\$link\"")")"
         file_name="$(echo "$record" | jq -r '.value.file.name')"
-        key="$(atfile.util.get_rkey_from_at_uri "$(echo $record | jq -r ".uri")")"
+        key="$(atfile.util.get_rkey_from_at_uri "$(echo "$record" | jq -r ".uri")")"
         downloaded_file="$(atfile.util.build_out_filename "$key" "$file_name")"
         
         curl -H "User-Agent: $(atfile.util.get_uas)" --silent "$blob_uri" -o "$downloaded_file"
@@ -128,7 +131,7 @@ function atfile.invoke.download() {
     fi
     
     if [[ $decrypt == 1 && $success == 1 ]]; then
-        new_downloaded_file="$(echo $downloaded_file | sed -s s/.gpg//)"
+        new_downloaded_file="$(echo "$downloaded_file" | sed -s s/.gpg//)"
         
         gpg --quiet --output "$new_downloaded_file" --decrypt "$downloaded_file"
         
@@ -167,17 +170,18 @@ function atfile.invoke.get() {
     if [[ $success == 1 ]]; then
         file_type="$(echo "$record" | jq -r '.value.file.mimeType')"
         did="$(echo $record | jq -r ".uri" | cut -d "/" -f 3)"
-        key="$(atfile.util.get_rkey_from_at_uri "$(echo $record | jq -r ".uri")")"
-        blob_uri="$(atfile.util.build_blob_uri "$did" "$(echo $record | jq -r ".value.blob.ref.\"\$link\"")")"
-        cdn_uri="$(atfile.util.get_cdn_uri "$did" "$(echo $record | jq -r ".value.blob.ref.\"\$link\"")" "$file_type")"
+        key="$(atfile.util.get_rkey_from_at_uri "$(echo "$record" | jq -r ".uri")")"
+        blob_uri="$(atfile.util.build_blob_uri "$did" "$(echo "$record" | jq -r ".value.blob.ref.\"\$link\"")")"
+        cdn_uri="$(atfile.util.get_cdn_uri "$did" "$(echo "$record" | jq -r ".value.blob.ref.\"\$link\"")" "$file_type")"
 
         unset locked
         unset encrypted
         
+        # shellcheck disable=SC2154
         atfile.say.debug "Getting record...\n↳ NSID: $_nsid_lock\n↳ Repo: $_username\n↳ Key: $key"
         locked_record="$(com.atproto.repo.getRecord "$_username" "$_nsid_lock" "$key")"
         if [[ $? == 0 ]] && [[ -n "$locked_record" ]]; then
-            if [[ $(echo $locked_record | jq -r ".value.lock") == true ]]; then
+            if [[ $(echo "$locked_record" | jq -r ".value.lock") == true ]]; then
                 locked="$(atfile.util.get_yn 1)"
             else
                 locked="$(atfile.util.get_yn 0)"
@@ -191,7 +195,7 @@ function atfile.invoke.get() {
         fi
     
         if [[ $_output_json == 1 ]]; then
-            browser_accessible=$(atfile.util.get_yn $(atfile.util.is_url_accessible_in_browser "$blob_uri"))
+            browser_accessible=$(atfile.util.get_yn "$(atfile.util.is_url_accessible_in_browser "$blob_uri")")
         
             echo "{ \"encrypted\": $encrypted, \"locked\": $locked, \"upload\": $(echo "$record" | jq -r ".value"), \"url\": { \"blob\": \"$blob_uri\", \"browser_accessible\": $browser_accessible, \"cdn\": { \"bsky\": \"$cdn_uri\" } } }" | jq
         else
@@ -203,7 +207,7 @@ function atfile.invoke.get() {
             file_name="$(echo "$record" | jq -r '.value.file.name')"
             file_name_pretty="$(atfile.util.get_file_name_pretty "$(echo "$record" | jq -r '.value')")"
             file_size="$(echo "$record" | jq -r '.value.file.size')"
-            file_size_pretty="$(atfile.util.get_file_size_pretty $file_size)"
+            file_size_pretty="$(atfile.util.get_file_size_pretty "$file_size")"
 
             unset finger_type
             header="$file_name_pretty"
@@ -212,8 +216,8 @@ function atfile.invoke.get() {
                 file_hash_pretty="(None)"
             fi
         
-            if [[ "$(echo $record | jq -r ".value.finger")" != "null" ]]; then
-                finger_type="$(echo $record | jq -r ".value.finger.\"\$type\"" | cut -d "#" -f 2)"
+            if [[ "$(echo "$record" | jq -r ".value.finger")" != "null" ]]; then
+                finger_type="$(echo "$record" | jq -r ".value.finger.\"\$type\"" | cut -d "#" -f 2)"
             fi
 
             echo "$header"
@@ -240,9 +244,9 @@ function atfile.invoke.get() {
                         echo -e "↳ Source: $finger_browser_uas"
                         ;;
                     "machine")
-                        finger_machine_app="$(echo $record | jq -r ".value.finger.app")"
-                        finger_machine_host="$(echo $record | jq -r ".value.finger.host")"
-                        finger_machine_os="$(echo $record | jq -r ".value.finger.os")"
+                        finger_machine_app="$(echo "$record" | jq -r ".value.finger.app")"
+                        finger_machine_host="$(echo "$record" | jq -r ".value.finger.host")"
+                        finger_machine_os="$(echo "$record" | jq -r ".value.finger.os")"
 
                         [[ -z $finger_machine_app || $finger_machine_app == "null" ]] && finger_machine_app="(Unknown)"
 
@@ -270,7 +274,7 @@ function atfile.invoke.get_url() {
     error="$(atfile.util.get_xrpc_error $? "$record")"
     
     if [[ -z "$error" ]]; then
-        blob_url="$(atfile.util.build_blob_uri "$(echo $record | jq -r ".uri" | cut -d "/" -f 3)" "$(echo $record | jq -r ".value.blob.ref.\"\$link\"")")"
+        blob_url="$(atfile.util.build_blob_uri "$(echo "$record" | jq -r ".uri" | cut -d "/" -f 3)" "$(echo "$record" | jq -r ".value.blob.ref.\"\$link\"")")"
 
         if [[ $_output_json == 1 ]]; then
             echo -e "{\"url\": \"$blob_url\" }" | jq
@@ -295,7 +299,7 @@ function atfile.invoke.handle_atfile() {
             "com.github.neithern.g4music"
         )
 
-        if [[ ${handlers[@]} =~ $handler ]]; then
+        if [[ ${handlers[*]} =~ $handler ]]; then
             echo 1
         elif [[ $type == "text/"* ]]; then
             echo 1
@@ -306,8 +310,8 @@ function atfile.invoke.handle_atfile() {
 
     [[ $_output_json == 1 ]] && atfile.die "Command not available as JSON"
 
-    actor="$(echo $uri | cut -d "/" -f 3)"
-    key="$(echo $uri | cut -d "/" -f 4)"
+    actor="$(echo "$uri" | cut -d "/" -f 3)"
+    key="$(echo "$uri" | cut -d "/" -f 4)"
 
     if [[ -n "$actor" && -n "$key" ]]; then
         atfile.util.override_actor "$actor"
@@ -317,9 +321,9 @@ function atfile.invoke.handle_atfile() {
         error="$(atfile.util.get_xrpc_error $? "$record")"
         [[ -n "$error" ]] && atfile.die.gui.xrpc_error "Unable to get '$key'" "$error"
 
-        blob_cid="$(echo $record | jq -r ".value.blob.ref.\"\$link\"")"
+        blob_cid="$(echo "$record" | jq -r ".value.blob.ref.\"\$link\"")"
         blob_uri="$(atfile.util.build_blob_uri "$_username" "$blob_cid")"
-        file_type="$(echo $record | jq -r '.value.file.mimeType')"
+        file_type="$(echo "$record" | jq -r '.value.file.mimeType')"
 
         if [[ $_os == "linux"* ]] && \
             [ -x "$(command -v xdg-mime)" ] && \
@@ -330,7 +334,7 @@ function atfile.invoke.handle_atfile() {
 
             if [[ -z $handler ]]; then
                 atfile.say.debug "Querying for handler '$file_type'..."
-                handler="$(xdg-mime query default $file_type)"
+                handler="$(xdg-mime query default "$file_type")"
             else
                 handler="$handler.desktop"
                 atfile.say.debug "Handler manually set to '$handler'"
@@ -344,6 +348,7 @@ function atfile.invoke.handle_atfile() {
                     atfile.say.debug "Unsupported for streaming"
 
                     download_success=1
+                    # shellcheck disable=SC2154
                     tmp_path="$_path_blobs_tmp/$blob_cid"
 
                     if ! [[ -f "$tmp_path" ]]; then
@@ -393,7 +398,7 @@ function atfile.invoke.handle_aturi() {
     [[ -z "$app_uri" ]] && atfile.die.gui \
         "Unable to resolve AT URI to App"
 
-    app_proto="$(echo $app_uri | cut -d ":" -f 1)"
+    app_proto="$(echo "$app_uri" | cut -d ":" -f 1)"
 
     atfile.say.debug "Opening '$app_uri' ($app_proto)..."
 
@@ -413,7 +418,7 @@ function atfile.invoke.list() {
     error="$(atfile.util.get_xrpc_error $? "$records")"
    
     if [[ -z "$error" ]]; then
-        records="$(echo $records | jq -c '.records[]')"
+        records="$(echo "$records" | jq -c '.records[]')"
         if [[ -z "$records" ]]; then
             if [[ -n "$cursor" ]]; then
                 atfile.die "No more files for '$_username'"
@@ -512,7 +517,8 @@ function atfile.invoke.manage_record() {
     function atfile.invoke.manage_record.get_collection() {
         collection="$_nsid_upload"
         parameter_output="$1"
-        [[ -n "$1" ]] && collection="$1" # fuck it, manage all the records from atfile!
+    
+        [[ -n "$parameter_output" ]] && collection="$1" # fuck it, manage all the records from atfile!
         echo "$collection"
     }
     
@@ -534,9 +540,9 @@ function atfile.invoke.manage_record() {
             
             if [[ "$key" == at:* ]]; then
                 at_uri="$key"
-                collection="$(echo $at_uri | cut -d "/" -f 4)"
-                key="$(echo $at_uri | cut -d "/" -f 5)"
-                username="$(echo $at_uri | cut -d "/" -f 3)"
+                collection="$(echo "$at_uri" | cut -d "/" -f 4)"
+                key="$(echo "$at_uri" | cut -d "/" -f 5)"
+                username="$(echo "$at_uri" | cut -d "/" -f 3)"
                 
                 [[ "$username" != "$_username" ]] && atfile.die "Unable to delete record — not owned by you ($_username)"
             fi
@@ -551,14 +557,15 @@ function atfile.invoke.manage_record() {
             
             if [[ "$key" == at:* ]]; then
                 at_uri="$key"
-                collection="$(echo $at_uri | cut -d "/" -f 4)"
-                key="$(echo $at_uri | cut -d "/" -f 5)"
-                username="$(echo $at_uri | cut -d "/" -f 3)"
+                collection="$(echo "$at_uri" | cut -d "/" -f 4)"
+                key="$(echo "$at_uri" | cut -d "/" -f 5)"
+                username="$(echo "$at_uri" | cut -d "/" -f 3)"
             fi
             
             if [[ -z "$username" ]]; then
                 username="$_username"
             else
+                # shellcheck disable=SC2053
                 if [[ $username != $_username ]]; then
                     atfile.util.override_actor "$username"
                 fi
@@ -567,7 +574,8 @@ function atfile.invoke.manage_record() {
             com.atproto.repo.getRecord "$username" "$collection" "$key" | jq
             atfile.util.override_actor_reset
             ;;
-        "put") # BUG: Collection is always blue.zio.atfile.upload when not using at://
+        # BUG: Collection is always blue.zio.atfile.upload when not using at://
+        "put")
             collection="$(atfile.invoke.manage_record.get_collection "$4")"
             key="$2"
             record="$3"
@@ -579,9 +587,9 @@ function atfile.invoke.manage_record() {
             
             if [[ "$key" == at:* ]]; then
                 at_uri="$key"
-                collection="$(echo $at_uri | cut -d "/" -f 4)"
-                key="$(echo $at_uri | cut -d "/" -f 5)"
-                username="$(echo $at_uri | cut -d "/" -f 3)"
+                collection="$(echo "$at_uri" | cut -d "/" -f 4)"
+                key="$(echo "$at_uri" | cut -d "/" -f 5)"
+                username="$(echo "$at_uri" | cut -d "/" -f 3)"
                 
                 [[ "$username" != "$_username" ]] && atfile.die "Unable to put record — not owned by you ($_username)"
             fi
@@ -600,7 +608,7 @@ function atfile.invoke.print() {
     error="$(atfile.util.get_xrpc_error $? "$record")"
     
     if [[ -z "$error" ]]; then
-        blob_uri="$(atfile.util.build_blob_uri "$(echo $record | jq -r ".uri" | cut -d "/" -f 3)" "$(echo $record | jq -r ".value.blob.ref.\"\$link\"")")"
+        blob_uri="$(atfile.util.build_blob_uri "$(echo "$record" | jq -r ".uri" | cut -d "/" -f 3)" "$(echo "$record" | jq -r ".value.blob.ref.\"\$link\"")")"
         file_type="$(echo "$record" | jq -r '.value.file.mimeType')"
         
         curl -H "$(atfile.util.get_uas)" -s -L "$blob_uri" --output -
@@ -670,7 +678,8 @@ function atfile.invoke.upload() {
     fi
 
     if [[ $_output_json == 0 ]]; then
-        if [[ "$_server" == *".host.bsky.network" ]]; then
+        # shellcheck disable=SC2154
+        if [[ $_server == *".host.bsky.network" ]]; then
             atfile.util.print_copyright_warning
         fi
     fi
@@ -679,7 +688,7 @@ function atfile.invoke.upload() {
         file_crypt="$(dirname "$file")/$(basename "$file").gpg"
         
         [[ $_output_json == 0 ]] && echo -e "Encrypting '$file_crypt'..."
-        gpg --yes --quiet --recipient $recipient --output "$file_crypt" --encrypt "$file"
+        gpg --yes --quiet --recipient "$recipient" --output "$file_crypt" --encrypt "$file"
         
         if [[ $? == 0 ]]; then
             file="$file_crypt"
@@ -715,8 +724,8 @@ function atfile.invoke.upload() {
         esac
 
         file_hash="$(atfile.util.get_md5 "$file")"
-        file_hash_checksum="$(echo $file_hash | cut -d "|" -f 1)"
-        file_hash_type="$(echo $file_hash | cut -d "|" -f 2)"
+        file_hash_checksum="$(echo "$file_hash" | cut -d "|" -f 1)"
+        file_hash_type="$(echo "$file_hash" | cut -d "|" -f 2)"
         file_name="$(basename "$file")"
         
         if [[ -n $recipient ]]; then
@@ -744,7 +753,7 @@ function atfile.invoke.upload() {
         file_size_surplus="$(atfile.util.get_file_size_surplus_for_pds "$file_size" "$_server")"
 
         if [[ $file_size_surplus != 0 ]]; then
-            die_message="File '$file_name' is too large ($(atfile.util.get_file_size_pretty $file_size_surplus) over)"
+            die_message="File '$file_name' is too large ($(atfile.util.get_file_size_pretty "$file_size_surplus") over)"
             atfile.die "$die_message"
         fi
         

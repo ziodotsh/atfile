@@ -17,12 +17,15 @@ function app.bsky.video.getUploadLimits() {
 function app.bsky.video.uploadVideo() {
     file="$1"
 
+    # shellcheck disable=SC2154
     aud="did:web:$(atfile.util.get_uri_segment "$_server" host)"
+    # shellcheck disable=SC2154
     did="$_username"
     name="$(basename "$file")"
     type="video/mp4"
 
-    curl -s -X POST $_endpoint_appview_bsky_video/xrpc/app.bsky.video.uploadVideo?did=$did\&name=$name \
+    # shellcheck disable=SC2154
+    curl -s -X POST "$_endpoint_appview_bsky_video/xrpc/app.bsky.video.uploadVideo?did=$did\&name=$name" \
         -H "Authorization: Bearer $(atfile.xrpc.bsky_video.jwt "com.atproto.repo.uploadBlob" "$aud")" \
         -H "Content-Type: $type" \
         -H "User-Agent: $(atfile.util.get_uas)" \

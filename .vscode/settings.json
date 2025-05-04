@@ -1,10 +1,20 @@
 {
     "cSpell.words": [
-        "ATFILE",
+        "appview",
+        "atfile",
         "bsky",
-        "DEVEL",
+        "choo",
+        "devel",
+        "exiftool",
         "feedgens",
+        "jetstream",
         "lexi",
+        "mediainfo",
+        "nsid",
+        "pkgman",
+        "rkey",
+        "termux",
+        "websocat",
         "xrpc"
     ]
 }

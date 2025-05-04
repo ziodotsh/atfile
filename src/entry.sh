@@ -8,7 +8,7 @@
 
 _start="$(atfile.util.get_date "" "%s")"
 _command="$1"
-_command_full="$@"
+_command_full="$*"
 _envvar_prefix="ATFILE"
 _os="$(atfile.util.get_os)"
 _is_git=0
@@ -83,7 +83,7 @@ _fmt_blob_url_default="[server]/xrpc/com.atproto.sync.getBlob?did=[did]&cid=[cid
 _fmt_out_file_default="[key]__[name]"
 _enable_fingerprint_default=0
 _max_list_buffer=6
-_max_list_default=$(( $(atfile.util.get_term_rows) - $_max_list_buffer ))
+_max_list_default=$(( $(atfile.util.get_term_rows) - _max_list_buffer ))
 _output_json_default=0
 _skip_auth_check_default=0
 _skip_copyright_warn_default=0
@@ -99,11 +99,11 @@ _max_list_fallback=100
 
 #### Set
 
-_debug="$(atfile.util.get_envvar "${_envvar_prefix}_DEBUG" $_debug_default)"
+_debug="$(atfile.util.get_envvar "${_envvar_prefix}_DEBUG" "$_debug_default")"
 _devel_publish="$(atfile.util.get_envvar "${_envvar_prefix}_DEVEL_PUBLISH" $_devel_publish_default)"
 _disable_update_checking="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_UPDATE_CHECKING" $_disable_update_checking_default)"
 _disable_updater="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_UPDATER" $_disable_updater_default)"
-_dist_password="$(atfile.util.get_envvar "${_envvar_prefix}_DIST_PASSWORD" $_dist_password_default)"
+_dist_password="$(atfile.util.get_envvar "${_envvar_prefix}_DIST_PASSWORD")"
 _dist_username="$(atfile.util.get_envvar "${_envvar_prefix}_DIST_USERNAME" $_dist_username_default)"
 _enable_fingerprint="$(atfile.util.get_envvar "${_envvar_prefix}_ENABLE_FINGERPRINT" "$_enable_fingerprint_default")"
 _enable_update_git_clobber="$(atfile.util.get_envvar "${_envvar_prefix}_ENABLE_UPDATE_GIT_CLOBBER" "$_enable_update_git_clobber_default")"
@@ -143,7 +143,7 @@ _nsid_upload="${_nsid_prefix}.atfile.upload"
 
 ## Source detection
 
-if [[ "$0" != "$BASH_SOURCE" ]] && [[ "$ATFILE_DEVEL" != 1 ]]; then
+if [[ "$0" != "${BASH_SOURCE[0]}" ]] && [[ "$ATFILE_DEVEL" != 1 ]]; then
     _debug=0
     _is_sourced=1
     _output_json=1
@@ -162,7 +162,7 @@ atfile.say.debug "Starting up..."
     atfile.say.debug "Overriding Copyright Author (\$_meta_author)\n↳ ${_envvar_prefix}_FORCE_META_AUTHOR set to '$_force_meta_author'"
 [[ -n $_force_meta_did ]] && \
     _meta_did="$_force_meta_did" &&\
-    _dist_username="$(atfile.util.get_envvar "${_envvar_prefix}_DIST_USERNAME" $_meta_did)" &&\
+    _dist_username="$(atfile.util.get_envvar "${_envvar_prefix}_DIST_USERNAME" "$_meta_did")" &&\
     atfile.say.debug "Overriding DID (\$_meta_did)\n↳ ${_envvar_prefix}_FORCE_META_DID set to '$_force_meta_did'"
 [[ -n $_force_meta_repo ]] && \
     _meta_repo="$_force_meta_repo" &&\
@@ -182,17 +182,17 @@ atfile.say.debug "Starting up..."
 
 ### Legacy
 
-[[ $_enable_fingerprint == $_enable_fingerprint_default ]] &&\
+[[ $_enable_fingerprint == "$_enable_fingerprint_default" ]] &&\
     _include_fingerprint_depr="$(atfile.util.get_envvar "${_envvar_prefix}_INCLUDE_FINGERPRINT" "$_enable_fingerprint_default")" &&\
     atfile.say.debug "Setting ${_envvar_prefix}_ENABLE_FINGERPRINT to $_include_fingerprint_depr\n↳ ${_envvar_prefix}_INCLUDE_FINGERPRINT (deprecated) set to 1" &&\
     _enable_fingerprint=$_include_fingerprint_depr
 
 ### Validation
 
-[[ $_output_json == 1 ]] && [[ $_max_list == $_max_list_default ]] &&\
+[[ $_output_json == 1 ]] && [[ $_max_list == "$_max_list_default" ]] &&\
     atfile.say.debug "Setting ${_envvar_prefix}_MAX_LIST to $_max_list_fallback\n↳ ${_envvar_prefix}_OUTPUT_JSON set to 1" &&\
     _max_list=$_max_list_fallback
-[[ $(( $_max_list > $_max_list_fallback )) == 1 ]] &&\
+[[ $(( _max_list > _max_list_fallback )) == 1 ]] &&\
     atfile.say.debug "Setting ${_envvar_prefix}_MAX_LIST to $_max_list_fallback\n↳ Maximum is $_max_list_fallback" &&\
     _max_list=$_max_list_fallback
 
@@ -246,8 +246,6 @@ atfile.util.check_prog "jq" "$_prog_hint_jq"
 [[ $_skip_ni_md5sum == 0 ]] && atfile.util.check_prog "md5sum" "" "${_envvar_prefix}_SKIP_NI_MD5SUM"
 
 ## Lifecycle commands
-
-is_lifecycle_command=0
 
 if [[ $_is_sourced == 0 ]] && [[ $_command == "" || $_command == "help" || $_command == "h" || $_command == "--help" || $_command == "-h" ]]; then
     atfile.help
@@ -308,7 +306,7 @@ fi
 ## Commands
 
 if [[ $_is_sourced == 0 ]] && [[ $ATFILE_DEVEL_NO_INVOKE != 1 ]]; then
-    atfile.say.debug "Running '$_command_full'...\n↳ Command: $_command\n↳ Arguments: ${@:2}"
+    atfile.say.debug "Running '$_command_full'...\n↳ Command: $_command\n↳ Arguments: ${*:2}"
 
     case "$_command" in
         "ai")
@@ -363,7 +361,7 @@ if [[ $_is_sourced == 0 ]] && [[ $ATFILE_DEVEL_NO_INVOKE != 1 ]]; then
             ;;
         "handle")
             uri="$2"
-            protocol="$(atfile.util.get_uri_segment $uri protocol)"
+            protocol="$(atfile.util.get_uri_segment "$uri" protocol)"
 
             if [[ $protocol == "https" ]]; then
                 http_uri="$uri"
@@ -374,7 +372,7 @@ if [[ $_is_sourced == 0 ]] && [[ $ATFILE_DEVEL_NO_INVOKE != 1 ]]; then
                 if [[ -z "$uri" ]]; then
                     atfile.die "Unable to map '$http_uri' to at:// URI"
                 else
-                    protocol="$(atfile.util.get_uri_segment $uri protocol)"
+                    protocol="$(atfile.util.get_uri_segment "$uri" protocol)"
                 fi
             fi
 
