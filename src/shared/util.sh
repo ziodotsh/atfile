@@ -357,7 +357,7 @@ function atfile.util.get_file_name_pretty() {
                    output+="\n   $long $lat"
                    
                    if [[ $(atfile.util.is_null_or_empty "$date") == 0 ]]; then
-                       output+=" — $($(atfile.util.get_date "$date"))"
+                       output+=" — $(atfile.util.get_date "$date")"
                    fi
                 fi
                 ;;
