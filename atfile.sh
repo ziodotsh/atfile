@@ -69,6 +69,7 @@ if [ ! -x "$(command -v git)" ]; then
 fi
 
 git describe --exact-match --tags > /dev/null 2>&1
+# shellcheck disable=SC2181
 [[ $? != 0 ]] && version+="+git.$(git rev-parse --short HEAD)"
 
 # BUG: Clobbers variables from config file

@@ -37,7 +37,7 @@ function atfile.util.check_prog() {
     download_hint="$2"
     skip_hint="$3"
     
-    if ! [ -x "$(command -v $command)" ]; then
+    if ! [ -x "$(command -v "$command")" ]; then
         message="'$command' not installed"
         
         if [[ -n "$download_hint" ]]; then
@@ -61,7 +61,9 @@ function atfile.util.check_prog_gpg() {
 }
 
 function atfile.util.check_prog_optional_metadata() {
+    # shellcheck disable=SC2154
     [[ $_skip_ni_exiftool == 0 ]] && atfile.util.check_prog "exiftool" "https://exiftool.org" "${_envvar_prefix}_SKIP_NI_EXIFTOOL"
+    # shellcheck disable=SC2154
     [[ $_skip_ni_mediainfo == 0 ]] && atfile.util.check_prog "mediainfo" "https://mediaarea.net/en/MediaInfo" "${_envvar_prefix}_SKIP_NI_MEDIAINFO"
 }
 
@@ -70,6 +72,7 @@ function atfile.util.create_dir() {
 
     if ! [[ -d $dir  ]]; then
         mkdir -p "$dir"
+        # shellcheck disable=SC2181
         [[ $? != 0 ]] && atfile.die "Unable to create directory '$dir'"
     fi
 }
@@ -81,9 +84,9 @@ function atfile.util.fmt_int() {
 function atfile.util.get_app_url_for_at_uri() {
     uri="$1"
 
-    actor="$(echo $uri | cut -d / -f 3)"
-    collection="$(echo $uri | cut -d / -f 4)"
-    rkey="$(echo $uri | cut -d / -f 5)"
+    actor="$(echo "$uri" | cut -d / -f 3)"
+    collection="$(echo "$uri" | cut -d / -f 4)"
+    rkey="$(echo "$uri" | cut -d / -f 5)"
 
     ignore_url_validation=0
     resolved_actor="$(atfile.util.resolve_identity "$actor")"
@@ -94,6 +97,7 @@ function atfile.util.get_app_url_for_at_uri() {
     unset actor_pds
     unset resolved_url
     
+    # shellcheck disable=SC2181
     if [[ $? == 0 ]]; then
         actor="$(echo "$resolved_actor" | cut -d "|" -f 1)"
         actor_handle="$(echo "$resolved_actor" | cut -d "|" -f 3 | cut -d "/" -f 3)"
@@ -172,6 +176,7 @@ function atfile.util.get_app_url_for_at_uri() {
 }
 
 function atfile.util.get_cache_path() {
+    # shellcheck disable=SC2154
     echo "$_path_cache/$1"
 }
 
@@ -213,7 +218,7 @@ function atfile.util.get_date() {
         if [[ $_os == "linux-musl" || $_os == "solaris" ]]; then
             echo ""
         else
-            date -u +$format
+            date -u +"$format"
         fi
     else
         if [[ $_os == "linux-musl" || $_os == "solaris" ]]; then
@@ -233,6 +238,7 @@ function atfile.util.get_date_json() {
     if [[ -z "$parsed" ]]; then
         if [[ -n "$date" ]]; then
             parsed_date="$(atfile.util.get_date "$date" 2> /dev/null)"
+            # shellcheck disable=SC2181
             [[ $? == 0 ]] && parsed="$parsed_date"
         fi
     fi
@@ -262,7 +268,7 @@ function atfile.util.get_didplc_doc() {
         didplc_doc="$(atfile.util.get_didplc_doc.request_doc "$didplc_endpoint" "$actor")"
     fi
 
-    echo "$(echo $didplc_doc | jq ". += {\"directory\": \"$didplc_endpoint\"}")"
+    echo "$(echo "$didplc_doc" | jq ". += {\"directory\": \"$didplc_endpoint\"}")"
 }
 
 function atfile.util.get_didweb_doc_url() {
@@ -380,7 +386,7 @@ function atfile.util.get_file_name_pretty() {
     output_last_line_length="${#output_last_line}"
     
     echo -e "$output"
-    echo -e "$(atfile.util.repeat_char "-" $output_last_line_length)"
+    echo -e "$(atfile.util.repeat_char "-" "$output_last_line_length")"
 }
 
 function atfile.util.get_file_size_pretty() {
@@ -411,7 +417,7 @@ function atfile.util.get_file_size_surplus_for_pds() {
         *".host.bsky.network") max_filesize=1073741824 ;;
     esac
 
-    if [[ -z $max_filesize ]] || [[ $max_filesize == 0 ]] || (( $size < $max_filesize )); then
+    if [[ -z $max_filesize ]] || [[ $max_filesize == 0 ]] || (( size < max_filesize )); then
         echo 0
     else
         echo $(( size - max_filesize ))
@@ -420,8 +426,8 @@ function atfile.util.get_file_size_surplus_for_pds() {
 
 function atfile.util.get_file_type_emoji() {
     mime_type="$1"
-    short_type="$(echo $mime_type | cut -d "/" -f 1)"
-    desc_type="$(echo $mime_type | cut -d "/" -f 2)"
+    short_type="$(echo "$mime_type" | cut -d "/" -f 1)"
+    desc_type="$(echo "$mime_type" | cut -d "/" -f 2)"
 
     case $short_type in
         "application")
@@ -496,7 +502,7 @@ function atfile.util.get_line() {
     input="$1"
     index=$(( $2 + 1 ))
     
-    echo "$(echo -e "$input" | sed -n "$(( $index ))"p)"
+    echo "$(echo -e "$input" | sed -n "$(( index ))"p)"
 }
 
 function atfile.util.get_mediainfo_field() {
@@ -535,13 +541,13 @@ function atfile.util.get_mediainfo_audio_json() {
     samplings=$(atfile.util.get_mediainfo_field "$file" "Audio" "SamplingRate" 0)
     titles="$(atfile.util.get_mediainfo_field "$file" "Audio" "Title" "")"
     
-    lines="$(echo "$bitrates" | wc -l)"
+    lines="$(echo "$bitRates" | wc -l)"
     output=""
 
-    for ((i = 0 ; i < $lines ; i++ )); do
+    for (( i = 0 ; i < lines ; i++ )); do
         lossy=true
         
-        [[ \"$(atfile.util.get_line "$compressions" $i)\" == "Lossless" ]] && lossy=false
+        [[ $(atfile.util.get_line "$compressions" $i) == "Lossless" ]] && lossy=false
     
         output+="{
     \"bitRate\": $(atfile.util.get_line "$bitRates" $i),
@@ -576,7 +582,7 @@ function atfile.util.get_mediainfo_video_json() {
     frameRate_modes="$(atfile.util.get_mediainfo_field "$file" "Video" "FrameRate_Mode" "")"
     titles="$(atfile.util.get_mediainfo_field "$file" "Video" "Title" "")"
     
-    lines="$(echo "$bitrates" | wc -l)"
+    lines="$(echo "$bitRates" | wc -l)"
     output=""
 
     for ((i = 0 ; i < lines ; i++ )); do    
@@ -692,11 +698,15 @@ function atfile.util.get_realpath() {
     path="$1"
 
     if [[ $_os == "solaris" ]]; then
-        # INVESTIGATE: Use this for every OS? What does this even do?
+        # SEE: https://stackoverflow.com/a/11554895
+        # INVESTIGATE: Use this for every OS?
+        # shellcheck disable=SC2015
         [ -d "$path" ] && (
+            # shellcheck disable=SC1007
             cd_path= \cd "$1"
             /bin/pwd
         ) || (
+            # shellcheck disable=SC1007
             cd_path= \cd "$(dirname "$1")" &&
             printf "%s/%s\n" "$(/bin/pwd)" "$(basename "$1")"
         )
@@ -761,7 +771,7 @@ function atfile.util.get_var_from_file() {
         found_line="$(cat "$file" | grep "\b${variable}=")"
         
         if [[ -n "$found_line" ]] && [[ ! "$found_line" == \#* ]]; then
-            output="$(echo $found_line | sed "s|${variable}=||g")"
+            output="$(echo "$found_line" | sed "s|${variable}=||g")"
             output="${output%\"}"
             output="${output#\"}"
 
@@ -871,7 +881,7 @@ function atfile.util.get_uri_segment() {
     case $segment in
         "host") echo "$uri" | cut -d "/" -f 3 ;;
         "protocol") echo "$uri" | cut -d ":" -f 1 ;;
-        *) echo "$uri" | cut -d "/" -"f $segme"nt ;;
+        *) echo "$uri" | cut -d "/" -f "$segment" ;;
     esac
 }
 
@@ -904,7 +914,7 @@ function atfile.util.map_http_to_at() {
         fi
     fi
 
-    echo $at_uri
+    echo "$at_uri"
 }
 
 # HACK: This essentially breaks the entire session (it overrides $_username and
@@ -956,7 +966,7 @@ function atfile.util.parse_version() {
     v_major="$(printf "%04d\n" "$(echo "$version" | cut -d "." -f 1)")"
     v_minor="$(printf "%04d\n" "$(echo "$version" | cut -d "." -f 2)")"
     v_rev="$(printf "%04d\n" "$(echo "$version" | cut -d "." -f 3)")"
-    echo "$(echo ${v_major}${v_minor}${v_rev} | sed 's/^0*//')"
+    echo "$(echo "${v_major}${v_minor}${v_rev}" | sed 's/^0*//')"
 }
 
 function atfile.util.print_blob_url_output() {
@@ -1047,7 +1057,7 @@ function atfile.util.resolve_identity() {
             didplc_dir="$(echo "$did_doc" | jq -r ".directory")"
             pds="$(echo "$did_doc" | jq -r '.service[] | select(.id == "#atproto_pds") | .serviceEndpoint')"
 
-            while IFS=$"\n" read -r a; do
+            while IFS=$'\n' read -r a; do
                 aliases+="$a;"
 
                 if [[ -z $handle && "$a" == "at://"* && "$a" != "at://did:"* ]]; then
@@ -1074,5 +1084,7 @@ function atfile.util.write_cache() {
     atfile.util.get_cache "$file"
   
     echo -e "$content" > "$file_path"
+    # shellcheck disable=SC2320
+    # shellcheck disable=SC2181
     [[ $? != 0 ]] && atfile.die "Unable to write to cache file ($file)"
 }

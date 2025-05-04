@@ -32,8 +32,8 @@ function atfile.invoke.blob_list() {
             json_output="{\"blobs\":["
         fi
     
-        while IFS=$"\n" read -r c; do
-            cid="$(echo $c | jq -r ".")"
+        while IFS=$'\n' read -r c; do
+            cid="$(echo "$c" | jq -r ".")"
             blob_uri="$(atfile.util.build_blob_uri "$_username" "$cid")"
             last_cid="$cid"
             ((record_count++))
@@ -127,6 +127,7 @@ function atfile.invoke.download() {
         downloaded_file="$(atfile.util.build_out_filename "$key" "$file_name")"
         
         curl -H "User-Agent: $(atfile.util.get_uas)" --silent "$blob_uri" -o "$downloaded_file"
+        # shellcheck disable=SC2181
         [[ $? != 0 ]] && success=0
     fi
     
@@ -135,6 +136,7 @@ function atfile.invoke.download() {
         
         gpg --quiet --output "$new_downloaded_file" --decrypt "$downloaded_file"
         
+        # shellcheck disable=SC2181
         if [[ $? != 0 ]]; then
             success=0
         else
@@ -169,7 +171,7 @@ function atfile.invoke.get() {
     
     if [[ $success == 1 ]]; then
         file_type="$(echo "$record" | jq -r '.value.file.mimeType')"
-        did="$(echo $record | jq -r ".uri" | cut -d "/" -f 3)"
+        did="$(echo "$record" | jq -r ".uri" | cut -d "/" -f 3)"
         key="$(atfile.util.get_rkey_from_at_uri "$(echo "$record" | jq -r ".uri")")"
         blob_uri="$(atfile.util.build_blob_uri "$did" "$(echo "$record" | jq -r ".value.blob.ref.\"\$link\"")")"
         cdn_uri="$(atfile.util.get_cdn_uri "$did" "$(echo "$record" | jq -r ".value.blob.ref.\"\$link\"")" "$file_type")"
@@ -180,6 +182,7 @@ function atfile.invoke.get() {
         # shellcheck disable=SC2154
         atfile.say.debug "Getting record...\n↳ NSID: $_nsid_lock\n↳ Repo: $_username\n↳ Key: $key"
         locked_record="$(com.atproto.repo.getRecord "$_username" "$_nsid_lock" "$key")"
+        # shellcheck disable=SC2181
         if [[ $? == 0 ]] && [[ -n "$locked_record" ]]; then
             if [[ $(echo "$locked_record" | jq -r ".value.lock") == true ]]; then
                 locked="$(atfile.util.get_yn 1)"
@@ -237,7 +240,7 @@ function atfile.invoke.get() {
             else
                 case $finger_type in
                     "browser")
-                        finger_browser_uas="$(echo $record | jq -r ".value.finger.userAgent")"
+                        finger_browser_uas="$(echo "$record" | jq -r ".value.finger.userAgent")"
 
                         [[ -z $finger_browser_uas || $finger_browser_uas == "null" ]] && finger_browser_uas="(Unknown)"
 
@@ -291,7 +294,7 @@ function atfile.invoke.handle_atfile() {
     handler="$2"
 
     function atfile.invoke.handle_atfile.is_temp_file_needed() {
-        handler="$(echo $1 | sed s/.desktop$//g)"
+        handler="$(echo "$1" | sed s/.desktop$//g)"
         type="$2"
 
         handlers=(
@@ -340,8 +343,10 @@ function atfile.invoke.handle_atfile() {
                 atfile.say.debug "Handler manually set to '$handler'"
             fi
 
+            # shellcheck disable=SC2319
+            # shellcheck disable=SC2181
             if [[ -n $handler ]] || [[ $? != 0 ]]; then
-                atfile.say.debug "Opening '$key' ($file_type) with '$(echo $handler | sed s/.desktop$//g)'..."
+                atfile.say.debug "Opening '$key' ($file_type) with '$(echo "$handler" | sed s/.desktop$//g)'..."
 
                 # HACK: Some apps don't like http(s)://; we'll need to handle these
                 if [[ $(atfile.invoke.handle_atfile.is_temp_file_needed "$handler" "$file_type") == 1 ]]; then
@@ -438,8 +443,8 @@ function atfile.invoke.list() {
             json_output="{\"uploads\":["
         fi
         
-        while IFS=$"\n" read -r c; do
-            key=$(atfile.util.get_rkey_from_at_uri "$(echo $c | jq -r ".uri")")
+        while IFS=$'\n' read -r c; do
+            key=$(atfile.util.get_rkey_from_at_uri "$(echo "$c" | jq -r ".uri")")
             name="$(echo "$c" | jq -r '.value.file.name')"
             type_emoji="$(atfile.util.get_file_type_emoji "$(echo "$c" | jq -r '.value.file.mimeType')")"
             last_key="$key"
@@ -529,6 +534,7 @@ function atfile.invoke.manage_record() {
             [[ -z "$record" ]] && atfile.die "<record> not set"
             
             record_json="$(echo "$record" | jq)"
+            # shellcheck disable=SC2181
             [[ $? != 0 ]] && atfile.die "Invalid JSON"
             
             com.atproto.repo.createRecord "$_username" "$collection" "$record_json" | jq
@@ -583,6 +589,7 @@ function atfile.invoke.manage_record() {
             [[ -z "$record" ]] && atfile.die "<record> not set"
             
             record_json="$(echo "$record" | jq)"
+            # shellcheck disable=SC2181
             [[ $? != 0 ]] && atfile.die "Invalid JSON"
             
             if [[ "$key" == at:* ]]; then
@@ -612,6 +619,7 @@ function atfile.invoke.print() {
         file_type="$(echo "$record" | jq -r '.value.file.mimeType')"
         
         curl -H "$(atfile.util.get_uas)" -s -L "$blob_uri" --output -
+        # shellcheck disable=SC2181
         [[ $? != 0 ]] && error="?"
     fi
     
@@ -627,6 +635,7 @@ function atfile.invoke.toggle_desktop() {
     [[ $_os == "haiku" ]] && atfile.die "Not available on Haiku"
     [[ $_os == "macos" ]] && atfile.die "Not available on macOS\nThink you could help? See: https://tangled.sh/@zio.sh/atfile/issues/9"
 
+    uid="$(id -u)"
     if [[ $uid == 0 ]]; then
         desktop_dir="/usr/local/share/applications"
         mime_dir="/usr/local/share/mime"
@@ -690,6 +699,7 @@ function atfile.invoke.upload() {
         [[ $_output_json == 0 ]] && echo -e "Encrypting '$file_crypt'..."
         gpg --yes --quiet --recipient "$recipient" --output "$file_crypt" --encrypt "$file"
         
+        # shellcheck disable=SC2181
         if [[ $? == 0 ]]; then
             file="$file_crypt"
         else
@@ -711,6 +721,7 @@ function atfile.invoke.upload() {
                 ;;
             "haiku")
                 haiku_file_attr="$(catattr BEOS:TYPE "$file" 2> /dev/null)"
+                # shellcheck disable=SC2181
                 [[ $? == 0 ]] && file_type="$(echo "$haiku_file_attr" | cut -d ":" -f 3 | xargs)"
 
                 file_date="$(atfile.util.get_date "$(stat -c '%y' "$file")")"
@@ -787,7 +798,7 @@ function atfile.invoke.upload() {
 
     if [[ -z "$error" ]]; then
         unset recipient_key
-        blob_uri="$(atfile.util.build_blob_uri "$(echo "$record" | jq -r ".uri" | cut -d "/" -f 3)" "$(echo $blob | jq -r ".ref.\"\$link\"")")"
+        blob_uri="$(atfile.util.build_blob_uri "$(echo "$record" | jq -r ".uri" | cut -d "/" -f 3)" "$(echo "$blob" | jq -r ".ref.\"\$link\"")")"
         key="$(atfile.util.get_rkey_from_at_uri "$(echo "$record" | jq -r ".uri")")"
         
         if [[ -n "$recipient" ]]; then

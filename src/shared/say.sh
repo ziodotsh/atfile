@@ -40,7 +40,7 @@ function atfile.say() {
         fi
     fi
     
-    message="$(echo "$message" | sed -e "s|\\\n|\\\n$(atfile.util.repeat_char " " $prefix_length)|g")"
+    message="$(echo "$message" | sed -e "s|\\\n|\\\n$(atfile.util.repeat_char " " "$prefix_length")|g")"
     
     echo -n -e "${prefix}${color_message}$message\033[0m${suffix}"
 }
@@ -64,5 +64,5 @@ function atfile.say.die() {
 function atfile.say.inline() {
     message="$1"
     color="$2"
-    atfile.say "$message" "" "" $color "" "\\"
+    atfile.say "$message" "" "" "$color" "" "\\"
 }

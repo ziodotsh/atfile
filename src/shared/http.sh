@@ -56,7 +56,8 @@ function atfile.http.upload() {
 
     atfile.say.debug "$uri\n↳ $file" "POST:  "
 
-    curl -s -X POST $_server/xrpc/$lexi \
+    # shellcheck disable=SC2154
+    curl -s -X POST "$_server/xrpc/$lexi" \
         -H "$auth" \
         -H "Content-Type: $type" \
         -H "User-Agent: $(atfile.util.get_uas)" \

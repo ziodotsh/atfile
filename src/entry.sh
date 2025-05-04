@@ -219,7 +219,7 @@ fi
 
 if [[ $is_os_supported == 0 ]]; then
     if [[ $_skip_unsupported_os_warn == 0 ]]; then
-        atfile.die "Unsupported OS ($(echo $_os | sed s/unknown-//g))\n↳ Set ${_envvar_prefix}_SKIP_UNSUPPORTED_OS_WARN=1 to ignore"
+        atfile.die "Unsupported OS ($(echo "$_os" | sed s/unknown-//g))\n↳ Set ${_envvar_prefix}_SKIP_UNSUPPORTED_OS_WARN=1 to ignore"
     else
         atfile.say.debug "Skipping unsupported OS warning\n↳ ${_envvar_prefix}_SKIP_UNSUPPORTED_OS_WARN is set ($_skip_unsupported_os_warn)"
     fi
@@ -241,7 +241,7 @@ fi
 
 atfile.say.debug "Checking required programs..."
 atfile.util.check_prog "curl" "https://curl.se"
-[[ $os != "haiku" && $os != "solaris" ]] && atfile.util.check_prog "file" "https://www.darwinsys.com/file"
+[[ $_os != "haiku" && $_os != "solaris" ]] && atfile.util.check_prog "file" "https://www.darwinsys.com/file"
 atfile.util.check_prog "jq" "$_prog_hint_jq"
 [[ $_skip_ni_md5sum == 0 ]] && atfile.util.check_prog "md5sum" "" "${_envvar_prefix}_SKIP_NI_MD5SUM"
 

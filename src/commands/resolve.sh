@@ -76,7 +76,7 @@ function atfile.resolve() {
                     atfile.say "   $i"
                 fi
 
-                first_alias="$a"
+                first_alias="${a[0]}"
             done
         done <<< "$aliases"
 

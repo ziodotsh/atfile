@@ -29,13 +29,19 @@ function atfile.release() {
     parsed_version="$(atfile.util.parse_version "$_version")"
     version_record_id="atfile-$parsed_version"
 
-    atfile.say "Building..."
+    test_error_count=0
+    test_info_count=0
+    test_style_count=0
+    test_warning_count=0
+    test_ignore_count=0
 
+    atfile.say "⚒️  Building..."
+
+    echo "↳ Creating '$dist_file'..."
     mkdir -p "$dist_dir"
-
-    echo "↳ Compiling '$dist_file'..."
     echo "#!/usr/bin/env bash" > "$dist_path"
 
+    echo "↳ Generating header..."
     echo -e "\n# ATFile <https://tangled.sh/@zio.sh/atfile>
 # ---
 # Version: $_version
@@ -50,7 +56,7 @@ function atfile.release() {
     do
         if [[ "$s" != *"/src/commands/release.sh" ]]; then
             if [[ -f "$s" ]]; then
-                echo " ↳ Adding: $s"
+                echo "↳ Adding: $s"
 
                 while IFS="" read -r line
                 do
@@ -65,8 +71,8 @@ function atfile.release() {
 
                     if [[ $line == *"# shellcheck disable"* ]]; then
                         include_line=1
+                        (( test_ignore_count++ ))
                     fi
-
 
                     if [[ $include_line == 1 ]]; then
                         if [[ $line == *"{:"* && $line == *":}"* ]]; then
@@ -91,13 +97,8 @@ function atfile.release() {
 
     echo "$dist_path"
 
-    echo "Testing..."
+    echo "🧪 Testing..."
     shellcheck_output="$(shellcheck --format=json "$dist_path" 2>&1)"
-
-    test_error_count=0
-    test_info_count=0
-    test_style_count=0
-    test_warning_count=0
 
     while read -r item; do
         code="$(echo "$item" | jq -r '.code')"
@@ -118,16 +119,17 @@ function atfile.release() {
 
     test_total_count=$(( test_error_count + test_info_count + test_style_count + test_warning_count ))
 
-    echo -e "Built: $_version
+    echo -e "---\n✅ Built: $_version
 ↳ Path: ./$dist_path_relative
  ↳ Check: $checksum
  ↳ Size: $(atfile.util.get_file_size_pretty "$(stat -c %s "$dist_path")")
  ↳ Lines: $(atfile.util.fmt_int "$(wc -l < "$dist_path")")
 ↳ Issues: $(atfile.util.fmt_int "$test_total_count")
- ↳ Error: $(atfile.util.fmt_int "$test_error_count")
- ↳ Warn:  $(atfile.util.fmt_int "$test_warning_count")
- ↳ Info:  $(atfile.util.fmt_int "$test_info_count")
- ↳ Style: $(atfile.util.fmt_int "$test_style_count")
+ ↳ Error:   $(atfile.util.fmt_int "$test_error_count")
+ ↳ Warning: $(atfile.util.fmt_int "$test_warning_count")
+ ↳ Info:    $(atfile.util.fmt_int "$test_info_count")
+ ↳ Style:   $(atfile.util.fmt_int "$test_style_count")
+ ↳ Ignored: $(atfile.util.fmt_int "$test_ignore_count")
 ↳ ID: $id"
 
     chmod +x "$dist_path"
@@ -138,14 +140,14 @@ function atfile.release() {
             atfile.die "Unable to publish ($test_error_count errors detected)"
         fi
 
-        echo "---"
+        atfile.say "---\n✨ Updating..."
         atfile.auth "$_dist_username" "$_dist_password"
         [[ $_version == *"+"* ]] && atfile.die "Cannot publish a Git version ($_version)"
 
-        atfile.say "Uploading '$dist_path'..."
+        atfile.say "↳ Uploading '$dist_path'..."
         atfile.invoke.upload "$dist_path" "" "$version_record_id"
+        # shellcheck disable=SC2181
         [[ $? != 0 ]] && atfile.die "Unable to upload '$dist_path'"
-        echo "---"
 
         latest_release_record="{
     \"version\": \"$_version\",
@@ -155,7 +157,7 @@ function atfile.release() {
     \"checksum\": \"$checksum\"
 }"
 
-        atfile.say "Updating latest record to $_version..."
+        atfile.say "↳ Bumping current version..."
         # shellcheck disable=SC2154
         atfile.invoke.manage_record put "at://$_username/self.atfile.latest/self" "$latest_release_record" &> /dev/null
     fi

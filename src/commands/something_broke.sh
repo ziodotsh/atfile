@@ -65,7 +65,7 @@ function atfile.something_broke() {
 ↳ UAS: $(atfile.util.get_uas)
 ↳ Path: $_prog_path
 Variables
-$(atfile.something_broke.print_envvar "DEBUG" $_debug_default)
+$(atfile.something_broke.print_envvar "DEBUG" "$_debug_default")
 $(atfile.something_broke.print_envvar "DEVEL")
 $(atfile.something_broke.print_envvar "DEVEL_DIR")
 $(atfile.something_broke.print_envvar "DEVEL_ENTRY")

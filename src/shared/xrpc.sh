@@ -34,7 +34,7 @@ function atfile.xrpc.pds.get() {
 function atfile.xrpc.pds.jwt() {
     atfile.http.post \
         "$_server/xrpc/com.atproto.server.createSession" \
-        '{"identifier": "'$_username'", "password": "'$_password'"}' | jq -r ".accessJwt"
+        '{"identifier": "'"$_username"'", "password": "'"$_password"'"}' | jq -r ".accessJwt"
 }
 
 function atfile.xrpc.pds.post() {
@@ -44,7 +44,7 @@ function atfile.xrpc.pds.post() {
 
     [[ -z $type ]] && type="application/json"
 
-    curl -s -X POST $_server/xrpc/$lexi \
+    curl -s -X POST "$_server/xrpc/$lexi" \
         -H "Authorization: Bearer $(atfile.xrpc.pds.jwt)" \
         -H "Content-Type: $type" \
         -H "User-Agent: $(atfile.util.get_uas)" \

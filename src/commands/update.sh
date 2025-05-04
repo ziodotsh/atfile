@@ -45,8 +45,8 @@ function atfile.update() {
     latest_version="$(echo "$latest_release_record" | jq -r '.value.version')"
     latest_version_commit="$(echo "$latest_release_record" | jq -r '.value.commit')"
     latest_version_date="$(echo "$latest_release_record" | jq -r '.value.releasedAt')"
-    parsed_latest_version="$(atfile.util.parse_version $latest_version)"
-    parsed_running_version="$(atfile.util.parse_version $_version)"
+    parsed_latest_version="$(atfile.util.parse_version "$latest_version")"
+    parsed_running_version="$(atfile.util.parse_version "$_version")"
     latest_version_record_id="atfile-$parsed_latest_version"
     update_available=0
     
@@ -65,6 +65,7 @@ function atfile.update() {
 
             echo "---"
             if [[ $_os == "haiku" ]]; then
+                # shellcheck disable=SC2154
                 atfile.say "Update available ($latest_version)\n↳ Run \`$_prog update\` to update" # BUG: Haiku Terminal has issues with emojis
             else
                 atfile.say "😎 Update available ($latest_version)\n  ↳ Run \`$_prog update\` to update"
@@ -86,16 +87,21 @@ function atfile.update() {
             
             atfile.say.debug "Touching temporary path ($temp_updated_path)..."
             touch "$temp_updated_path"
+            # shellcheck disable=SC2181
             [[ $? != 0 ]] && atfile.die "Unable to create temporary file (do you have permission?)"
             
             atfile.say.debug "Getting blob URL for $latest_version ($latest_version_record_id)..."
-            blob_url="$(atfile.invoke.get_url $latest_version_record_id)"
+            blob_url="$(atfile.invoke.get_url "$latest_version_record_id")"
+            # shellcheck disable=SC2181
             [[ $? != 0 ]] && atfile.die "Unable to get blob URL"
 
             atfile.say.debug "Downloading latest release..."
             curl -H "User-Agent: $(atfile.util.get_uas)" -s -o "$temp_updated_path" "$blob_url"
+            # shellcheck disable=SC2181
             if [[ $? == 0 ]]; then
+                # shellcheck disable=SC2154
                 mv "$temp_updated_path" "$_prog_path"
+                # shellcheck disable=SC2181
                 if [[ $? != 0 ]]; then
                     atfile.die "Unable to update (do you have permission?)"
                 else

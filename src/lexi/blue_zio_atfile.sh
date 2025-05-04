@@ -187,7 +187,7 @@ function blue.zio.atfile.meta__video() {
     \"gps\": {
         \"alt\": $gps_alt,
         \"lat\": $gps_lat,
-        \"long\": "$gps_long"
+        \"long\": $gps_long
     },
     \"title\": \"$title\",
     \"video\": [ $video ]
@@ -211,6 +211,7 @@ function blue.zio.atfile.finger__machine() {
     unset machine_id
     unset machine_os
 
+    # shellcheck disable=SC2154
     if [[ $_enable_fingerprint == 1 ]]; then
         machine_id_file="/etc/machine-id"
         os_release_file="/etc/os-release"
