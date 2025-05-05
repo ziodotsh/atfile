@@ -38,7 +38,7 @@ function parse_version() {
     v_major="$(printf "%04d\n" "$(echo "$version" | cut -d "." -f 1)")"
     v_minor="$(printf "%04d\n" "$(echo "$version" | cut -d "." -f 2)")"
     v_rev="$(printf "%04d\n" "$(echo "$version" | cut -d "." -f 3)")"
-    echo "$(echo "${v_major}${v_minor}${v_rev}" | sed 's/^0*//')"
+    echo "${v_major}${v_minor}${v_rev}" | sed 's/^0*//'
 }
 
 function xrpc_get() {

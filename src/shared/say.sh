@@ -10,8 +10,9 @@ function atfile.say() {
     
     prefix_length=0
 
+    # shellcheck disable=SC2154
     if [[ $_os == "haiku" ]]; then
-        message="$(echo "$message" | sed 's/↳/>/g')"
+        message="${message//↳/>}"
     fi
     
     [[ -z $color_prefix_message ]] && color_prefix_message=0
@@ -40,7 +41,7 @@ function atfile.say() {
         fi
     fi
     
-    message="$(echo "$message" | sed -e "s|\\\n|\\\n$(atfile.util.repeat_char " " "$prefix_length")|g")"
+    message="${message//\\n/\\n$(atfile.util.repeat_char " " "$prefix_length")}"
     
     echo -n -e "${prefix}${color_message}$message\033[0m${suffix}"
 }

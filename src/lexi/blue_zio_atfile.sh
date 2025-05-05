@@ -22,7 +22,7 @@ function blue.zio.atfile.meta__audio() {
     file="$1"
     
     if [ ! -x "$(command -v mediainfo)" ]; then
-        echo "$(blue.zio.atfile.meta__unknown "Unable to create record at time of upload (MediaInfo not installed)")"
+        blue.zio.atfile.meta__unknown "Unable to create record at time of upload (MediaInfo not installed)"
         return
     fi
     
@@ -74,7 +74,7 @@ function blue.zio.atfile.meta__photo() {
     file="$1"
     
     if [ ! -x "$(command -v exiftool)" ]; then
-        echo "$(blue.zio.atfile.meta__unknown "Unable to create record during upload (ExifTool not installed)")"
+        blue.zio.atfile.meta__unknown "Unable to create record during upload (ExifTool not installed)"
         return
     fi
 
@@ -144,7 +144,7 @@ function blue.zio.atfile.meta__video() {
     file="$1"
     
     if [ ! -x "$(command -v mediainfo)" ]; then
-        echo "$(blue.zio.atfile.meta__unknown "Unable to create record during upload (MediaInfo not installed)")"
+        blue.zio.atfile.meta__unknown "Unable to create record during upload (MediaInfo not installed)"
         return
     fi
     

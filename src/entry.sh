@@ -219,7 +219,7 @@ fi
 
 if [[ $is_os_supported == 0 ]]; then
     if [[ $_skip_unsupported_os_warn == 0 ]]; then
-        atfile.die "Unsupported OS ($(echo "$_os" | sed s/unknown-//g))\n↳ Set ${_envvar_prefix}_SKIP_UNSUPPORTED_OS_WARN=1 to ignore"
+        atfile.die "Unsupported OS (${_os//unknown-/})\n↳ Set ${_envvar_prefix}_SKIP_UNSUPPORTED_OS_WARN=1 to ignore"
     else
         atfile.say.debug "Skipping unsupported OS warning\n↳ ${_envvar_prefix}_SKIP_UNSUPPORTED_OS_WARN is set ($_skip_unsupported_os_warn)"
     fi

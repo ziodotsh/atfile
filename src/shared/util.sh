@@ -260,20 +260,22 @@ function atfile.util.get_didplc_doc() {
         curl -H "User-Agent: $(atfile.util.get_uas)" -s -L -X GET "$endpoint/$actor"
     }
 
+    # shellcheck disable=SC2154
     didplc_endpoint="$_endpoint_plc_directory"
     didplc_doc="$(atfile.util.get_didplc_doc.request_doc "$didplc_endpoint" "$actor")"
 
     if [[ "$didplc_doc" != "{"* ]]; then
+        # shellcheck disable=SC2154
         didplc_endpoint="$_endpoint_plc_directory_fallback"
         didplc_doc="$(atfile.util.get_didplc_doc.request_doc "$didplc_endpoint" "$actor")"
     fi
 
-    echo "$(echo "$didplc_doc" | jq ". += {\"directory\": \"$didplc_endpoint\"}")"
+    echo "$didplc_doc" | jq ". += {\"directory\": \"$didplc_endpoint\"}"
 }
 
 function atfile.util.get_didweb_doc_url() {
     actor="$1"
-    echo "https://$(echo "$actor" | sed "s/did:web://")/.well-known/did.json"
+    echo "https://${actor//did:web:/}/.well-known/did.json"
 }
 
 function atfile.util.get_envvar() {
@@ -502,7 +504,7 @@ function atfile.util.get_line() {
     input="$1"
     index=$(( $2 + 1 ))
     
-    echo "$(echo -e "$input" | sed -n "$(( index ))"p)"
+    echo -e "$input" | sed -n "$(( index ))"p
 }
 
 function atfile.util.get_mediainfo_field() {
@@ -771,7 +773,7 @@ function atfile.util.get_var_from_file() {
         found_line="$(grep "\b${variable}=" "$file")"
         
         if [[ -n "$found_line" ]] && [[ ! "$found_line" == \#* ]]; then
-            output="$(echo "$found_line" | sed "s|${variable}=||g")"
+            output="${found_line#"${variable}"=}"
             output="${output%\"}"
             output="${output#\"}"
 
@@ -966,7 +968,7 @@ function atfile.util.parse_version() {
     v_major="$(printf "%04d\n" "$(echo "$version" | cut -d "." -f 1)")"
     v_minor="$(printf "%04d\n" "$(echo "$version" | cut -d "." -f 2)")"
     v_rev="$(printf "%04d\n" "$(echo "$version" | cut -d "." -f 3)")"
-    echo "$(echo "${v_major}${v_minor}${v_rev}" | sed 's/^0*//')"
+    echo "${v_major}${v_minor}${v_rev}" | sed 's/^0*//'
 }
 
 function atfile.util.print_blob_url_output() {

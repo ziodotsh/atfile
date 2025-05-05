@@ -95,8 +95,6 @@ function atfile.release() {
 
     checksum="$(atfile.util.get_md5 "$dist_path")"
 
-    echo "$dist_path"
-
     echo "🧪 Testing..."
     shellcheck_output="$(shellcheck --format=json "$dist_path" 2>&1)"
 
