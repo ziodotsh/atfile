@@ -70,8 +70,12 @@ function atfile.release() {
                     fi
 
                     if [[ $line == *"# shellcheck disable"* ]]; then
-                        include_line=1
-                        (( test_ignore_count++ ))
+                        if [[ $line == *"=SC2154"* ]]; then
+                            include_line=0
+                        else
+                            include_line=1
+                            (( test_ignore_count++ ))
+                        fi
                     fi
 
                     if [[ $include_line == 1 ]]; then
