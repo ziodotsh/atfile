@@ -180,13 +180,6 @@ atfile.say.debug "Starting up..."
     _version="$_force_version" &&\
     atfile.say.debug "Overriding Version (\$_version)\n↳ ${_envvar_prefix}_FORCE_VERSION set to '$_force_version'"
 
-### Legacy
-
-[[ $_enable_fingerprint == "$_enable_fingerprint_default" ]] &&\
-    _include_fingerprint_depr="$(atfile.util.get_envvar "${_envvar_prefix}_INCLUDE_FINGERPRINT" "$_enable_fingerprint_default")" &&\
-    atfile.say.debug "Setting ${_envvar_prefix}_ENABLE_FINGERPRINT to $_include_fingerprint_depr\n↳ ${_envvar_prefix}_INCLUDE_FINGERPRINT (deprecated) set to 1" &&\
-    _enable_fingerprint=$_include_fingerprint_depr
-
 ### Validation
 
 [[ $_output_json == 1 ]] && [[ $_max_list == "$_max_list_default" ]] &&\
