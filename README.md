@@ -1,19 +1,11 @@
-<h1 align="center">
+<center>
     ATFile
-</h1>
+</center>
 
-<p align="center">
+<center>
     Store and retrieve files on the <a href="https://atproto.com/">ATmosphere</a> (like <a href="https://bsky.app">Bluesky</a>)<br />
     <em>Written entirely in Bash Shell. No <span title="Deno is pretty cool tho">NodeJS</span> here!</em>
-</p>
-
-<p align="center">
-    <strong>
-        <a href="https://github.com/ziodotsh/atfile/releases/latest">⬇️ Get ATFile</a> &nbsp;|&nbsp;
-        <a href="https://tangled.sh/@zio.sh/atfile/issues/new">💣 Submit Issue</a> &nbsp;|&nbsp;
-        <a href="https://bsky.app/profile/did:web:zio.sh"> 🦋 @zio.sh</a>
-    </strong>
-</p>
+</center>
 
 <hr />
 
