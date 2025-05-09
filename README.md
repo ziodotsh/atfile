@@ -7,26 +7,18 @@
     <em>Written entirely in Bash Shell. No <span title="Deno is pretty cool tho">NodeJS</span> here!</em>
 </p>
 
-<p align="center">
-    <strong>
-        <a href="https://github.com/ziodotsh/atfile/releases/latest">⬇️ Get ATFile</a> &nbsp;|&nbsp;
-        <a href="https://tangled.sh/@zio.sh/atfile/issues/new">💣 Submit Issue</a> &nbsp;|&nbsp;
-        <a href="https://bsky.app/profile/did:web:zio.sh"> 🦋 @zio.sh</a>
-    </strong>
-</p>
-
 <hr />
 
 ## ✨ Quick Start
 
 ```sh
 curl -sSL https://zio.sh/atfile/install.sh | bash
-echo 'ATFILE_USERNAME="<your-atproto-username>"' > ~/.config/atfile.env  # e.g. alice.bsky.social, did:plc:vdjlpwlhbnug4fnjodwr3vzh, did:web:twitter.com
+echo 'ATFILE_USERNAME="<your-atproto-username>"' > ~/.config/atfile.env # e.g. alice.bsky.social, did:plc:vdjlpwlhbnug4fnjodwr3vzh, did:web:twitter.com
 echo 'ATFILE_PASSWORD="<your-atproto-password>"' >> ~/.config/atfile.env
 atfile help
 ```
 
-## 👀 Using
+## 👀 Detailed Usage
 
 ### ✅ Requirements
 
@@ -59,16 +51,59 @@ atfile help
           * To change this on Bluesky PDS, set `PDS_BLOB_UPLOAD_LIMIT=<bytes>`
           * If the PDS is running behind Cloudflare, the Free plan imposes a 100MB upload limit
           * This tool, nor setting a higher filesize limit, **does not workaround [video upload limits on Bluesky](https://bsky.social/about/blog/09-11-2024-video).** Videos are served via a [CDN](https://video.bsky.app), and adding larger videos to post records yields errors
+  
+### ⬇️ Downloading & Installing
 
-### 🤔 _(Todo)_
+There are three ways of installing ATFile. Either:
 
-_(Todo)_
+#### Automatic ("`curl|bash`")
+
+```
+curl -sSL https://zio.sh/atfile/install.sh | bash
+```
+
+This will automatically fetch the latest version of ATFile and install it in an appropriate location, as well as creating a blank configuration file. Once downloaded and installed, the locations used will be output. They are as follows:
+
+* **Linux/Windows/BSD/Solaris**
+  * Install: `$HOME/.local/bin/atfile`
+    * As `sudo`/`root`: `/usr/local/bin/atfile`
+  * Config: `$HOME/.config/atfile.env`
+    * As `root` (not `sudo`): `/root/.config/atfile.env`
+* **macOS**
+  * Install: `$HOME/.local/bin/atfile`
+    * As `sudo`/`root`: `/usr/local/bin/atfile`
+  * Config: `$HOME/Library/Application Support/atfile.env`
+    * As `root` (not `sudo`): `/root/.config/atfile.env`
+* **Haiku**
+  * Install: `/boot/system/non-packaged/bin/atfile`
+  * Config: `$HOME/config/settings/atfile.env`
+    * `$HOME` is **always** `/home` on Haiku
+
+If `$XDG_CONFIG_HOME` is set, this will overwrite the config directory (e.g. setting `XDG_CONFIG_HOME=$HOME/.local/share/atfile` will result in the config being stored at `$HOME/.local/share/atfile/atfile.env`).
+
+Custom config paths are supported, but set after-the-fact &mdash; see **Manually** below.
+
+#### Manually
+
+To install manually, see [tags on @zio.sh/atfile](https://tangled.sh/@zio.sh/atfile/tags), and download the required version under **Artifacts**. This can be stored and run from anywhere (and is identical to the version `curl|bash` fetched &mdash; this installed version can also be moved to custom locations at whim).
+
+Don't forget to mark as executable with `chmod +x atfile.sh`. It's also a good idea to remove the version from the filename, as ATFile can update itself (with `atfile update`) and will overwrite the file (this functionality can be disabled with `ATFILE_DISABLE_UPDATER=1`).
+
+Config locations are identical to those above (see **Automatic ("`curl|bash`")** above). To use a custom path, set `$ATFILE_PATH_CONF`. Variables can also be used (and overridden) with exports &mdash; see **`atfile help` ➔ Environment Variables** for more.
+
+#### Repository
+
+If you've pulled this repository, you can also use ATFile by simply calling `./atfile.sh` &mdash; it functions just as a regular compiled version of ATFile, including reading from the same config file. Debug messages are turned on by default: disable these by setting `ATFILE_DEBUG=0`.
+
+**Using a development version against your ATProto account could potentially inadvertently damage records.**
+
+### Using
+
+See `atfile help`.
 
 ## 🏗️ Building
 
 _(Todo)_
-
----
 
 ## ⌨️ Contributing
 
