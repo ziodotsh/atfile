@@ -294,7 +294,7 @@ function atfile.invoke.handle_atfile() {
     handler="$2"
 
     function atfile.invoke.handle_atfile.is_temp_file_needed() {
-        handler="$(echo "$1" | sed s/.desktop$//g)"
+        handler="${1//.desktop/}"
         type="$2"
 
         handlers=(
@@ -346,7 +346,7 @@ function atfile.invoke.handle_atfile() {
             # shellcheck disable=SC2319
             # shellcheck disable=SC2181
             if [[ -n $handler ]] || [[ $? != 0 ]]; then
-                atfile.say.debug "Opening '$key' ($file_type) with '$(echo "$handler" | sed s/.desktop$//g)'..."
+                atfile.say.debug "Opening '$key' ($file_type) with '${handler//.desktop/}'..."
 
                 # HACK: Some apps don't like http(s)://; we'll need to handle these
                 if [[ $(atfile.invoke.handle_atfile.is_temp_file_needed "$handler" "$file_type") == 1 ]]; then
@@ -742,7 +742,7 @@ function atfile.invoke.upload() {
         if [[ -n $recipient ]]; then
             file_type="application/prs.atfile.gpg-crypt"
         elif [[ "$file_type" == "application/"* ]]; then
-            file_extension="$(echo "$file_name" | sed 's:.*\.::')"
+            file_extension="${file_name##*.}"
             
             case "$file_extension" in
                 "car") file_type="application/prs.atfile.car" ;;

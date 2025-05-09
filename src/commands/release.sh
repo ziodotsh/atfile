@@ -70,8 +70,12 @@ function atfile.release() {
                     fi
 
                     if [[ $line == *"# shellcheck disable"* ]]; then
-                        include_line=1
-                        (( test_ignore_count++ ))
+                        if [[ $line == *"=SC2154"* ]]; then
+                            include_line=0
+                        else
+                            include_line=1
+                            (( test_ignore_count++ ))
+                        fi
                     fi
 
                     if [[ $include_line == 1 ]]; then
@@ -94,8 +98,6 @@ function atfile.release() {
     echo -e "\n# \"Four million lines of BASIC\"\n#  - Kif Kroker (3003)" >> "$dist_path"
 
     checksum="$(atfile.util.get_md5 "$dist_path")"
-
-    echo "$dist_path"
 
     echo "🧪 Testing..."
     shellcheck_output="$(shellcheck --format=json "$dist_path" 2>&1)"
