@@ -69,6 +69,7 @@ _path_envvar="$(atfile.util.get_envvar "${_envvar_prefix}_PATH_CONF" "$_path_env
 
 _debug_default=$([[ $ATFILE_DEVEL == 1 ]] && echo 1 || echo 0)
 _devel_publish_default=0
+_disable_pbc_fallback_default=0
 _disable_update_checking_default=0
 _disable_updater_default=0
 _dist_username_default="$_meta_did"
@@ -92,6 +93,7 @@ _skip_unsupported_os_warn_default=0
 
 #### Fallbacks
 
+_endpoint_appview_fallback="https://api.bsky.app"
 _endpoint_plc_directory_fallback="https://plc.directory"
 _max_list_fallback=100
 
@@ -99,6 +101,7 @@ _max_list_fallback=100
 
 _debug="$(atfile.util.get_envvar "${_envvar_prefix}_DEBUG" "$_debug_default")"
 _devel_publish="$(atfile.util.get_envvar "${_envvar_prefix}_DEVEL_PUBLISH" $_devel_publish_default)"
+_disable_pbc_fallback="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_PBC_FALLBACK" $_disable_pbc_fallback_default)"
 _disable_update_checking="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_UPDATE_CHECKING" $_disable_update_checking_default)"
 _disable_updater="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_UPDATER" $_disable_updater_default)"
 _dist_password="$(atfile.util.get_envvar "${_envvar_prefix}_DIST_PASSWORD")"

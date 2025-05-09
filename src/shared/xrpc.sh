@@ -59,9 +59,13 @@ function atfile.xrpc.bsky.get() {
     lexi="$1"
     query="$2"
     type="$3"
+    appview="$4"
+
+    # shellcheck disable=SC2154
+    [[ -z "$appview" ]] && appview="$_endpoint_appview"
 
     atfile.http.get \
-        "$_endpoint_appview/xrpc/$lexi?$query" \
+        "$appview/xrpc/$lexi?$query" \
         "" \
         "$type" | jq
 }

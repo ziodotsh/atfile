@@ -42,8 +42,8 @@ atfile help
         * Both GNU and BusyBox versions supported
     * [`websocat`](https://github.com/vi/websocat) _(optional: needed for `stream`)_
 * **ATProto account**
-  *  Both [Bluesky PLC-operated](https://bsky.social) and self-hosted accounts supported
-      * If you're using a `bsky.network` (`@*.bsky.social`) account,  limit the amount of files you upload to Bluesky PLC's servers. Heed the copyright warning: **do not upload copyrighted files.**
+  *  Both [Bluesky PBC-operated](https://bsky.social) and self-hosted accounts supported
+      * If you're using a `bsky.network` (`@*.bsky.social`) account,  limit the amount of files you upload to Bluesky PBC's servers. Heed the copyright warning: **do not upload copyrighted files.**
       * `did:web` accounts supported!
     * Confirmed to work on [Bluesky PDS](https://github.com/bluesky-social/pds) and [millipds](https://github.com/DavidBuchanan314/millipds)
       * Other PDSs remain untested, but if they implement standard `com.atproto.*` endpoints, there should be no reason these won't work

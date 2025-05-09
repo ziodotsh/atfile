@@ -157,7 +157,12 @@ function atfile.help() {
         ℹ️  Your PDS is resolved from your username. Set to override it (or if
            resolving fails)
     ${_envvar_prefix}_ENDPOINT_PLC_DIRECTORY <url> (default: ${_endpoint_plc_directory_default}$([[ $_endpoint_plc_directory_default == *"zio.blue" ]] && echo "²"))
-        Endpoint of the PLC directory\n
+        Endpoint of the PLC directory
+    ${_envvar_prefix}_DISABLE_PBC_FALLBACK <bool¹> (default: $_disable_pbc_fallback)
+        Disable the (hardcoded) usage of various Bluesky PBC-hosted fallbacks
+        if/when required. Currently, there are fallbacks for:
+        * ${_envvar_prefix}_ENDPOINT_APPVIEW ($_endpoint_appview_fallback)
+        * ${_envvar_prefix}_ENDPOINT_PLC_DIRECTORY ($_endpoint_plc_directory_fallback)\n
     ${_envvar_prefix}_DEBUG <bool¹> (default: $_debug_default)
         Print debug outputs
         ⚠️  When output is JSON (${_envvar_prefix}_OUTPUT_JSON=1), sets to 0
