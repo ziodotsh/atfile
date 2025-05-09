@@ -49,17 +49,16 @@ atfile help
     * `md5sum` _(optional: set `ATFILE_SKIP_NI_MD5SUM=1` to ignore)_
         * Both GNU and BusyBox versions supported
     * [`websocat`](https://github.com/vi/websocat) _(optional: needed for `stream`)_
-* **PDS:** [Bluesky PDS](https://github.com/bluesky-social/pds)
-    * Other PDSs (such as [millipds](https://github.com/DavidBuchanan314/millipds)) remain untested, but if they implement standard `com.atproto.*` endpoints, there should be no reason these won't work
-    * Filesize limits cannot be automatically detected. By default, this is 100MB
-        * To change this on Bluesky PDS, set `PDS_BLOB_UPLOAD_LIMIT=<bytes>`
-        * If the PDS is running behind Cloudflare, the Free plan imposes a 100MB upload limit
-        * This tool, nor setting a higher filesize limit, does not workaround [video upload limits on Bluesky](https://bsky.social/about/blog/09-11-2024-video). Videos are served via a [CDN](https://video.bsky.app), and adding larger videos to post records yields errors on the app
 * **ATProto account**
-    * `bsky.network` (`@*.bsky.social`) accounts supported
-      * If you can, limit the amount of files you upload to Bluesky's servers. It's a miracle this even works with, what's currently, an entirely free service.
-      * Heed the copyright warning: **do not upload copyrighted files.**
-    * `did:web` accounts supported!
+  *  Both [Bluesky PLC-operated](https://bsky.social) and self-hosted accounts supported
+      * If you're using a `bsky.network` (`@*.bsky.social`) account,  limit the amount of files you upload to Bluesky PLC's servers. Heed the copyright warning: **do not upload copyrighted files.**
+      * `did:web` accounts supported!
+    * Confirmed to work on [Bluesky PDS](https://github.com/bluesky-social/pds) and [millipds](https://github.com/DavidBuchanan314/millipds)
+      * Other PDSs remain untested, but if they implement standard `com.atproto.*` endpoints, there should be no reason these won't work
+      * Filesize limits cannot be automatically detected. By default, this is 100MB
+          * To change this on Bluesky PDS, set `PDS_BLOB_UPLOAD_LIMIT=<bytes>`
+          * If the PDS is running behind Cloudflare, the Free plan imposes a 100MB upload limit
+          * This tool, nor setting a higher filesize limit, **does not workaround [video upload limits on Bluesky](https://bsky.social/about/blog/09-11-2024-video).** Videos are served via a [CDN](https://video.bsky.app), and adding larger videos to post records yields errors
 
 ### 🤔 _(Todo)_
 
