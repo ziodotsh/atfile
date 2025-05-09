@@ -7,8 +7,14 @@ function atfile.bsky_profile() {
     [[ $_output_json == 1 ]] && atfile.die "Command not available as JSON"
 
     function atfile.bsky_profile.get_pretty_date() {
-        # shellcheck disable=SC2317
-        atfile.util.get_date "$1" "%Y-%m-%d %H:%M:%S"
+        date="$1"
+
+        if [[ $date == "null" ]]; then
+            echo "(Unknown)"
+        else
+            # shellcheck disable=SC2317
+            atfile.util.get_date "$1" "%Y-%m-%d %H:%M:%S"
+        fi
     }
 
     if [[ -z "$actor" ]]; then
