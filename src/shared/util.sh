@@ -680,6 +680,7 @@ function atfile.util.get_pds_pretty() {
         pds_name="Bridgy Fed"
         pds_emoji="🔀"
     else
+        # BUG: This doesn't seem to work anymore?
         pds_oauth_url="$pds/oauth/authorize"
         pds_oauth_page="$(curl -H "User-Agent: $(atfile.util.get_uas)" -s -L -X GET "$pds_oauth_url")"
         pds_customization_data="$(echo "$pds_oauth_page" | sed -s s/.*_customizationData\"]=//g | sed -s s/\;document\.currentScript\.remove.*//g)"
