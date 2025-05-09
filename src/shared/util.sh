@@ -1029,7 +1029,7 @@ function atfile.util.resolve_identity() {
     
     if [[ "$actor" != "did:"* ]]; then
         # shellcheck disable=SC2154
-        resolved_handle="$(atfile.xrpc.bsky.get "com.atproto.identity.resolveHandle" "handle=$actor" "" "$_endpoint_resolve_handle")"
+        resolved_handle="$(atfile.xrpc.bsky.get "com.atproto.identity.resolveHandle" "handle=$actor")"
         error="$(atfile.util.get_xrpc_error $? "$resolved_handle")"
 
         if [[ -z "$error" ]]; then

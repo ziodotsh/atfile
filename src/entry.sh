@@ -74,10 +74,8 @@ _disable_updater_default=0
 _dist_username_default="$_meta_did"
 _enable_fingerprint_default=0
 _enable_update_git_clobber_default=0
-_endpoint_appview_bsky_default="https://api.bsky.app"
-_endpoint_appview_bsky_video_default="https://video.bsky.app"
+_endpoint_appview_default="https://bsky.zio.blue"
 _endpoint_jetstream_default="wss://jetstream.atproto.tools"
-_endpoint_resolve_handle_default="https://zio.blue" # lol wtf is bsky.social
 _endpoint_plc_directory_default="https://plc.zio.blue"
 _fmt_blob_url_default="[server]/xrpc/com.atproto.sync.getBlob?did=[did]&cid=[cid]"
 _fmt_out_file_default="[key]__[name]"
@@ -107,11 +105,9 @@ _dist_password="$(atfile.util.get_envvar "${_envvar_prefix}_DIST_PASSWORD")"
 _dist_username="$(atfile.util.get_envvar "${_envvar_prefix}_DIST_USERNAME" $_dist_username_default)"
 _enable_fingerprint="$(atfile.util.get_envvar "${_envvar_prefix}_ENABLE_FINGERPRINT" "$_enable_fingerprint_default")"
 _enable_update_git_clobber="$(atfile.util.get_envvar "${_envvar_prefix}_ENABLE_UPDATE_GIT_CLOBBER" "$_enable_update_git_clobber_default")"
-_endpoint_appview_bsky="$(atfile.util.get_envvar "${_envvar_prefix}_ENDPOINT_APPVIEW_BSKY" "$_endpoint_appview_bsky_default")"
-_endpoint_appview_bsky_video="$(atfile.util.get_envvar "${_envvar_prefix}_ENDPOINT_APPVIEW_BSKY_VIDEO" "$_endpoint_appview_bsky_video_default")"
+_endpoint_appview="$(atfile.util.get_envvar "${_envvar_prefix}_ENDPOINT_APPVIEW" "$_endpoint_appview_default")"
 _endpoint_jetstream="$(atfile.util.get_envvar "${_envvar_prefix}_ENDPOINT_JETSTREAM" "$_endpoint_jetstream_default")"
 _endpoint_plc_directory="$(atfile.util.get_envvar "${_envvar_prefix}_ENDPOINT_PLC_DIRECTORY" "$_endpoint_plc_directory_default")"
-_endpoint_resolve_handle="$(atfile.util.get_envvar "${_envvar_prefix}_ENDPOINT_RESOLVE_HANDLE" "$_endpoint_resolve_handle_default")"
 _fmt_blob_url="$(atfile.util.get_envvar "${_envvar_prefix}_FMT_BLOB_URL" "$_fmt_blob_url_default")"
 _fmt_out_file="$(atfile.util.get_envvar "${_envvar_prefix}_FMT_OUT_FILE" "$_fmt_out_file_default")"
 _force_meta_author="$(atfile.util.get_envvar "${_envvar_prefix}_FORCE_META_AUTHOR")"
@@ -320,9 +316,6 @@ if [[ $_is_sourced == 0 ]] && [[ $ATFILE_DEVEL_NO_INVOKE != 1 ]]; then
                 atfile.bsky_profile "$2"
             fi
             ;;
-        #"bsky-video")
-        #    atfile.bsky_video "$2"
-        #    ;;
         "cat")
             [[ -z "$2" ]] && atfile.die "<key> not set"
             if [[ -n "$3" ]]; then

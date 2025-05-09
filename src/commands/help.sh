@@ -148,6 +148,8 @@ function atfile.help() {
            * video/*: $_nsid_meta#video
     ${_envvar_prefix}_SKIP_UNSUPPORTED_OS_WARN <bool¹> (default: $_skip_unsupported_os_warn)
         Do not error when running on an unsupported OS\n
+    ${_envvar_prefix}_ENDPOINT_APPVIEW <url> (default: ${_endpoint_appview_default}$([[ $_endpoint_appview_default == *"zio.blue" ]] && echo "²"))
+        Endpoint of the Bluesky (or compatible) AppView
     ${_envvar_prefix}_ENDPOINT_JETSTREAM <url> (default: $_endpoint_jetstream_default)
         Endpoint of the Jetstream relay
     ${_envvar_prefix}_ENDPOINT_PDS <url>
@@ -155,9 +157,7 @@ function atfile.help() {
         ℹ️  Your PDS is resolved from your username. Set to override it (or if
            resolving fails)
     ${_envvar_prefix}_ENDPOINT_PLC_DIRECTORY <url> (default: ${_endpoint_plc_directory_default}$([[ $_endpoint_plc_directory_default == *"zio.blue" ]] && echo "²"))
-        Endpoint of the PLC directory
-    ${_envvar_prefix}_ENDPOINT_RESOLVE_HANDLE <url> (default: ${_endpoint_resolve_handle_default}$([[ $_endpoint_plc_directory_default == *"zio.blue" ]] && echo "²"))
-        Endpoint of the PDS/AppView used for handle resolving\n
+        Endpoint of the PLC directory\n
     ${_envvar_prefix}_DEBUG <bool¹> (default: $_debug_default)
         Print debug outputs
         ⚠️  When output is JSON (${_envvar_prefix}_OUTPUT_JSON=1), sets to 0

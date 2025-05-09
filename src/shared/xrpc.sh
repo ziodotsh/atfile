@@ -61,29 +61,7 @@ function atfile.xrpc.bsky.get() {
     type="$3"
 
     atfile.http.get \
-        "$_endpoint_appview_bsky/xrpc/$lexi?$query" \
+        "$_endpoint_appview/xrpc/$lexi?$query" \
         "" \
-        "$type" | jq
-}
-
-## Bluesky Video
-
-function atfile.xrpc.bsky_video.jwt() {
-    lxm="$1"
-    aud="$2"
-
-    [[ -z "$aud" ]] && aud="did:web:$(atfile.util.get_uri_segment "$_endpoint_appview_bsky_video" host)"
-
-    atfile.xrpc.pds.get "com.atproto.server.getServiceAuth" "aud=$aud&lxm=$lxm" | jq -r ".token"
-}
-
-function atfile.xrpc.bsky_video.get() {
-    lexi="$1"
-    query="$2"
-    type="$3"
-
-    atfile.http.get \
-        "$_endpoint_appview_bsky_video/xrpc/$lexi?$query" \
-        "Bearer $(atfile.xrpc.bsky_video.jwt "$lexi")" \
         "$type" | jq
 }
