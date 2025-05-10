@@ -150,7 +150,7 @@ function atfile.help() {
         Do not error when running on an unsupported OS\n
     ${_envvar_prefix}_ENDPOINT_APPVIEW <url> (default: ${_endpoint_appview_default}$([[ $_endpoint_appview_default == *"zio.blue" ]] && echo "²"))
         Endpoint of the Bluesky (or compatible) AppView
-    ${_envvar_prefix}_ENDPOINT_JETSTREAM <url> (default: $_endpoint_jetstream_default)
+    ${_envvar_prefix}_ENDPOINT_JETSTREAM <url> (default: $_endpoint_jetstream_default$([[ $_endpoint_jetstream_default == *"zio.blue" ]] && echo "²"))
         Endpoint of the Jetstream relay
     ${_envvar_prefix}_ENDPOINT_PDS <url>
         Endpoint of the PDS
@@ -162,6 +162,7 @@ function atfile.help() {
         Disable the (hardcoded) usage of various Bluesky PBC-hosted fallbacks
         if/when required. Currently, there are fallbacks for:
         * ${_envvar_prefix}_ENDPOINT_APPVIEW ($_endpoint_appview_fallback)
+        * ${_envvar_prefix}_ENDPOINT_JETSTREAM ($_endpoint_jetstream_fallback)
         * ${_envvar_prefix}_ENDPOINT_PLC_DIRECTORY ($_endpoint_plc_directory_fallback)\n
     ${_envvar_prefix}_DEBUG <bool¹> (default: $_debug_default)
         Print debug outputs

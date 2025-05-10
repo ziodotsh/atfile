@@ -16,7 +16,7 @@ function atfile.release() {
     atfile.util.check_prog "md5sum"
     atfile.util.check_prog "shellcheck"
 
-    id="$(tr -dc A-Za-z0-9 </dev/urandom | head -c 13; echo)"
+    id="$(atfile.util.get_random 13)"
     commit_author="$(git config user.name) <$(git config user.email)>"
     commit_hash="$(git rev-parse HEAD)"
     commit_date="$(git show --no-patch --format=%ci "$commit_hash")"

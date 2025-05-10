@@ -699,6 +699,25 @@ function atfile.util.get_pds_pretty() {
     fi
 }
 
+function atfile.util.get_random() {
+    amount="$1"
+    [[ -z "$amount" ]] && amount="6"
+    echo "$(tr -dc A-Za-z0-9 </dev/urandom | head -c $amount; echo)"
+}
+
+function atfile.util.get_random_pbc_jetstream() {
+    pbc_jetstreams=(
+        "jetstream1.us-east"
+        "jetstream2.us-east"
+        "jetstream1.us-west"
+        "jetstream2.us-east"
+    )
+
+    pbc_jetstream="${pbc_jetstreams[ $RANDOM % ${#pbc_jetstreams[@]} ]}"
+
+    echo "https://$pbc_jetstream.bsky.network"
+}
+
 function atfile.util.get_realpath() {
     path="$1"
 

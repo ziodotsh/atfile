@@ -76,7 +76,7 @@ _dist_username_default="$_meta_did"
 _enable_fingerprint_default=0
 _enable_update_git_clobber_default=0
 _endpoint_appview_default="https://bsky.zio.blue"
-_endpoint_jetstream_default="wss://jetstream.atproto.tools"
+_endpoint_jetstream_default="wss://stream.zio.blue"
 _endpoint_plc_directory_default="https://plc.zio.blue"
 _fmt_blob_url_default="[server]/xrpc/com.atproto.sync.getBlob?did=[did]&cid=[cid]"
 _fmt_out_file_default="[key]__[name]"
@@ -94,6 +94,7 @@ _skip_unsupported_os_warn_default=0
 #### Fallbacks
 
 _endpoint_appview_fallback="https://api.bsky.app"
+_endpoint_jetstream_fallback="$(atfile.util.get_random_pbc_jetstream)"
 _endpoint_plc_directory_fallback="https://plc.directory"
 _max_list_fallback=100
 
