@@ -423,9 +423,6 @@ if [[ $_is_sourced == 0 ]] && [[ $ATFILE_DEVEL_NO_INVOKE != 1 ]]; then
         "resolve")
             atfile.resolve "$2"
             ;;
-        "sl")
-            atfile.sl
-            ;;
         "something-broke")
             atfile.something_broke
             ;;
