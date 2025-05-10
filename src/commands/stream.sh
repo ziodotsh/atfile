@@ -15,7 +15,7 @@ function atfile.stream() {
 
     collection_query="$(atfile.util.build_query_array "wantedCollections" "$collection")"
     did_query="$(atfile.util.build_query_array "wantedDids" "$did")"
-    cursor_query="$([[ -n "$cursor" ]] && echo "cursor=$cursor&")"
+    cursor_query="$([[ -n "$cursor" ]] && echo "cursor=$cursor&" || echo "cursor=$(atfile.util.get_date "$_now" "%s")")"
     compress_query="$([[ -n "$compress" ]] && echo "compress=$compress&")"
 
     url="$_endpoint_jetstream/subscribe?${collection_query}${did_query}${cursor_query}${compress_query}"
