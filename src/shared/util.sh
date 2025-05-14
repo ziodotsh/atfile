@@ -715,7 +715,7 @@ function atfile.util.get_random_pbc_jetstream() {
 
     pbc_jetstream="${pbc_jetstreams[ $RANDOM % ${#pbc_jetstreams[@]} ]}"
 
-    echo "https://$pbc_jetstream.bsky.network"
+    echo "wss://$pbc_jetstream.bsky.network"
 }
 
 function atfile.util.get_realpath() {
