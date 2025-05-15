@@ -190,7 +190,7 @@ function atfile.help() {
     Version $_version
     (c) $_meta_year $_meta_author <$_meta_repo>
     Licensed as MIT License ✨\n
-    🦋 Follow @$handle on ATProto
+    🦋 Follow @$handle on the ATmosphere
        ↳ Bluesky: https://bsky.app/profile/$handle
        ↳ Tangled: https://tangled.sh/@$handle
 
