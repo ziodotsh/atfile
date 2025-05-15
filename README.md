@@ -68,12 +68,10 @@ This will automatically fetch the latest version of ATFile and install it in an 
   * Install: `$HOME/.local/bin/atfile`
     * As `sudo`/`root`: `/usr/local/bin/atfile`
   * Config: `$HOME/.config/atfile.env`
-    * As `root` (not `sudo`): `/root/.config/atfile.env`
 * **macOS**
   * Install: `$HOME/.local/bin/atfile`
     * As `sudo`/`root`: `/usr/local/bin/atfile`
   * Config: `$HOME/Library/Application Support/atfile.env`
-    * As `root` (not `sudo`): `/root/.config/atfile.env`
 * **Haiku**
   * Install: `/boot/system/non-packaged/bin/atfile`
   * Config: `$HOME/config/settings/atfile.env`
@@ -94,6 +92,8 @@ Config locations are identical to those above (see **Automatic ("`curl|bash`")**
 #### Repository
 
 If you've pulled this repository, you can also use ATFile by simply calling `./atfile.sh` &mdash; it functions just as a regular compiled version of ATFile, including reading from the same config file. Debug messages are turned on by default: disable these by setting `ATFILE_DEBUG=0`.
+
+To compile, run `./atfile.sh build`. The built version will be available at `./bin/atfile-<version>[+git.<hash>].sh`.
 
 **Using a development version against your ATProto account could potentially inadvertently damage records.**
 
