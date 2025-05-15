@@ -47,7 +47,7 @@ function atfile.release() {
 # Version: $_version
 # Commit:  $commit_hash
 # Author:  $commit_author
-# Build:   $id ($(hostname):$(atfile.util.get_os))     
+# Build:   $id ($(hostname):$(atfile.util.get_os))
 # ---
 # Psst! You can \`source atfile\` in your own Bash scripts!
 " >> "$dist_path"
