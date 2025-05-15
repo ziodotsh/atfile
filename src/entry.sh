@@ -143,17 +143,23 @@ _nsid_lock="${_nsid_prefix}.atfile.lock"
 _nsid_meta="${_nsid_prefix}.atfile.meta"
 _nsid_upload="${_nsid_prefix}.atfile.upload"
 
-## Source detection
-
-if [[ "$0" != "${BASH_SOURCE[0]}" ]] && [[ "$ATFILE_DEVEL" != 1 ]]; then
-    _debug=0
-    _is_sourced=1
-    _output_json=1
-fi
-
 ## "Hello, world!"
 
 atfile.say.debug "Starting up..."
+
+## Source detection
+
+if [[ "$0" != "${BASH_SOURCE[0]}" ]]; then
+    if [[ "$ATFILE_DEVEL" == 1 ]]; then
+        if [[ -n "$ATFILE_DEVEL_SOURCE" ]]; then
+            _is_sourced=1
+            atfile.say.debug "Sourcing: $ATFILE_DEVEL_SOURCE"
+        fi
+    else
+        _is_sourced=1
+        atfile.say.debug "Sourcing: ${BASH_SOURCE[0]}"
+    fi
+fi
 
 ## Envvar correction
 
@@ -403,7 +409,7 @@ if [[ $_is_sourced == 0 ]] && [[ $ATFILE_DEVEL_NO_INVOKE != 1 ]]; then
             atfile.invoke.lock "$2" 1
             ;;
         "now")
-            atfile.invoke.now "$2"
+            atfile.now "$2"
             ;;
         "record")
             # NOTE: Performs no validation (apart from JSON)! Here be dragons
