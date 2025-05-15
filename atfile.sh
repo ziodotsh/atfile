@@ -54,15 +54,21 @@ function atfile.devel.die() {
     exit 255
 }
 
-if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
-    atfile.devel.die "Unable to source"
-fi
+unset ATFILE_DEVEL
+unset ATFILE_DEVEL_DIR
+unset ATFILE_DEVEL_ENTRY
+unset ATFILE_DEVEL_SOURCE
 
-# shellcheck disable=SC2034
-ATFILE_DEVEL=1
-ATFILE_DEVEL_DIR="$(dirname "$(realpath "$0")")"
-# shellcheck disable=SC2034
-ATFILE_DEVEL_ENTRY="$(realpath "$0")"
+if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
+    ATFILE_DEVEL=1
+    ATFILE_DEVEL_DIR="$(dirname "${BASH_SOURCE[0]}")"
+    ATFILE_DEVEL_ENTRY="$(realpath "${BASH_SOURCE[0]}")"
+    ATFILE_DEVEL_SOURCE="$ATFILE_DEVEL_ENTRY"
+else
+    ATFILE_DEVEL=1
+    ATFILE_DEVEL_DIR="$(dirname "$(realpath "$0")")"
+    ATFILE_DEVEL_ENTRY="$(realpath "$0")"
+fi
 
 if [ ! -x "$(command -v git)" ]; then
     atfile.devel.die "'git' not installed (download: https://git-scm.com/downloads)"
@@ -79,14 +85,14 @@ git describe --exact-match --tags > /dev/null 2>&1
 [[ -z $ATFILE_FORCE_META_YEAR ]] && ATFILE_FORCE_META_YEAR="$year"
 [[ -z $ATFILE_FORCE_VERSION ]] && ATFILE_FORCE_VERSION="$version"
 
-declare -a ATFILE_DEVEL_SOURCES
+declare -a ATFILE_DEVEL_INCLUDES
 
-for f in "$ATFILE_DEVEL_DIR/src/commands/"*; do ATFILE_DEVEL_SOURCES+=("$f"); done
-for f in "$ATFILE_DEVEL_DIR/src/lexi/"*; do ATFILE_DEVEL_SOURCES+=("$f"); done
-for f in "$ATFILE_DEVEL_DIR/src/shared/"*; do ATFILE_DEVEL_SOURCES+=("$f"); done
-ATFILE_DEVEL_SOURCES+=("$ATFILE_DEVEL_DIR/src/entry.sh")
+for f in "$ATFILE_DEVEL_DIR/src/commands/"*; do ATFILE_DEVEL_INCLUDES+=("$f"); done
+for f in "$ATFILE_DEVEL_DIR/src/lexi/"*; do ATFILE_DEVEL_INCLUDES+=("$f"); done
+for f in "$ATFILE_DEVEL_DIR/src/shared/"*; do ATFILE_DEVEL_INCLUDES+=("$f"); done
+ATFILE_DEVEL_INCLUDES+=("$ATFILE_DEVEL_DIR/src/entry.sh")
 
-for path in "${ATFILE_DEVEL_SOURCES[@]}"
+for path in "${ATFILE_DEVEL_INCLUDES[@]}"
 do
     if [[ ! -f "$path" ]]; then
         atfile.devel.die "Unable to find source for '$path'"

@@ -52,7 +52,7 @@ function atfile.release() {
 # Psst! You can \`source atfile\` in your own Bash scripts!
 " >> "$dist_path"
 
-    for s in "${ATFILE_DEVEL_SOURCES[@]}"
+    for s in "${ATFILE_DEVEL_INCLUDES[@]}"
     do
         if [[ "$s" != *"/src/commands/release.sh" ]]; then
             if [[ -f "$s" ]]; then
