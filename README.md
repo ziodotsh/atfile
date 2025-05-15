@@ -68,12 +68,10 @@ This will automatically fetch the latest version of ATFile and install it in an 
   * Install: `$HOME/.local/bin/atfile`
     * As `sudo`/`root`: `/usr/local/bin/atfile`
   * Config: `$HOME/.config/atfile.env`
-    * As `root` (not `sudo`): `/root/.config/atfile.env`
 * **macOS**
   * Install: `$HOME/.local/bin/atfile`
     * As `sudo`/`root`: `/usr/local/bin/atfile`
   * Config: `$HOME/Library/Application Support/atfile.env`
-    * As `root` (not `sudo`): `/root/.config/atfile.env`
 * **Haiku**
   * Install: `/boot/system/non-packaged/bin/atfile`
   * Config: `$HOME/config/settings/atfile.env`
