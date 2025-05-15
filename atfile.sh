@@ -63,8 +63,10 @@ if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
     ATFILE_DEVEL=1
     ATFILE_DEVEL_DIR="$(dirname "${BASH_SOURCE[0]}")"
     ATFILE_DEVEL_ENTRY="$(realpath "${BASH_SOURCE[0]}")"
+    # shellcheck disable=SC2034
     ATFILE_DEVEL_SOURCE="$ATFILE_DEVEL_ENTRY"
 else
+    # shellcheck disable=SC2034
     ATFILE_DEVEL=1
     ATFILE_DEVEL_DIR="$(dirname "$(realpath "$0")")"
     ATFILE_DEVEL_ENTRY="$(realpath "$0")"
