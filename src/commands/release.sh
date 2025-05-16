@@ -42,7 +42,7 @@ function atfile.release() {
     echo "#!/usr/bin/env bash" > "$dist_path"
 
     echo "↳ Generating header..."
-    echo -e "\n# ATFile <https://tangled.sh/@zio.sh/atfile>
+    echo -e "\n# ATFile <${ATFILE_FORCE_META_REPO}>
 # ---
 # Version: $_version
 # Commit:  $commit_hash
