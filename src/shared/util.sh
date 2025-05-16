@@ -702,7 +702,7 @@ function atfile.util.get_pds_pretty() {
 function atfile.util.get_random() {
     amount="$1"
     [[ -z "$amount" ]] && amount="6"
-    echo "$(tr -dc A-Za-z0-9 </dev/urandom | head -c $amount; echo)"
+    echo "$(tr -dc A-Za-z0-9 </dev/urandom | head -c "$amount"; echo)"
 }
 
 function atfile.util.get_random_pbc_jetstream() {

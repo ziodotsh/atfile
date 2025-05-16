@@ -9,7 +9,7 @@ function atfile.release() {
         key="$2"
         value="$3"
 
-        echo "$(echo "$string" | sed -s "s|{:$key:}|$value|g")"
+        sed -s "s|{:$key:}|$value|g" <<< "$string"
     }
 
     atfile.util.check_prog "git"
@@ -97,7 +97,7 @@ function atfile.release() {
     
     echo -e "\n# \"Four million lines of BASIC\"\n#  - Kif Kroker (3003)" >> "$dist_path"
 
-    checksum="$(atfile.util.get_md5 "$dist_path")"
+    checksum="$(atfile.util.get_md5 "$dist_path" | cut -d "|" -f 1)"
 
     echo "🧪 Testing..."
     shellcheck_output="$(shellcheck --format=json "$dist_path" 2>&1)"

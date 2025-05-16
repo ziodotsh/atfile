@@ -9,12 +9,14 @@
         "exiftool",
         "feedgens",
         "jetstream",
+        "jetstreams",
         "lexi",
         "mediainfo",
         "nsid",
         "pkgman",
         "rkey",
         "termux",
+        "urandom",
         "websocat",
         "xrpc"
     ]
