@@ -205,7 +205,7 @@ fi
 
 ## OS detection
 
-atfile.say.debug "Checking OS ($_os) is supported..."
+atfile.say.debug "Checking OS is supported...\n↳ Detected: $_os"
 is_os_supported=0
 
 if [[ $_os != "unknown-"* ]] &&\

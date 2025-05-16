@@ -23,6 +23,7 @@ function get_os() {
         "FreeBSD"*|"freebsd"*) echo "bsd-freebsd" ;;
         "netbsd"*) echo "bsd-netbsd" ;;
         "openbsd"*) echo "bsd-openbsd" ;;
+        *"bsd"*) echo "bsd-unknown" ;;
         # Misc.
         "haiku") echo "haiku" ;;
         "darwin"*) echo "macos" ;;
