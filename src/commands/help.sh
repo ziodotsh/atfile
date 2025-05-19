@@ -82,16 +82,15 @@ function atfile.help() {
            application <atfile-uri> opens with\n
     now
         Get date in ISO-8601 format\n
-    record add <record-json> [<collection>]
-    record get <key> [<collection>] [<actor>]
+    record list <at-uri>
+    record create <collection> <record-json>
+    record create <at-uri> <record-json>
     record get <at-uri>
-    record put <key> <record-json> [<collection>]
-    record put <at-uri> <record-json>
-    record rm <key> [<collection>]
-    record rm <at-uri>
+    record update <at-uri> <record-json>
+    record recreate <at-uri> <record-json>
+    record delete <at-uri>
         Manage records on a repository
-        ⚠️  No validation is performed. Here be dragons!
-        ℹ️  <collection> defaults to '$_nsid_upload'\n
+        ⚠️  No validation is performed. Here be dragons!\n
     resolve <actor>
         Get details for <actor>\n
     stream [<collection(s)>] [<did(s)>] [<cursor>] [<compress>]

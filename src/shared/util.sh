@@ -36,6 +36,8 @@ function atfile.util.check_prog() {
     command="$1"
     download_hint="$2"
     skip_hint="$3"
+
+    atfile.say.debug "Checking program '$1' exists..."
     
     if ! [ -x "$(command -v "$command")" ]; then
         message="'$command' not installed"
@@ -895,6 +897,19 @@ function atfile.util.launch_uri() {
             *) echo "$uri"
         esac
     fi
+}
+
+function atfile.util.parse_at_uri() {
+    at_uri="$1"
+    segment="$2"
+    unset parsed_at_uri
+
+    case $segment in
+        "actor"|"did"|"handle") echo "$at_uri" | cut -d "/" -f 3 ;;
+        "collection") echo "$at_uri" | cut -d "/" -f 4 ;;
+        "key"|"rkey") echo "$at_uri" | cut -d "/" -f 5 ;;
+        *) echo "$at_uri" | cut -d "/" -f "$segment" ;;
+    esac
 }
 
 function atfile.util.get_uri_segment() {

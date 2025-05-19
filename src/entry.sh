@@ -240,7 +240,6 @@ if [[ "$_os" == "haiku" ]]; then
     _prog_hint_jq="pkgman install jq"
 fi
 
-atfile.say.debug "Checking required programs..."
 atfile.util.check_prog "curl" "https://curl.se"
 [[ $_os != "haiku" && $_os != "solaris" ]] && atfile.util.check_prog "file" "https://www.darwinsys.com/file"
 atfile.util.check_prog "jq" "$_prog_hint_jq"
@@ -414,10 +413,12 @@ if [[ $_is_sourced == 0 ]] && [[ $ATFILE_DEVEL_NO_INVOKE != 1 ]]; then
         "record")
             # NOTE: Performs no validation (apart from JSON)! Here be dragons
             case "$2" in
-                "add"|"create"|"c") atfile.invoke.manage_record "create" "$3" "$4" ;;
-                "get"|"g") atfile.invoke.manage_record "get" "$3" "$4" "$5" ;;
-                "put"|"update"|"u") atfile.invoke.manage_record "put" "$3" "$4" ;;
-                "rm"|"delete"|"d") atfile.invoke.manage_record "delete" "$3" "$4" ;;
+                "add"|"create"|"c") atfile.record "create" "$3" "$4" ;;
+                "get"|"g") atfile.record "get" "$3" ;;
+                "ls"|"list"|"l") atfile.record_list "$3" ;;
+                "put"|"update"|"u") atfile.record "update" "$3" "$4" ;;
+                "rc"|"recreate"|"r") atfile.record "recreate" "$3" "$4" ;;
+                "rm"|"delete"|"d") atfile.record "delete" "$3" ;;
                 *) atfile.die.unknown_command "$(echo "$_command $2" | xargs)" ;;
             esac
             ;;

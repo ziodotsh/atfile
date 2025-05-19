@@ -43,7 +43,7 @@ function atfile.die.xrpc_error() {
     xrpc_error="$2"
 
     [[ "$xrpc_error" == "?" ]] && unset xrpc_error
-    [[ -n "$xrpc_error" ]] && message="$message\n↳ $xrpc_error"
+    [[ -n "$xrpc_error" && "$xrpc_error" != "{}" ]] && message="$message\n↳ $xrpc_error"
 
     atfile.die "$message"
 }
