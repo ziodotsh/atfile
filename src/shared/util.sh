@@ -72,6 +72,8 @@ function atfile.util.check_prog_optional_metadata() {
 function atfile.util.create_dir() {
     dir="$1"
 
+    atfile.say.debug "Creating directory: $dir"
+
     if ! [[ -d $dir  ]]; then
         mkdir -p "$dir"
         # shellcheck disable=SC2181

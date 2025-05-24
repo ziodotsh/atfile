@@ -228,7 +228,6 @@ fi
 
 ## Directory creation
 
-atfile.say.debug "Creating necessary directories..."
 atfile.util.create_dir "$_path_cache"
 atfile.util.create_dir "$_path_blobs_tmp"
 
@@ -236,9 +235,7 @@ atfile.util.create_dir "$_path_blobs_tmp"
 
 _prog_hint_jq="https://jqlang.github.io/jq"
 
-if [[ "$_os" == "haiku" ]]; then
-    _prog_hint_jq="pkgman install jq"
-fi
+[[ "$_os" == "haiku" ]] && _prog_hint_jq="pkgman install jq"
 
 atfile.util.check_prog "curl" "https://curl.se"
 [[ $_os != "haiku" && $_os != "solaris" ]] && atfile.util.check_prog "file" "https://www.darwinsys.com/file"
