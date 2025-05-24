@@ -114,14 +114,14 @@ function atfile.util.get_app_url_for_at_uri() {
 
     if [[ -n "$actor" && -n "$collection" && -n "$rkey" ]]; then
         case "$collection" in
-            "app.bsky.actor.profile") resolved_url="https://bsky.app/profile/$actor" ;;
-            "app.bsky.feed.generator") resolved_url="https://bsky.app/profile/$actor/feed/$rkey" ;;
-            "app.bsky.graph.list") resolved_url="https://bsky.app/profile/$actor/lists/$rkey" ;;
-            "app.bsky.graph.starterpack") resolved_url="https://bsky.app/starter-pack/$actor/$rkey" ;;
-            "app.bsky.feed.post") resolved_url="https://bsky.app/profile/$actor/post/$rkey" ;;
+            "app.bsky.actor.profile") resolved_url="$_endpoint_social_app/profile/$actor" ;;
+            "app.bsky.feed.generator") resolved_url="$_endpoint_social_app/profile/$actor/feed/$rkey" ;;
+            "app.bsky.graph.list") resolved_url="$_endpoint_social_app/profile/$actor/lists/$rkey" ;;
+            "app.bsky.graph.starterpack") resolved_url="$_endpoint_social_app/starter-pack/$actor/$rkey" ;;
+            "app.bsky.feed.post") resolved_url="$_endpoint_social_app/profile/$actor/post/$rkey" ;;
             "blue.linkat.board") resolved_url="https://linkat.blue/$actor_handle" ;;
             "blue.zio.atfile.upload") ignore_url_validation=1 && resolved_url="atfile://$actor/$rkey" ;;
-            "chat.bsky.actor.declaration") resolved_url="https://bsky.app/messages/settings" ;;
+            "chat.bsky.actor.declaration") resolved_url="$_endpoint_social_app/messages/settings" ;;
             "com.shinolabs.pinksea.oekaki") resolved_url="https://pinksea.art/$actor/oekaki/$rkey" ;;
             "com.whtwnd.blog.entry") resolved_url="https://whtwnd.com/$actor/$rkey" ;;
             "events.smokesignal.app.profile") resolved_url="https://smokesignal.events/$actor" ;;
@@ -151,11 +151,11 @@ function atfile.util.get_app_url_for_at_uri() {
                         "app.bsky.feed.threadgate")
                             resolved_url="$(atfile.util.get_app_url_for_at_uri "$(echo "$record" | jq -r '.value.post')")" ;;
                         "app.bsky.graph.follow")
-                            resolved_url="https://bsky.app/profile/$(echo "$record" | jq -r '.value.subject')" ;;
+                            resolved_url="$_endpoint_social_app/profile/$(echo "$record" | jq -r '.value.subject')" ;;
                         "app.bsky.graph.listblock")
                             resolved_url="$(atfile.util.get_app_url_for_at_uri "$(echo "$record" | jq -r '.value.subject')")" ;;
                         "app.bsky.graph.listitem")
-                            resolved_url="https://bsky.app/profile/$(echo "$record" | jq -r '.value.subject')" ;;
+                            resolved_url="$_endpoint_social_app/profile/$(echo "$record" | jq -r '.value.subject')" ;;
                         "events.smokesignal.calendar.rsvp")
                             resolved_url="$(atfile.util.get_app_url_for_at_uri "$(echo "$record" | jq -r '.value.subject.uri')")" ;;
                         "fyi.unravel.frontpage.comment")
@@ -1030,6 +1030,16 @@ function atfile.util.print_copyright_warning() {
 ║    Do not upload copyrighted files!    ║ 
 ╚════════════════════════════════════════╝"
     fi
+}
+
+function atfile.util.print_override_envvar_debug() {
+    pretty_name="$1"
+    override_variable="$2"
+    
+    override_value="$(eval echo "\$_force${override_variable}")"
+    envvar_suffix="_FORCE${override_variable^^}"
+
+    atfile.say.debug "Overriding $pretty_name (\$$override_variable)\n↳ ${_envvar_prefix}$envvar_suffix set to '$override_value'"
 }
 
 function atfile.util.print_seconds_since_start_debug() {

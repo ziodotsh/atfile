@@ -105,7 +105,7 @@ function atfile.help() {
     ${_envvar_prefix}_PASSWORD <string> (required)
         Password of the PDS user
         ℹ️  An App Password is recommended
-           (https://bsky.app/settings/app-passwords)\n
+           ($_endpoint_social_app/settings/app-passwords)\n
     ${_envvar_prefix}_ENABLE_FINGERPRINT <bool¹> (default: $_enable_fingerprint_default)
         Apply machine fingerprint to uploaded files
     ${_envvar_prefix}_OUTPUT_JSON <bool¹> (default: $_output_json_default)
@@ -157,6 +157,8 @@ function atfile.help() {
            resolving fails)
     ${_envvar_prefix}_ENDPOINT_PLC_DIRECTORY <url> (default: ${_endpoint_plc_directory_default}$([[ $_endpoint_plc_directory_default == *"zio.blue" ]] && echo "²"))
         Endpoint of the PLC directory
+    ${_envvar_prefix}_ENDPOINT_SOCIAL_APP <url> (default: ${_endpoint_social_app_default})
+        Endpoint of the Bluesky (or compatible) social app
     ${_envvar_prefix}_DISABLE_PBC_FALLBACK <bool¹> (default: $_disable_pbc_fallback)
         Disable the (hardcoded) usage of various Bluesky PBC-hosted fallbacks
         if/when required. Currently, there are fallbacks for:
@@ -190,7 +192,7 @@ function atfile.help() {
     (c) $_meta_year $_meta_author <$_meta_repo>
     Licensed as MIT License ✨\n
     🦋 Follow @$handle on the ATmosphere
-       ↳ Bluesky: https://bsky.app/profile/$handle
+       ↳ $_endpoint_social_app_name: $_endpoint_social_app/profile/$handle
        ↳ Tangled: https://tangled.sh/@$handle
 
 Usage

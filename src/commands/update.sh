@@ -65,8 +65,9 @@ function atfile.update() {
 
             echo "---"
             if [[ $_os == "haiku" ]]; then
+                # BUG: Haiku Terminal has issues with emojis
                 # shellcheck disable=SC2154
-                atfile.say "Update available ($latest_version)\n↳ Run \`$_prog update\` to update" # BUG: Haiku Terminal has issues with emojis
+                atfile.say "Update available ($latest_version)\n↳ Run \`$_prog update\` to update"
             else
                 atfile.say "😎 Update available ($latest_version)\n  ↳ Run \`$_prog update\` to update"
             fi

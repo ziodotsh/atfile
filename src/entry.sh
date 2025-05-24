@@ -87,6 +87,7 @@ _endpoint_appview_default="https://api.bsky.app"
 #_endpoint_jetstream_default="wss://stream.zio.blue"
 _endpoint_jetstream_default="$_endpoint_jetstream_fallback"
 _endpoint_plc_directory_default="https://plc.zio.blue"
+_endpoint_social_app_default="https://bsky.app"
 _fmt_blob_url_default="[server]/xrpc/com.atproto.sync.getBlob?did=[did]&cid=[cid]"
 _fmt_out_file_default="[key]__[name]"
 _enable_fingerprint_default=0
@@ -114,6 +115,7 @@ _enable_update_git_clobber="$(atfile.util.get_envvar "${_envvar_prefix}_ENABLE_U
 _endpoint_appview="$(atfile.util.get_envvar "${_envvar_prefix}_ENDPOINT_APPVIEW" "$_endpoint_appview_default")"
 _endpoint_jetstream="$(atfile.util.get_envvar "${_envvar_prefix}_ENDPOINT_JETSTREAM" "$_endpoint_jetstream_default")"
 _endpoint_plc_directory="$(atfile.util.get_envvar "${_envvar_prefix}_ENDPOINT_PLC_DIRECTORY" "$_endpoint_plc_directory_default")"
+_endpoint_social_app="$(atfile.util.get_envvar "${_envvar_prefix}_ENDPOINT_SOCIAL_APP" "$_endpoint_social_app_default")"
 _fmt_blob_url="$(atfile.util.get_envvar "${_envvar_prefix}_FMT_BLOB_URL" "$_fmt_blob_url_default")"
 _fmt_out_file="$(atfile.util.get_envvar "${_envvar_prefix}_FMT_OUT_FILE" "$_fmt_out_file_default")"
 _force_meta_author="$(atfile.util.get_envvar "${_envvar_prefix}_FORCE_META_AUTHOR")"
@@ -136,12 +138,17 @@ _password="$(atfile.util.get_envvar "${_envvar_prefix}_PASSWORD")"
 _test_desktop_uas="Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0"
 _username="$(atfile.util.get_envvar "${_envvar_prefix}_USERNAME")"
 
-### NSIDs
+### Read-only
 
 _nsid_prefix="blue.zio"
 _nsid_lock="${_nsid_prefix}.atfile.lock"
 _nsid_meta="${_nsid_prefix}.atfile.meta"
 _nsid_upload="${_nsid_prefix}.atfile.upload"
+_endpoint_social_app_name="Bluesky"
+
+case "$_endpoint_social_app" in
+    "https://deer.social") _endpoint_social_app_name="Deer" ;;
+esac
 
 ## "Hello, world!"
 
@@ -167,26 +174,26 @@ fi
 
 [[ -n $_force_meta_author ]] && \
     _meta_author="$_force_meta_author" &&\
-    atfile.say.debug "Overriding Copyright Author (\$_meta_author)\n↳ ${_envvar_prefix}_FORCE_META_AUTHOR set to '$_force_meta_author'"
+    atfile.util.print_override_envvar_debug "Copyright Author" "_meta_author"
 [[ -n $_force_meta_did ]] && \
     _meta_did="$_force_meta_did" &&\
     _dist_username="$(atfile.util.get_envvar "${_envvar_prefix}_DIST_USERNAME" "$_meta_did")" &&\
-    atfile.say.debug "Overriding DID (\$_meta_did)\n↳ ${_envvar_prefix}_FORCE_META_DID set to '$_force_meta_did'"
+    atfile.util.print_override_envvar_debug "DID" "_meta_did"
 [[ -n $_force_meta_repo ]] && \
     _meta_repo="$_force_meta_repo" &&\
-    atfile.say.debug "Overriding Repo URL (\$_meta_repo)\n↳ ${_envvar_prefix}_FORCE_META_REPO set to '$_force_meta_repo'"
+    atfile.util.print_override_envvar_debug "Repo URL" "_meta_author"
 [[ -n $_force_meta_year ]] && \
     _meta_year="$_force_meta_year" &&\
-    atfile.say.debug "Overriding Copyright Year (\$_meta_year)\n↳ ${_envvar_prefix}_FORCE_META_YEAR set to '$_force_meta_year'"
+    atfile.util.print_override_envvar_debug "Copyright Year" "_meta_year"
 [[ -n $_force_now ]] && \
     _now="$_force_now" &&\
-    atfile.say.debug "Overriding Now (\$_now)\n↳ ${_envvar_prefix}_FORCE_NOW set to '$_force_now'"
+    atfile.util.print_override_envvar_debug "Current Time" "_now"
 [[ -n $_force_os ]] &&\
     _os="$_force_os" &&\
-    atfile.say.debug "Overriding OS (\$_os)\n↳ ${_envvar_prefix}_FORCE_OS set to '$_force_os'"
+    atfile.util.print_override_envvar_debug "OSL" "_os"
 [[ -n $_force_version ]] && \
     _version="$_force_version" &&\
-    atfile.say.debug "Overriding Version (\$_version)\n↳ ${_envvar_prefix}_FORCE_VERSION set to '$_force_version'"
+    atfile.util.print_override_envvar_debug "Version" "_version"
 
 ### Validation
 

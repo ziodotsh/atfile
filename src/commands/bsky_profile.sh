@@ -90,7 +90,7 @@ function atfile.bsky_profile() {
   📃 $count_posts $(atfile.util.get_int_suffix "$count_followers" "\e[37mPost\e[0m" "\e[37mPosts\e[0m") ∙ ⚙️  $count_feeds $(atfile.util.get_int_suffix "$count_feeds" "\e[37mFeed\e[0m" "\e[37mFeeds\e[0m") ∙ 📋 $count_lists $(atfile.util.get_int_suffix "$count_lists" "\e[37mList\e[0m" "\e[37mLists\e[0m") ∙ 👥 $count_packs $(atfile.util.get_int_suffix "$count_packs" "\e[37mPack\e[0m" "\e[37mPacks\e[0m")
   $type ∙ ✨ $date_created ∙ 🕷️  $date_indexed
   \e[37m$(atfile.util.repeat_char "-" 3)\e[0m
-  🦋 https://bsky.app/profile/$actor\n"
+  🦋 $_endpoint_social_app/profile/$actor\n"
 
         if [[ "$date_indexed" == "0001-01-01 00:00:00" ]]; then
             atfile.die "No Bluesky profile for '$actor'"

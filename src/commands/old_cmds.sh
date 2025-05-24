@@ -333,7 +333,8 @@ function atfile.invoke.handle_atfile() {
             [ -x "$(command -v xdg-open)" ] && \
             [ -x "$(command -v gtk-launch)" ]; then
 
-            [[ -z $file_type ]] && file_type="text/html" # HACK: Open with browser if $file_type isn't set
+            # HACK: Open with browser if $file_type isn't set
+            [[ -z $file_type ]] && file_type="text/html"
 
             if [[ -z $handler ]]; then
                 atfile.say.debug "Querying for handler '$file_type'..."
@@ -455,7 +456,8 @@ function atfile.invoke.list() {
                     json_output+="$c,"
                 else
                     if [[ $_os == "haiku" ]]; then
-                        echo -e "$key\t$name" # BUG: Haiku Terminal has issues with emojis
+                        # BUG: Haiku Terminal has issues with emojis
+                        echo -e "$key\t$name"
                     else
                         echo -e "$key\t$type_emoji $name"
                     fi
