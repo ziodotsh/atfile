@@ -732,7 +732,8 @@ function atfile.invoke.upload() {
         else
             echo "---"
             if [[ $_os == "haiku" ]]; then
-                echo "Uploaded: $file_name" # BUG: Haiku Terminal has issues with emojis
+                # BUG: Haiku Terminal has issues with emojis
+                echo "Uploaded: $file_name"
             else
                 echo "Uploaded: $file_type_emoji $file_name"
             fi

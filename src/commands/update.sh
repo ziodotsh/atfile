@@ -81,7 +81,7 @@ function atfile.update() {
             [[ $_is_git == 1 && $_enable_update_git_clobber == 0 ]] &&\
                 atfile.die "Cannot update in Git repository"
             [[ $_disable_updater == 1 ]] &&\
-                atfile.die "Cannot update system-managed version: update from your package manager" # NOTE: This relies on packaged versions having a wrapper that sets this var
+                atfile.die "Cannot update system-managed version: update from your package manager"
 
             # shellcheck disable=SC2154
             temp_updated_path="$_prog_dir/${_prog}-${latest_version}.tmp"
