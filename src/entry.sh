@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 
-# Entry
+# Global variables
 
-## Global variables
-
-### General
+## General
 
 _start="$(atfile.util.get_date "" "%s")"
 _command="$1"
-_command_full="$*"
+_command_args=("${@:2}")
 _envvar_prefix="ATFILE"
 _os="$(atfile.util.get_os)"
 _is_git=0
@@ -20,13 +18,13 @@ _meta_year="{:meta_year:}"
 _now="$(atfile.util.get_date)"
 _version="{:version:}"
 
-### Reflection
+## Reflection
 
 _prog="$(basename "$(atfile.util.get_realpath "$0")")"
 _prog_dir="$(dirname "$(atfile.util.get_realpath "$0")")"
 _prog_path="$(atfile.util.get_realpath "$0")"
 
-### Paths
+## Paths
 
 _path_home="$HOME"
 
@@ -63,16 +61,16 @@ _path_blobs_tmp="$_path_blobs_tmp/at-blobs"
 _path_cache="$_path_cache/atfile"
 _path_envvar="$(atfile.util.get_envvar "${_envvar_prefix}_PATH_CONF" "$_path_envvar/$_file_envvar")" 
 
-### Envvars
+## Envvars
 
-#### Fallbacks
+### Fallbacks
 
 _endpoint_appview_fallback="https://api.bsky.app"
 _endpoint_jetstream_fallback="$(atfile.util.get_random_pbc_jetstream)"
 _endpoint_plc_directory_fallback="https://plc.directory"
 _max_list_fallback=100
 
-#### Defaults
+### Defaults
 
 _debug_default=$([[ $ATFILE_DEVEL == 1 ]] && echo 1 || echo 0)
 _devel_publish_default=0
@@ -101,7 +99,7 @@ _skip_ni_md5sum_default=0
 _skip_ni_mediainfo_default=0
 _skip_unsupported_os_warn_default=0
 
-#### Set
+### Set
 
 _debug="$(atfile.util.get_envvar "${_envvar_prefix}_DEBUG" "$_debug_default")"
 _devel_publish="$(atfile.util.get_envvar "${_envvar_prefix}_DEVEL_PUBLISH" $_devel_publish_default)"
@@ -138,7 +136,7 @@ _password="$(atfile.util.get_envvar "${_envvar_prefix}_PASSWORD")"
 _test_desktop_uas="Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0"
 _username="$(atfile.util.get_envvar "${_envvar_prefix}_USERNAME")"
 
-### Read-only
+## Read-only
 
 _nsid_prefix="blue.zio"
 _nsid_lock="${_nsid_prefix}.atfile.lock"
@@ -150,7 +148,7 @@ case "$_endpoint_social_app" in
     "https://deer.social") _endpoint_social_app_name="Deer" ;;
 esac
 
-## "Hello, world!"
+# Setup
 
 atfile.say.debug "Starting up..."
 
@@ -249,40 +247,20 @@ atfile.util.check_prog "curl" "https://curl.se"
 atfile.util.check_prog "jq" "$_prog_hint_jq"
 [[ $_skip_ni_md5sum == 0 ]] && atfile.util.check_prog "md5sum" "" "${_envvar_prefix}_SKIP_NI_MD5SUM"
 
-## Lifecycle commands
-
-if [[ $_is_sourced == 0 ]] && [[ $_command == "" || $_command == "help" || $_command == "h" || $_command == "--help" || $_command == "-h" ]]; then
-    atfile.help
-    
-    atfile.util.print_seconds_since_start_debug
-    exit 0
-fi
-
-if [[ $_command == "update" ]]; then
-    atfile.update install
-    
-    atfile.util.print_seconds_since_start_debug
-    exit 0
-fi
-
-if [[ $_command == "version" || $_command == "--version" ]]; then
-    echo -e "$_version"
-
-    atfile.cache.del "update-check"
-    atfile.update check-only
-    atfile.util.print_seconds_since_start_debug
-    exit 0
-fi
+# Main
 
 ## Command aliases
 
 if [[ $_is_sourced == 0 ]]; then
+    previous_command="$_command"
+
     case "$_command" in
         "open"|"print"|"c") _command="cat" ;;
         "rm") _command="delete" ;;
         "download"|"f"|"d") _command="fetch" ;;
         "download-crypt"|"fc"|"dc") _command="fetch-crypt" ;;
         "at") _command="handle" ;;
+        "--help"|"-h") _command="help" ;;
         "get"|"i") _command="info" ;;
         "ls") _command="list" ;;
         "build") _command="release" ;;
@@ -292,191 +270,35 @@ if [[ $_is_sourced == 0 ]]; then
         "ul"|"u") _command="upload" ;;
         "ub") _command="upload-blob" ;;
         "uc") _command="upload-crypt" ;;
+        "--update"|"-U") _command="update" ;;
         "get-url"|"b") _command="url" ;;
+        "--version"|"-V") _command="version" ;;
     esac
+
+    if [[ $previous_command != "$_command" ]]; then
+        atfile.say.debug "Using command '$_command' for '$previous_command'..."
+    fi
 fi
 
-## Authentication
+## Default
+
+if [[ $_is_sourced == 0 && -z $_command ]]; then
+    atfile.util.override_command "help"
+fi
+
+if [[ "$_command" == "atfile:"* || "$_command" == "at:"* || "$_command" == "https:"* ]]; then
+    atfile.util.override_command "handle" "$_command"
+    atfile.say.debug "Handling '${_command_args[*]}'..."
+fi
+
+## Auth
 
 atfile.auth
 
-## Protocol handling
+## Invoke
 
-if [[ "$_command" == "atfile:"* || "$_command" == "at:"* || "$_command" == "https:"* ]]; then
-    set -- "handle" "$_command"
-    _command="handle"
-fi
-
-## Commands
-
-if [[ $_is_sourced == 0 ]] && [[ $ATFILE_DEVEL_NO_INVOKE != 1 ]]; then
-    atfile.say.debug "Running '$_command_full'...\n↳ Command: $_command\n↳ Arguments: ${*:2}"
-
-    case "$_command" in
-        "ai")
-            atfile.ai
-            ;;
-        "blob")
-            case "$2" in
-                "list"|"ls"|"l") atfile.invoke.blob_list "$3" ;;
-                "upload"|"u") atfile.invoke.blob_upload "$3" ;;
-                *) atfile.die.unknown_command "$(echo "$_command $2" | xargs)" ;;
-            esac  
-            ;;
-        "bsky")
-            if [[ -z "$2" ]]; then
-                atfile.util.override_actor "$_username"
-                atfile.bsky_profile "$_username"
-            else
-                atfile.bsky_profile "$2"
-            fi
-            ;;
-        "cat")
-            [[ -z "$2" ]] && atfile.die "<key> not set"
-            if [[ -n "$3" ]]; then
-                atfile.util.override_actor "$3"
-            fi
-            
-            atfile.invoke.print "$2"
-            ;;
-        "delete")
-            [[ -z "$2" ]] && atfile.die "<key> not set"
-            atfile.invoke.delete "$2"
-            ;;
-        "fetch")
-            [[ -z "$2" ]] && atfile.die "<key> not set"
-            if [[ -n "$3" ]]; then
-                atfile.util.override_actor "$3"
-            fi
-            
-            atfile.invoke.download "$2"
-            ;;
-        "fetch-crypt")
-            atfile.util.check_prog_gpg
-            [[ -z "$2" ]] && atfile.die "<key> not set"
-            if [[ -n "$3" ]]; then
-                atfile.util.override_actor "$3"
-            fi
-            
-            atfile.invoke.download "$2" 1
-            ;;
-        "handle")
-            uri="$2"
-            protocol="$(atfile.util.get_uri_segment "$uri" protocol)"
-
-            if [[ $protocol == "https" ]]; then
-                http_uri="$uri"
-                uri="$(atfile.util.map_http_to_at "$http_uri")"
-
-                atfile.say.debug "Mapping '$http_uri'..."
-                
-                if [[ -z "$uri" ]]; then
-                    atfile.die "Unable to map '$http_uri' to at:// URI"
-                else
-                    protocol="$(atfile.util.get_uri_segment "$uri" protocol)"
-                fi
-            fi
-
-            atfile.say.debug "Handling protocol '$protocol://'..."
-
-            case $protocol in
-                "at") atfile.invoke.handle_aturi "$uri" ;;
-                "atfile") atfile.invoke.handle_atfile "$uri" "$3" ;;
-            esac
-            ;;
-        "info")
-            [[ -z "$2" ]] && atfile.die "<key> not set"
-            if [[ -n "$3" ]]; then
-                atfile.util.override_actor "$3"
-            fi
-            
-            atfile.invoke.get "$2"
-            ;;
-        "list")
-            if [[ "$2" == *.* || "$2" == did:* ]]; then
-                # NOTE: User has entered <actor> in the wrong place, so we'll fix it
-                #       for them
-                # BUG:  Keys with periods in them can't be used as a cursor
-                
-                atfile.util.override_actor "$2"
-
-                atfile.invoke.list "$3"
-            else
-                if [[ -n "$3" ]]; then
-                    atfile.util.override_actor "$3"
-                fi
-                atfile.invoke.list "$2"   
-            fi
-            ;;
-        "lock")
-            atfile.invoke.lock "$2" 1
-            ;;
-        "now")
-            atfile.now "$2"
-            ;;
-        "record")
-            # NOTE: Performs no validation (apart from JSON)! Here be dragons
-            case "$2" in
-                "add"|"create"|"c") atfile.record "create" "$3" "$4" ;;
-                "get"|"g") atfile.record "get" "$3" ;;
-                "ls"|"list"|"l") atfile.record_list "$3" ;;
-                "put"|"update"|"u") atfile.record "update" "$3" "$4" ;;
-                "rc"|"recreate"|"r") atfile.record "recreate" "$3" "$4" ;;
-                "rm"|"delete"|"d") atfile.record "delete" "$3" ;;
-                *) atfile.die.unknown_command "$(echo "$_command $2" | xargs)" ;;
-            esac
-            ;;
-        "release")
-            if [[ $ATFILE_DEVEL == 1 ]]; then
-                atfile.release
-            else
-                atfile.die.unknown_command "$_command"
-            fi
-            ;;
-        "resolve")
-            atfile.resolve "$2"
-            ;;
-        "something-broke")
-            atfile.something_broke
-            ;;
-        "stream")
-            atfile.stream "$2" "$3" "$4" "$5"
-            ;;
-        "token")
-            atfile.invoke.token
-            ;;
-        "toggle-mime")
-            atfile.invoke.toggle_desktop
-            ;;
-        "upload")
-            atfile.util.check_prog_optional_metadata
-            [[ -z "$2" ]] && atfile.die "<file> not set"
-            atfile.invoke.upload "$2" "" "$3"
-            ;;
-        "upload-crypt")
-            atfile.util.check_prog_optional_metadata
-            atfile.util.check_prog_gpg
-            [[ -z "$2" ]] && atfile.die "<file> not set"
-            [[ -z "$3" ]] && atfile.die "<recipient> not set"
-            atfile.invoke.upload "$2" "$3" "$4"
-            ;;
-        "unlock")
-            atfile.invoke.lock "$2" 0
-            ;;
-        "url")
-            [[ -z "$2" ]] && atfile.die "<key> not set"
-            if [[ -n "$3" ]]; then
-                atfile.util.override_actor "$3"
-            fi
-            
-            atfile.invoke.get_url "$2"
-            ;;
-        *)
-            atfile.die.unknown_command "$_command"
-            ;;
-    esac
-
-    atfile.update check-only
+if [[ $_is_sourced == 0 ]]; then
+    atfile.invoke "$_command" "${_command_args[@]}"
 fi
 
 atfile.util.print_seconds_since_start_debug

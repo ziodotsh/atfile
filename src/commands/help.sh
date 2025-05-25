@@ -208,7 +208,6 @@ Usage
     usage+="$usage_paths\n"
 
     if [[ $_debug == 1 ]]; then
-        atfile.say.debug "Printing help..."
         echo -e "$usage"
     else
         echo -e "$usage" | less

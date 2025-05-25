@@ -5,14 +5,6 @@ function atfile.auth() {
     override_username="$1"
     override_password="$2"
 
-    function atfile.auth.get_command_segment() {
-        # shellcheck disable=SC2154
-        IFS=' ' read -r -a command_array <<< "$_command_full"
-        index=$1
-
-        echo "${command_array[index]}"
-    }
-
     [[ -n "$override_password" ]] && _password="$override_password"
     [[ -n "$override_username" ]] && _username="$override_username"
 
@@ -23,29 +15,30 @@ function atfile.auth() {
         if [[ -z $override_username ]] && [[ $_is_sourced == 0 ]]; then
             # NOTE: Speeds things up a little if the user is overriding actor
             #       Keep this in-sync with the main case in `../entry.sh`!
-            if [[ $_command == "cat" && -n "$(atfile.auth.get_command_segment 2)" ]] ||\
-               [[ $_command == "fetch" && -n "$(atfile.auth.get_command_segment 2)" ]] ||\
-               [[ $_command == "fetch-crypt" && -n "$(atfile.auth.get_command_segment 2)" ]] ||\
-               [[ $_command == "info" && -n "$(atfile.auth.get_command_segment 2)" ]] ||\
-               [[ $_command == "list" && "$(atfile.auth.get_command_segment 1)" == *.* ]] ||\
-               [[ $_command == "list" && "$(atfile.auth.get_command_segment 1)" == did:* ]] ||\
-               [[ $_command == "list" && -n "$(atfile.auth.get_command_segment 2)" ]] ||\
-               [[ $_command == "url" && -n "$(atfile.auth.get_command_segment 2)" ]]; then
-                atfile.say.debug "Skipping identity resolving\n↳ Actor is overridden by command ('$_command_full')"
+            if [[ $_command == "cat" && -n "${_command_args[1]}" ]] ||\
+               [[ $_command == "fetch" && -n "${_command_args[1]}" ]] ||\
+               [[ $_command == "fetch-crypt" && -n "${_command_args[1]}" ]] ||\
+               [[ $_command == "info" && -n "${_command_args[1]}" ]] ||\
+               [[ $_command == "list" && "${_command_args[0]}" == *.* ]] ||\
+               [[ $_command == "list" && "${_command_args[0]}" == did:* ]] ||\
+               [[ $_command == "list" && -n "${_command_args[1]}" ]] ||\
+               [[ $_command == "url" && -n "${_command_args[1]}" ]]; then
+                atfile.say.debug "Skipping identity resolving\n↳ Actor is overridden by command ('$_command')"
                 skip_resolving=1 
             fi
 
             # NOTE: Speeds things up a little if the command doesn't need actor resolving
-            if [[ $_command == "at:"* ]] ||\
-            [[ $_command == "atfile:"* ]] ||\
-            [[ $_command == "bsky" ]] ||\
-            [[ $_command == "handle" ]] ||\
-            [[ $_command == "now" ]] ||\
-            [[ $_command == "release" ]] ||\
-            [[ $_command == "resolve" ]] ||\
-            [[ $_command == "scrape" ]] ||\
-            [[ $_command == "something-broke" ]] ||\
-            [[ $_command == "stream" ]]; then
+            if [[ $_command == "bsky" ]] ||\
+               [[ $_command == "handle" ]] ||\
+               [[ $_command == "help" ]] ||\
+               [[ $_command == "now" ]] ||\
+               [[ $_command == "release" ]] ||\
+               [[ $_command == "resolve" ]] ||\
+               [[ $_command == "scrape" ]] ||\
+               [[ $_command == "something-broke" ]] ||\
+               [[ $_command == "stream" ]] ||\
+               [[ $_command == "update" ]] ||\
+               [[ $_command == "version" ]]; then
                 atfile.say.debug "Skipping identity resolving\n↳ Not required for command '$_command'"
                 skip_resolving=1
             fi

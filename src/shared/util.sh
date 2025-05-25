@@ -72,7 +72,7 @@ function atfile.util.check_prog_optional_metadata() {
 function atfile.util.create_dir() {
     dir="$1"
 
-    atfile.say.debug "Creating directory: $dir"
+    atfile.say.debug "Creating directory '$dir'..."
 
     if ! [[ -d $dir  ]]; then
         mkdir -p "$dir"
@@ -981,6 +981,12 @@ function atfile.util.override_actor() {
     fi
 
     atfile.say.debug "Overridden identity\n↳ DID: $_username\n↳ PDS: $_server\n↳ Blob URL: $_fmt_blob_url"
+}
+
+function atfile.util.override_command() {
+    _command="$1"
+    _command_args=("${@:2}")
+    atfile.say.debug "Overridden command\n↳ Command: $_command\n↳ Arguments: ${_command_args[*]}"
 }
 
 # NOTE: This is to help during sourcing if atfile.uitl.override_actor() has
