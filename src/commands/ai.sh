@@ -5,8 +5,8 @@ function atfile.ai() {
     error="$(atfile.util.get_xrpc_error $? "$ai_art_record")"
 
     if [[ -z "$error" ]]; then
-        echo "$ai_art_record" | jq -r .value.text
+        atfile.say "$(echo "$ai_art_record" | jq -r .value.text)"
     else
-        echo ":("
+        atfile.say ":("
     fi
 }
