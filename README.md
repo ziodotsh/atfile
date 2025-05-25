@@ -27,7 +27,7 @@ atfile help
     * 🟢 **macOS**: Compatible with built-in version of Bash (3.2)
     * 🟡 **Windows**: MinGW (Cygwin, Git Bash, MSYS2, etc.) and WSL (see Linux caveats above)
         * This repository **does not** provide a native version for Windows
-    * 🟢 **BSD**: FreeBSD, NetBSD and OpenBSD; other non-detected BSDs should work (see ¹)
+    * 🟢 __*BSD__: FreeBSD, NetBSD, OpenBSD, and other *BSD's
     * 🟢 **Haiku**: [Yes, really](https://bsky.app/profile/did:plc:kv7sv4lynbv5s6gdhn5r5vcw/post/3lboqznyqgs26)
     * 🔴 **Solaris**: <span title="Don't we all?">Has issues</span>; low priority
 * **Bash³:** 3.x or later
@@ -43,7 +43,7 @@ atfile help
     * [`websocat`](https://github.com/vi/websocat) _(optional: needed for `stream`)_
 * **ATProto account**
   *  Both [Bluesky PBC-operated](https://bsky.social) and self-hosted accounts supported
-      * If you're using a `bsky.network` (`@*.bsky.social`) account,  limit the amount of files you upload to Bluesky PBC's servers. Heed the copyright warning: **do not upload copyrighted files.**
+      * If you're using a `bsky.network` (`@*.bsky.social`) account,  limit the amount of files you upload to Bluesky PBC's servers. Heed the copyright warning: **do not upload copyrighted files**
       * `did:web` accounts supported!
     * Confirmed to work on [Bluesky PDS](https://github.com/bluesky-social/pds) and [millipds](https://github.com/DavidBuchanan314/millipds)
       * Other PDSs remain untested, but if they implement standard `com.atproto.*` endpoints, there should be no reason these won't work
@@ -64,7 +64,7 @@ curl -sSL https://zio.sh/atfile/install.sh | bash
 
 This will automatically fetch the latest version of ATFile and install it in an appropriate location, as well as creating a blank configuration file. Once downloaded and installed, the locations used will be output. They are as follows:
 
-* **Linux/Windows/BSD/Solaris**
+* __Linux/Windows/*BSD/Solaris__
   * Install: `$HOME/.local/bin/atfile`
     * As `sudo`/`root`: `/usr/local/bin/atfile`
   * Config: `$HOME/.config/atfile.env`
@@ -123,10 +123,7 @@ When submitting Pull Requests, **target the `dev` branch**: `main` is the curren
 
 * **¹** You can bypass OS detection in one of two ways:
     * Set `ATFILE_SKIP_UNSUPPORTED_OS=1`<br />Be careful! There's a reason some OSes are not supported
-    * Set `ATFILE_FORCE_OS=<os>`<br />This overrides the OS detected. Possible values:
-       * BSD: `bsd-freebsd`, `bsd-netbsd`, `bsd-openbsd`
-       * Linux: `linux`, `linux-mingw`, `linux-musl`, `linux-termux`
-       * Other: `haiku`, `macos`, `solaris`
+    * Set `ATFILE_FORCE_OS=<os>`<br />This overrides the OS detected. Possible values: `bsd`, `haiku`, `linux`, `linux-mingw`, `linux-musl`, `linux-termux`, `macos`, `solaris`, `unknown`
 * **²** musl-powered distros do not use GNU/glibc packages, and have problems currently
     * Known musl distros: Alpine, Chimera, Dragora, Gentoo (musl), Morpheus, OpenWrt, postmarketOS, Sabotage, Void
     * Bypassing OS detection (see ¹) will work, but dates will not be handled correctly

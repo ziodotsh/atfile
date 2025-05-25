@@ -208,7 +208,7 @@ function atfile.util.get_date() {
     [[ -z $format ]] && format="%Y-%m-%dT%H:%M:%SZ"
 
     if [[ $date =~ ^([0-9]{4}-[0-9]{2}-[0-9]{2})T([0-9]{2}:[0-9]{2}:[0-9]{2}([.][0-9]{3}){0,1})Z$ ]]; then
-        if [[ $_os == "bsd-"* ]]; then
+        if [[ $_os == "bsd" ]]; then
             date="${BASH_REMATCH[1]} ${BASH_REMATCH[2]}"
             in_format="%Y-%m-%d %H:%M:%S"
         elif [[ $_os == "linux-musl" || $_os == "solaris" ]]; then
@@ -227,7 +227,7 @@ function atfile.util.get_date() {
     else
         if [[ $_os == "linux-musl" || $_os == "solaris" ]]; then
             date -u -d "$date"
-        elif [[ $_os == "bsd-"* || $_os == "macos" ]]; then
+        elif [[ $_os == "bsd" || $_os == "macos" ]]; then
             date -u -j -f "$in_format" "$date" +"$format"
         else
             date --date "$date" -u +"$format"
@@ -306,7 +306,7 @@ function atfile.util.get_envvar() {
 
 function atfile.util.get_envvar_from_envfile() {
     variable="$1"
-    atfile.util.get_var_from_file "$_path_envvar" "$variable"
+    [[ -f $_path_envvar ]] && atfile.util.get_var_from_file "$_path_envvar" "$variable"
 }
 
 function atfile.util.get_exiftool_field() {
@@ -646,24 +646,24 @@ function atfile.util.get_md5() {
 }
 
 function atfile.util.get_os() {
-    os="$OSTYPE"
+    os="${OSTYPE,,}"
 
     case $os in
+        # BSD
+        "freebsd"*|"netbsd"*|"openbsd"*|*"bsd") echo "bsd" ;;
+        # Haiku
+        "haiku") echo "haiku" ;;
         # Linux
         "linux-gnu") echo "linux" ;;
         "cygwin"|"msys") echo "linux-mingw" ;;
         "linux-musl") echo "linux-musl" ;;
         "linux-android") echo "linux-termux" ;;
-        # BSD
-        "FreeBSD"*|"freebsd"*) echo "bsd-freebsd" ;;
-        "netbsd"*) echo "bsd-netbsd" ;;
-        "openbsd"*) echo "bsd-openbsd" ;;
-        # Misc.
-        "haiku") echo "haiku" ;;
+        # macOS
         "darwin"*) echo "macos" ;;
+        # Solaris
         "solaris"*) echo "solaris" ;;
         # Unknown
-        *) echo "unknown-$OSTYPE" ;;
+        *) echo "unknown-$os" ;;
     esac
 }
 

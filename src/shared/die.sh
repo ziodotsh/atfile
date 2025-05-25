@@ -3,7 +3,7 @@
 function atfile.die() {
     message="$1"
 
-    if [[ $_output_json == 0 ]]; then
+    if [[ $_output_json != 1 ]]; then
         atfile.say.die "$message"
     else
         echo -e "{ \"error\": \"$1\" }" | jq

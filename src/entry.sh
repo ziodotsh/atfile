@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 
-# Global variables
+# Environment
 
-## General
+## Early-start global variables
 
-_start="$(atfile.util.get_date "" "%s")"
+_start="$(atfile.util.get_date "" "%s")" # 1
+_envvar_prefix="ATFILE" # 2
+_debug="$(atfile.util.get_envvar "${_envvar_prefix}_DEBUG" "0")" # 3
 _command="$1"
 _command_args=("${@:2}")
-_envvar_prefix="ATFILE"
 _os="$(atfile.util.get_os)"
-_is_git=0
+_os_supported=0
+_is_piped=0
 _is_sourced=0
 _meta_author="{:meta_author:}"
 _meta_did="{:meta_did:}"
@@ -17,6 +19,66 @@ _meta_repo="{:meta_repo:}"
 _meta_year="{:meta_year:}"
 _now="$(atfile.util.get_date)"
 _version="{:version:}"
+
+## "Hello, world!"
+
+atfile.say.debug "Reticulating splines..."
+
+## OS detection
+
+atfile.say.debug "Detected OS: $_os"
+
+if [[ $_os != "unknown-"* ]] &&\
+   [[ $_os == "bsd" ]] ||\
+   [[ $_os == "haiku" ]] ||\
+   [[ $_os == "linux" ]] ||\
+   [[ $_os == "linux-mingw" ]] ||\
+   [[ $_os == "linux-termux" ]] ||\
+   [[ $_os == "macos" ]] ; then
+    _os_supported=1
+fi
+
+## Pipe detection
+
+if [ -p /dev/stdin ] ||\
+   [[ "$0" == "bash" || $0 == *"/bin/bash" ]]; then
+    _is_piped=1
+    atfile.say.debug "Piping: $0"
+fi
+
+## Source detection
+
+if [[ -n ${BASH_SOURCE[0]} ]]; then
+    if [[ "$0" != "${BASH_SOURCE[0]}" ]]; then
+        if [[ "$ATFILE_DEVEL" == 1 ]]; then
+            if [[ -n "$ATFILE_DEVEL_SOURCE" ]]; then
+                _is_sourced=1
+                atfile.say.debug "Sourcing: $ATFILE_DEVEL_SOURCE"
+            fi
+        else
+            _is_sourced=1
+            atfile.say.debug "Sourcing: ${BASH_SOURCE[0]}"
+        fi
+    fi
+fi
+
+# Installation
+
+if [[ $_is_piped == 1 ]] ||\
+   [[ "$1" == "install" ]]; then
+    if [[ "$1" == "install" ]]; then
+        atfile.install "$2" "$3"
+        install_exit="$?"
+    else
+        atfile.install "$1" "$2"
+        install_exit="$?"
+    fi
+
+    atfile.util.print_seconds_since_start_debug
+    exit $install_exit
+fi
+
+# Global variables
 
 ## Reflection
 
@@ -150,22 +212,6 @@ esac
 
 # Setup
 
-atfile.say.debug "Starting up..."
-
-## Source detection
-
-if [[ "$0" != "${BASH_SOURCE[0]}" ]]; then
-    if [[ "$ATFILE_DEVEL" == 1 ]]; then
-        if [[ -n "$ATFILE_DEVEL_SOURCE" ]]; then
-            _is_sourced=1
-            atfile.say.debug "Sourcing: $ATFILE_DEVEL_SOURCE"
-        fi
-    else
-        _is_sourced=1
-        atfile.say.debug "Sourcing: ${BASH_SOURCE[0]}"
-    fi
-fi
-
 ## Envvar correction
 
 ### Overrides
@@ -202,28 +248,11 @@ fi
     atfile.say.debug "Setting ${_envvar_prefix}_MAX_LIST to $_max_list_fallback\n↳ Maximum is $_max_list_fallback" &&\
     _max_list=$_max_list_fallback
 
-## Git detection
-
-if [ -x "$(command -v git)" ] && [[ -d "$_prog_dir/.git" ]] && [[ "$(atfile.util.get_realpath "$(pwd)")" == "$_prog_dir" ]]; then
-    _is_git=1
-fi
-
 ## OS detection
 
-atfile.say.debug "Checking OS is supported...\n↳ Detected: $_os"
-is_os_supported=0
+atfile.say.debug "Checking OS is supported..."
 
-if [[ $_os != "unknown-"* ]] &&\
-   [[ $_os == "bsd-"* ]] ||\
-   [[ $_os == "haiku" ]] ||\
-   [[ $_os == "linux" ]] ||\
-   [[ $_os == "linux-mingw" ]] ||\
-   [[ $_os == "linux-termux" ]] ||\
-   [[ $_os == "macos" ]] ; then
-    is_os_supported=1
-fi
-
-if [[ $is_os_supported == 0 ]]; then
+if [[ $_os_supported == 0 ]]; then
     if [[ $_skip_unsupported_os_warn == 0 ]]; then
         atfile.die "Unsupported OS (${_os//unknown-/})\n↳ Set ${_envvar_prefix}_SKIP_UNSUPPORTED_OS_WARN=1 to ignore"
     else

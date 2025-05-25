@@ -628,7 +628,7 @@ function atfile.invoke.upload() {
         unset file_type
 
         case "$_os" in
-            "bsd-"*|"macos")
+            "bsd"|"macos")
                 file_date="$(atfile.util.get_date "$(stat -f '%Sm' -t "%Y-%m-%dT%H:%M:%SZ" "$file")")"
                 file_size="$(stat -f '%z' "$file")"
                 file_type="$(file -b --mime-type "$file")"

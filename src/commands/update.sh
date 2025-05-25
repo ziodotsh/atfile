@@ -4,6 +4,11 @@
 function atfile.update() {
     cmd="$1"
     unset error
+    is_git=0
+
+    if [ -x "$(command -v git)" ] && [[ -d "$_prog_dir/.git" ]] && [[ "$(atfile.util.get_realpath "$(pwd)")" == "$_prog_dir" ]]; then
+        is_git=1
+    fi
 
     if [[ "$cmd" == "check-only" ]]; then
         # shellcheck disable=SC2154
@@ -11,7 +16,7 @@ function atfile.update() {
         # shellcheck disable=SC2154
         [[ $_disable_updater == 1 ]] && return
         # shellcheck disable=SC2154
-        [[ $_is_git == 1 && $_enable_update_git_clobber == 0 ]] && return
+        [[ $is_git == 1 && $_enable_update_git_clobber == 0 ]] && return
         # shellcheck disable=SC2154
         [[ $_output_json == 1 ]] && return
 
@@ -78,7 +83,7 @@ function atfile.update() {
                 return
             fi
 
-            [[ $_is_git == 1 && $_enable_update_git_clobber == 0 ]] &&\
+            [[ $is_git == 1 && $_enable_update_git_clobber == 0 ]] &&\
                 atfile.die "Cannot update in Git repository"
             [[ $_disable_updater == 1 ]] &&\
                 atfile.die "Cannot update system-managed version: update from your package manager"

@@ -59,6 +59,11 @@ unset ATFILE_DEVEL_DIR
 unset ATFILE_DEVEL_ENTRY
 unset ATFILE_DEVEL_SOURCE
 
+#if [ -p /dev/stdin ] ||\
+#   [[ "$0" == "bash" || $0 == *"/bin/bash" ]]; then
+#    atfile.devel.die "Piping is not supported"
+#fi
+
 if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
     ATFILE_DEVEL=1
     ATFILE_DEVEL_DIR="$(dirname "${BASH_SOURCE[0]}")"
