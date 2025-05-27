@@ -15,7 +15,8 @@ function atfile.auth() {
         if [[ -z $override_username ]] && [[ $_is_sourced == 0 ]]; then
             # NOTE: Speeds things up a little if the user is overriding actor
             #       Keep this in-sync with the main case in `../entry.sh`!
-            if [[ $_command == "cat" && -n "${_command_args[1]}" ]] ||\
+            if [[ $_command == "bsky" && -n "${_command_args[1]}" ]] ||\
+               [[ $_command == "cat" && -n "${_command_args[1]}" ]] ||\
                [[ $_command == "fetch" && -n "${_command_args[1]}" ]] ||\
                [[ $_command == "fetch-crypt" && -n "${_command_args[1]}" ]] ||\
                [[ $_command == "info" && -n "${_command_args[1]}" ]] ||\
@@ -28,7 +29,8 @@ function atfile.auth() {
             fi
 
             # NOTE: Speeds things up a little if the command doesn't need actor resolving
-            if [[ $_command == "bsky" ]] ||\
+            if [[ -n $_command ]] ||\
+               [[ $_command == "ai" ]] ||\
                [[ $_command == "handle" ]] ||\
                [[ $_command == "help" ]] ||\
                [[ $_command == "now" ]] ||\
