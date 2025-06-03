@@ -29,7 +29,7 @@ function atfile.auth() {
             fi
 
             # NOTE: Speeds things up a little if the command doesn't need actor resolving
-            if [[ -n $_command ]] ||\
+            if [[ -z $_command ]] ||\
                [[ $_command == "ai" ]] ||\
                [[ $_command == "handle" ]] ||\
                [[ $_command == "help" ]] ||\
