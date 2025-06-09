@@ -6,7 +6,7 @@
 
 _start="$(atfile.util.get_date "" "%s")" # 1
 _envvar_prefix="ATFILE" # 2
-_debug="$(atfile.util.get_envvar "${_envvar_prefix}_DEBUG" "0")" # 3
+_debug="$(atfile.util.get_envvar "${_envvar_prefix}_DEBUG" "$([[ $ATFILE_DEVEL == 1 ]] && echo 1 || echo 0)")" # 3
 _command="$1"
 _command_args=("${@:2}")
 _os="$(atfile.util.get_os)"
@@ -23,6 +23,43 @@ _version="{:version:}"
 ## "Hello, world!"
 
 atfile.say.debug "Reticulating splines..."
+
+## Paths
+
+_path_home="$HOME"
+
+if [[ -n "$SUDO_USER" ]]; then
+    _path_home="$(eval echo "~$SUDO_USER")"
+fi
+
+_file_envvar="atfile.env"
+_path_blobs_tmp="/tmp"
+_path_cache="$_path_home/.cache"
+_path_envvar="$_path_home/.config"
+
+# BUG: ATFILE_FORCE_OS cannot overwrite this
+case $_os in
+    "haiku")
+        _path_blobs_tmp="/boot/system/cache/tmp"
+        _path_cache="$_path_home/config/cache"
+        _path_envvar="$_path_home/config/settings"
+        ;;
+    "linux-termux")
+        _path_blobs_tmp="/data/data/com.termux/files/tmp"
+        ;;
+    "macos")
+        _path_envvar="$_path_home/Library/Application Support"
+        _path_blobs_tmp="/private/tmp"
+        ;;
+esac
+
+if [[ -n "$XDG_CONFIG_HOME" ]]; then
+    _path_envvar="$XDG_CONFIG_HOME"
+fi
+
+_path_blobs_tmp="$_path_blobs_tmp/at-blobs"
+_path_cache="$_path_cache/atfile"
+_path_envvar="$(atfile.util.get_envvar "${_envvar_prefix}_PATH_CONF" "$_path_envvar/$_file_envvar")" 
 
 ## OS detection
 
@@ -86,43 +123,6 @@ _prog="$(basename "$(atfile.util.get_realpath "$0")")"
 _prog_dir="$(dirname "$(atfile.util.get_realpath "$0")")"
 _prog_path="$(atfile.util.get_realpath "$0")"
 
-## Paths
-
-_path_home="$HOME"
-
-if [[ -n "$SUDO_USER" ]]; then
-    _path_home="$(eval echo "~$SUDO_USER")"
-fi
-
-_file_envvar="atfile.env"
-_path_blobs_tmp="/tmp"
-_path_cache="$_path_home/.cache"
-_path_envvar="$_path_home/.config"
-
-# BUG: ATFILE_FORCE_OS cannot overwrite this
-case $_os in
-    "haiku")
-        _path_blobs_tmp="/boot/system/cache/tmp"
-        _path_cache="$_path_home/config/cache"
-        _path_envvar="$_path_home/config/settings"
-        ;;
-    "linux-termux")
-        _path_blobs_tmp="/data/data/com.termux/files/tmp"
-        ;;
-    "macos")
-        _path_envvar="$_path_home/Library/Application Support"
-        _path_blobs_tmp="/private/tmp"
-        ;;
-esac
-
-if [[ -n "$XDG_CONFIG_HOME" ]]; then
-    _path_envvar="$XDG_CONFIG_HOME"
-fi
-
-_path_blobs_tmp="$_path_blobs_tmp/at-blobs"
-_path_cache="$_path_cache/atfile"
-_path_envvar="$(atfile.util.get_envvar "${_envvar_prefix}_PATH_CONF" "$_path_envvar/$_file_envvar")" 
-
 ## Envvars
 
 ### Fallbacks
@@ -134,7 +134,6 @@ _max_list_fallback=100
 
 ### Defaults
 
-_debug_default=$([[ $ATFILE_DEVEL == 1 ]] && echo 1 || echo 0)
 _devel_publish_default=0
 _disable_pbc_fallback_default=0
 _disable_update_checking_default=0
@@ -163,7 +162,6 @@ _skip_unsupported_os_warn_default=0
 
 ### Set
 
-_debug="$(atfile.util.get_envvar "${_envvar_prefix}_DEBUG" "$_debug_default")"
 _devel_publish="$(atfile.util.get_envvar "${_envvar_prefix}_DEVEL_PUBLISH" $_devel_publish_default)"
 _disable_pbc_fallback="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_PBC_FALLBACK" $_disable_pbc_fallback_default)"
 _disable_update_checking="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_UPDATE_CHECKING" $_disable_update_checking_default)"
@@ -250,8 +248,6 @@ esac
 
 ## OS detection
 
-atfile.say.debug "Checking OS is supported..."
-
 if [[ $_os_supported == 0 ]]; then
     if [[ $_skip_unsupported_os_warn == 0 ]]; then
         atfile.die "Unsupported OS (${_os//unknown-/})\n↳ Set ${_envvar_prefix}_SKIP_UNSUPPORTED_OS_WARN=1 to ignore"
@@ -275,6 +271,7 @@ atfile.util.check_prog "curl" "https://curl.se"
 [[ $_os != "haiku" && $_os != "solaris" ]] && atfile.util.check_prog "file" "https://www.darwinsys.com/file"
 atfile.util.check_prog "jq" "$_prog_hint_jq"
 [[ $_skip_ni_md5sum == 0 ]] && atfile.util.check_prog "md5sum" "" "${_envvar_prefix}_SKIP_NI_MD5SUM"
+#[[ $_os == "haiku" ]] && atfile.util.check_prog "perl"
 
 # Main
 
@@ -311,12 +308,11 @@ fi
 
 ## Default
 
-if [[ $_is_sourced == 0 && -z $_command ]]; then
-    atfile.util.override_command "help"
-fi
+[[ $_is_sourced == 0 && -z $_command ]] && _command="help"
 
 if [[ "$_command" == "atfile:"* || "$_command" == "at:"* || "$_command" == "https:"* ]]; then
-    atfile.util.override_command "handle" "$_command"
+    _command="handle"
+    _command_args=("$1")
     atfile.say.debug "Handling '${_command_args[*]}'..."
 fi
 

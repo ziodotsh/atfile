@@ -5,56 +5,46 @@ function atfile.install() {
     override_version="$2"
     
     uid="$(id -u)"
-    conf_file="atfile.env"
+    conf_dir="${_path_envvar%/*}"
     install_file="atfile"
-    unset conf_dir
     unset install_dir
 
     atfile.util.check_prog "curl"
     atfile.util.check_prog "jq"
 
+    # shellcheck disable=SC2154
     if [[ $_os_supported == 0 ]]; then
         atfile.die "Unsupported OS (${_os//unknown-/})"
     fi
 
-    if [[ $_os == "haiku" ]]; then
-        install_dir="/boot/system/non-packaged/bin"
-        conf_dir="$HOME/config/settings"
-    else
-        if [[ $uid == 0 ]]; then
-            install_dir="/usr/local/bin"
-
-            if [[ -z $SUDO_DIR ]]; then
-                conf_dir="/root/.config"
+    case $_os in
+        "haiku")
+            install_dir="/boot/system/non-packaged/bin"
+            ;;
+        *)
+            if [[ $uid == 0 ]]; then
+                install_dir="/usr/local/bin"
             else
-                if [[ $_os == "macos" ]]; then
-                    conf_dir="$(eval echo ~"$SUDO_USER")/Library/Application Support"
-                else
-                    conf_dir="$(eval echo ~"$SUDO_USER")/.config"
-                fi
+                install_dir="$_path_home/.local/bin"
             fi
-        else
-            install_dir="$(eval echo ~"$USER")/.local/bin"
-            conf_dir="$(eval echo ~"$USER")/.config"
-
-            if [[ $_os == "macos" ]]; then
-                conf_dir="$(eval echo ~"$USER")/Library/Application Support"
-            else
-                conf_dir="$(eval echo ~"$USER")/.config"
-            fi
-        fi
-
-        # INVESTIGATE: What happens during `sudo`?
-        if [[ -n "$XDG_CONFIG_HOME" ]]; then
-            conf_dir="$XDG_CONFIG_HOME"
-        fi
-    fi
+            ;;
+    esac
 
     [[ -n "$override_path" ]] && install_dir="$override_path"
+    mkdir -p "$conf_dir"
+    touch "$conf_dir/$_file_envvar"
 
-    atfile.say.debug "Installing...\n↳ OS: $_os\n↳ Install: $install_dir/$install_file\n↳ Config: $conf_dir/$conf_file"
+    atfile.say.debug "Installing...\n↳ OS: $_os\n↳ Install: $install_dir/$install_file\n↳ Config: $conf_dir/$_file_envvar"
 
     if [[ -f "$install_dir/$install_file" ]]; then
         atfile.die "Already installed ($install_dir/$install_file)"
     fi
+
+    atfile.say "😎 Installed ATFile"
+    atfile.say "   ↳ Path:   $install_dir/$install_file"
+    atfile.say "   ↳ Config: $conf_dir/$_file_envvar"
+    atfile.say "   ---"
+    atfile.say "   Before running, set your credentials in the config file!"
+    atfile.say "   Run '$install_file help' to get started"
+    #           ------------------------------------------------------------------------------
 }
