@@ -239,9 +239,10 @@ function blue.zio.atfile.finger__machine() {
                 os_version="$(sw_vers -productVersion | cut -d '.' -f 1,2)"
                 
                 case $os_version in
-                    "13."*) os_version="$os_version Ventura" ;;
-                    "14."*) os_version="$os_version Sonoma" ;;
-                    "15."*) os_version="$os_version Sequoia" ;;
+                    "13."*) os_version="Ventura" ;;
+                    "14."*) os_version="Sonoma" ;;
+                    "15."*) os_version="Sequoia" ;;
+                    "26."*) os_version="Tahoe" ;;
                 esac
 
                 machine_host="$(hostname)"
