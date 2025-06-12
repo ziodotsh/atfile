@@ -85,6 +85,7 @@ function atfile.util.fmt_int() {
     printf "%'d\n" "$1"
 }
 
+# TODO: Check if record actually exists
 function atfile.util.get_app_url_for_at_uri() {
     uri="$1"
 
