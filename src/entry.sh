@@ -4,9 +4,15 @@
 
 ## Early-start global variables
 
+### Permutation
+
 _start="$(atfile.util.get_date "" "%s")" # 1
 _envvar_prefix="ATFILE" # 2
 _debug="$(atfile.util.get_envvar "${_envvar_prefix}_DEBUG" "$([[ $ATFILE_DEVEL == 1 ]] && echo 1 || echo 0)")" # 3
+_force_os="$(atfile.util.get_envvar "${_envvar_prefix}_FORCE_OS")" # 3
+
+### Combination
+
 _command="$1"
 _command_args=("${@:2}")
 _os="$(atfile.util.get_os)"
@@ -181,7 +187,6 @@ _force_meta_did="$(atfile.util.get_envvar "${_envvar_prefix}_FORCE_META_DID")"
 _force_meta_repo="$(atfile.util.get_envvar "${_envvar_prefix}_FORCE_META_REPO")"
 _force_meta_year="$(atfile.util.get_envvar "${_envvar_prefix}_FORCE_META_YEAR")"
 _force_now="$(atfile.util.get_envvar "${_envvar_prefix}_FORCE_NOW")"
-_force_os="$(atfile.util.get_envvar "${_envvar_prefix}_FORCE_OS")"
 _force_version="$(atfile.util.get_envvar "${_envvar_prefix}_FORCE_VERSION")"
 _max_list="$(atfile.util.get_envvar "${_envvar_prefix}_MAX_LIST" "$_max_list_default")"
 _output_json="$(atfile.util.get_envvar "${_envvar_prefix}_OUTPUT_JSON" "$_output_json_default")"
