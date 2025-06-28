@@ -651,6 +651,8 @@ function atfile.util.get_os() {
 
     [[ -n $_force_os ]] && os="force-${_force_os,,}"
 
+    # shellcheck disable=SC2221
+    # shellcheck disable=SC2222
     case $os in
         # BSD
         "freebsd"*|"netbsd"*|"openbsd"*|*"bsd"|"force-bsd") echo "bsd" ;;
