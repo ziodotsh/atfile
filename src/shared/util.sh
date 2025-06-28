@@ -698,8 +698,8 @@ function atfile.util.get_pds_pretty() {
             pds_name="$pds_host"
         fi
     fi
-    
-    # BUG: Haiku Terminal has issues with emojis
+
+                                # BUG: Haiku Terminal has issues with emojis
     if [[ -n "$pds_emoji" ]] && [[ $_os != "haiku" ]]; then
         echo "$pds_emoji $pds_name"
     else
