@@ -77,9 +77,7 @@ This will automatically fetch the latest version of ATFile and install it in an 
   * Config: `$HOME/config/settings/atfile.env`
     * `$HOME` is **always** `/home` on Haiku
 
-If `$XDG_CONFIG_HOME` is set, this will overwrite the config directory (e.g. setting `XDG_CONFIG_HOME=$HOME/.local/share/atfile` will result in the config being stored at `$HOME/.local/share/atfile/atfile.env`).
-
-Custom config paths are supported, but set after-the-fact &mdash; see **Manually** below.
+If `$XDG_CONFIG_HOME` is set, this will overwrite the config directory (e.g. setting `XDG_CONFIG_HOME=$HOME/.local/share/atfile` will result in the config being stored at `$HOME/.local/share/atfile/atfile.env`). Custom config paths are supported, but set after-the-fact &mdash; see **Manually** below.
 
 #### Manually
 
@@ -123,7 +121,7 @@ When submitting Pull Requests, **target the `dev` branch**: `main` is the curren
 
 * **¹** You can bypass OS detection in one of two ways:
     * Set `ATFILE_SKIP_UNSUPPORTED_OS=1`<br />Be careful! There's a reason some OSes are not supported
-    * Set `ATFILE_FORCE_OS=<os>`<br />This overrides the OS detected. Possible values: `bsd`, `haiku`, `linux`, `linux-mingw`, `linux-musl`, `linux-termux`, `macos`, `solaris`, `unknown`
+    * Set `ATFILE_FORCE_OS=<os>`<br />This overrides the OS detected. Possible values: `bsd`, `haiku`, `linux`, `linux-mingw`, `linux-musl`, `linux-termux`, `macos`, and `solaris`.
 * **²** musl-powered distros do not use GNU/glibc packages, and have problems currently
     * Known musl distros: Alpine, Chimera, Dragora, Gentoo (musl), Morpheus, OpenWrt, postmarketOS, Sabotage, Void
     * Bypassing OS detection (see ¹) will work, but dates will not be handled correctly
