@@ -236,7 +236,7 @@ esac
     atfile.util.print_override_envvar_debug "Current Time" "_now"
 [[ -n $_force_os ]] &&\
     _os="$_force_os" &&\
-    atfile.util.print_override_envvar_debug "OSL" "_os"
+    atfile.util.print_override_envvar_debug "OS" "_os"
 [[ -n $_force_version ]] && \
     _version="$_force_version" &&\
     atfile.util.print_override_envvar_debug "Version" "_version"
