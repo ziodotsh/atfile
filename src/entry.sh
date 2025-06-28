@@ -43,7 +43,6 @@ _path_blobs_tmp="/tmp"
 _path_cache="$_path_home/.cache"
 _path_envvar="$_path_home/.config"
 
-# BUG: ATFILE_FORCE_OS cannot overwrite this
 case $_os in
     "haiku")
         _path_blobs_tmp="/boot/system/cache/tmp"

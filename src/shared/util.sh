@@ -649,22 +649,24 @@ function atfile.util.get_md5() {
 function atfile.util.get_os() {
     os="${OSTYPE,,}"
 
+    [[ -n $_force_os ]] && os="force-${_force_os,,}"
+
     case $os in
         # BSD
-        "freebsd"*|"netbsd"*|"openbsd"*|*"bsd") echo "bsd" ;;
+        "freebsd"*|"netbsd"*|"openbsd"*|*"bsd"|"force-bsd") echo "bsd" ;;
         # Haiku
-        "haiku") echo "haiku" ;;
+        "haiku"|"force-haiku") echo "haiku" ;;
         # Linux
-        "linux-gnu") echo "linux" ;;
-        "cygwin"|"msys") echo "linux-mingw" ;;
-        "linux-musl") echo "linux-musl" ;;
-        "linux-android") echo "linux-termux" ;;
+        "linux-gnu"|"force-linux") echo "linux" ;;
+        "cygwin"|"msys"|"force-linux-mingw") echo "linux-mingw" ;;
+        "linux-musl"|"force-linux-musl") echo "linux-musl" ;;
+        "linux-android"|"force-linux-termux") echo "linux-termux" ;;
         # macOS
-        "darwin"*) echo "macos" ;;
+        "darwin"*|"force-macos") echo "macos" ;;
         # Solaris
-        "solaris"*) echo "solaris" ;;
+        "solaris"*|"force-solaris") echo "solaris" ;;
         # Unknown
-        *) echo "unknown-$os" ;;
+        *) echo "unknown-${os//force-/}" ;;
     esac
 }
 
@@ -696,7 +698,8 @@ function atfile.util.get_pds_pretty() {
             pds_name="$pds_host"
         fi
     fi
-                                # BUG: Haiku Terminal has issues with emojis
+    
+    # BUG: Haiku Terminal has issues with emojis
     if [[ -n "$pds_emoji" ]] && [[ $_os != "haiku" ]]; then
         echo "$pds_emoji $pds_name"
     else
