@@ -141,8 +141,9 @@ _max_list_fallback=100
 
 _devel_publish_default=0
 _disable_pbc_fallback_default=0
+_disable_setup_dir_creation_default=0
 _disable_update_checking_default=0
-_disable_updater_default=0
+_disable_update_command_default=0
 _dist_username_default="$_meta_did"
 _enable_fingerprint_default=0
 _enable_update_git_clobber_default=0
@@ -169,8 +170,9 @@ _skip_unsupported_os_warn_default=0
 
 _devel_publish="$(atfile.util.get_envvar "${_envvar_prefix}_DEVEL_PUBLISH" $_devel_publish_default)"
 _disable_pbc_fallback="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_PBC_FALLBACK" $_disable_pbc_fallback_default)"
+_disable_setup_dir_creation="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_SETUP_DIR_CREATION" "$_disable_setup_dir_creation_default")"
 _disable_update_checking="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_UPDATE_CHECKING" $_disable_update_checking_default)"
-_disable_updater="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_UPDATER" $_disable_updater_default)"
+_disable_update_command="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_UPDATE_COMMAND" $_disable_update_command_default)"
 _dist_password="$(atfile.util.get_envvar "${_envvar_prefix}_DIST_PASSWORD")"
 _dist_username="$(atfile.util.get_envvar "${_envvar_prefix}_DIST_USERNAME" $_dist_username_default)"
 _enable_fingerprint="$(atfile.util.get_envvar "${_envvar_prefix}_ENABLE_FINGERPRINT" "$_enable_fingerprint_default")"
@@ -262,8 +264,10 @@ fi
 
 ## Directory creation
 
-atfile.util.create_dir "$_path_cache"
-atfile.util.create_dir "$_path_blobs_tmp"
+if [[ $_disable_setup_dir_creation == 0 ]]; then
+    atfile.util.create_dir "$_path_cache"
+    atfile.util.create_dir "$_path_blobs_tmp"
+fi
 
 ## Program detection
 

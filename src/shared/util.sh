@@ -665,6 +665,8 @@ function atfile.util.get_os() {
         "linux-android"|"force-linux-termux") echo "linux-termux" ;;
         # macOS
         "darwin"*|"force-macos") echo "macos" ;;
+        # SerenityOS
+        "serenity"*|"force-serenity") echo "serenity" ;;
         # Solaris
         "solaris"*|"force-solaris") echo "solaris" ;;
         # Unknown

@@ -14,7 +14,7 @@ function atfile.update() {
         # shellcheck disable=SC2154
         [[ $_disable_update_checking == 1 ]] && return
         # shellcheck disable=SC2154
-        [[ $_disable_updater == 1 ]] && return
+        [[ $_disable_update_command == 1 ]] && return
         # shellcheck disable=SC2154
         [[ $is_git == 1 && $_enable_update_git_clobber == 0 ]] && return
         # shellcheck disable=SC2154
@@ -78,15 +78,15 @@ function atfile.update() {
             fi
             ;;
         "install")
+            [[ $is_git == 1 && $_enable_update_git_clobber == 0 ]] &&\
+                atfile.die "Cannot update in Git repository"
+            [[ $_disable_update_command == 1 ]] &&\
+                atfile.die "Cannot update system-managed version: update from your package manager"
+
             if [[ $update_available == 0 ]]; then
                 atfile.say "No updates found"
                 return
             fi
-
-            [[ $is_git == 1 && $_enable_update_git_clobber == 0 ]] &&\
-                atfile.die "Cannot update in Git repository"
-            [[ $_disable_updater == 1 ]] &&\
-                atfile.die "Cannot update system-managed version: update from your package manager"
 
             # shellcheck disable=SC2154
             temp_updated_path="$_prog_dir/${_prog}-${latest_version}.tmp"

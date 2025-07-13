@@ -30,6 +30,7 @@ atfile help
     * 🟢 __*BSD__: FreeBSD, NetBSD, OpenBSD, and other *BSD's
     * 🟢 **Haiku**: [Yes, really](https://bsky.app/profile/did:plc:kv7sv4lynbv5s6gdhn5r5vcw/post/3lboqznyqgs26)
     * 🔴 **Solaris**: <span title="Don't we all?">Has issues</span>; low priority
+    * 🔴 **SerenityOS**: Untested
 * **Bash³:** 3.x or later
 * **Packages**
     * [`curl`](https://curl.se)
@@ -64,7 +65,7 @@ curl -sSL https://zio.sh/atfile/install.sh | bash
 
 This will automatically fetch the latest version of ATFile and install it in an appropriate location, as well as creating a blank configuration file. Once downloaded and installed, the locations used will be output. They are as follows:
 
-* __Linux/Windows/*BSD/Solaris__
+* __Linux/Windows/*BSD/Solaris/SerenityOS__
   * Install: `$HOME/.local/bin/atfile`
     * As `sudo`/`root`: `/usr/local/bin/atfile`
   * Config: `$HOME/.config/atfile.env`
@@ -83,7 +84,7 @@ If `$XDG_CONFIG_HOME` is set, this will overwrite the config directory (e.g. set
 
 To install manually, see [tags on @zio.sh/atfile](https://tangled.sh/@zio.sh/atfile/tags), and download the required version under **Artifacts**. This can be stored and run from anywhere (and is identical to the version `curl|bash` fetched &mdash; this installed version can also be moved to custom locations at whim).
 
-Don't forget to mark as executable with `chmod +x atfile.sh`. It's also a good idea to remove the version from the filename, as ATFile can update itself (with `atfile update`) and will overwrite the file (this functionality can be disabled with `ATFILE_DISABLE_UPDATER=1`).
+Don't forget to mark as executable with `chmod +x atfile.sh`. It's also a good idea to remove the version from the filename, as ATFile can update itself (with `atfile update`) and will overwrite the file (this functionality can be disabled with `ATFILE_DISABLE_UPDATE_COMMAND=1`).
 
 Config locations are identical to those above (see **Automatic ("`curl|bash`")** above). To use a custom path, set `$ATFILE_PATH_CONF`. Variables can also be used (and overridden) with exports &mdash; see **`atfile help` ➔ Environment Variables** for more.
 
@@ -121,7 +122,7 @@ When submitting Pull Requests, **target the `dev` branch**: `main` is the curren
 
 * **¹** You can bypass OS detection in one of two ways:
     * Set `ATFILE_SKIP_UNSUPPORTED_OS=1`<br />Be careful! There's a reason some OSes are not supported
-    * Set `ATFILE_FORCE_OS=<os>`<br />This overrides the OS detected. Possible values: `bsd`, `haiku`, `linux`, `linux-mingw`, `linux-musl`, `linux-termux`, `macos`, and `solaris`.
+    * Set `ATFILE_FORCE_OS=<os>`<br />This overrides the OS detected. Possible values: `bsd`, `haiku`, `linux`, `linux-mingw`, `linux-musl`, `linux-termux`, `macos`, `serenity`, and `solaris`.
 * **²** musl-powered distros do not use GNU/glibc packages, and have problems currently
     * Known musl distros: Alpine, Chimera, Dragora, Gentoo (musl), Morpheus, OpenWrt, postmarketOS, Sabotage, Void
     * Bypassing OS detection (see ¹) will work, but dates will not be handled correctly
