@@ -52,7 +52,7 @@ atfile help
           * To change this on Bluesky PDS, set `PDS_BLOB_UPLOAD_LIMIT=<bytes>`
           * If the PDS is running behind Cloudflare, the Free plan imposes a 100MB upload limit
           * This tool, nor setting a higher filesize limit, **does not workaround [video upload limits on Bluesky](https://bsky.social/about/blog/09-11-2024-video).** Videos are served via a [CDN](https://video.bsky.app), and adding larger videos to post records yields errors
-  
+
 ### ⬇️ Downloading & Installing
 
 There are three ways of installing ATFile. Either:
@@ -106,7 +106,7 @@ _(Todo)_
 
 ## ⌨️ Contributing
 
-Development mainly takes place on [Tangled](https://tangled.sh/@zio.sh/tangled), with [GitHub](https://github.com/ziodotsh/tangled) acting as a mirror. If possible, please use Tangled for your contributions: since it is powered by ATProto, you can log in using your Bluesky account.
+Development mainly takes place on [Tangled](https://tangled.sh/@zio.sh/atfile), with [GitHub](https://github.com/ziodotsh/atfile) acting as a mirror. If possible, please use Tangled for your contributions: since it is powered by ATProto, you can log in using your Bluesky account.
 
 When submitting Pull Requests, **target the `dev` branch**: `main` is the current stable production version, and PRs will be rejected targeting this branch.
 
