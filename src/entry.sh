@@ -314,7 +314,7 @@ if [[ $_is_sourced == 0 ]]; then
     fi
 fi
 
-## Default
+## Defaults
 
 [[ $_is_sourced == 0 && -z $_command ]] && _command="help"
 
@@ -324,13 +324,10 @@ if [[ "$_command" == "atfile:"* || "$_command" == "at:"* || "$_command" == "http
     atfile.say.debug "Handling '${_command_args[*]}'..."
 fi
 
-## Auth
-
-atfile.auth
-
 ## Invoke
 
 if [[ $_is_sourced == 0 ]]; then
+    atfile.auth
     atfile.invoke "$_command" "${_command_args[@]}"
 fi
 
