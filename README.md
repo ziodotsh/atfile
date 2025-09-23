@@ -43,7 +43,7 @@ atfile help
         * Both GNU and BusyBox versions supported
     * [`websocat`](https://github.com/vi/websocat) _(optional: needed for `stream`)_
 * **ATProto account**
-    * Limit the amount of files you upload, and avoid copyrighted files, if using a managed PDS &mdash; such as [Blacksky](https://pds.blacksky.app), [Bluesky](https://bsky.social), [Spark](https://pds.sprk.so), [Tangled](https://tngl.sh), or any other independent PDS you don't own
+    * Limit the amount of files you upload, and avoid copyrighted files, if using a managed PDS<br />(e.g. [Blacksky](https://pds.blacksky.app), [Bluesky](https://bsky.social), [Spark](https://pds.sprk.so), [Tangled](https://tngl.sh), or any other independent PDS you don't own)
     * Supports accounts with `did:plc` and `did:web` identities
     * Supports PDSs running [Bluesky PDS](https://github.com/bluesky-social/pds) and [millipds](https://github.com/DavidBuchanan314/millipds)
       * Other PDSs remain untested, but if they implement standard `com.atproto.*` endpoints, there should be no reason these won't work
