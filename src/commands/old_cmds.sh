@@ -599,13 +599,6 @@ function atfile.invoke.upload() {
     else
         file="$(atfile.util.get_realpath "$file")"
     fi
-
-    if [[ $_output_json == 0 ]]; then
-        # shellcheck disable=SC2154
-        if [[ $_server == *".host.bsky.network" ]]; then
-            atfile.util.print_copyright_warning
-        fi
-    fi
     
     if [[ -n $recipient ]]; then
         file_crypt="$(dirname "$file")/$(basename "$file").gpg"

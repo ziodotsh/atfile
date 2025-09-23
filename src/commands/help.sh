@@ -129,9 +129,6 @@ function atfile.help() {
         If you're confident your credentials are correct, and
         \$${_envvar_prefix}_USERNAME is a DID (*not* a handle), this will
         drastically improve performance!
-    ${_envvar_prefix}_SKIP_COPYRIGHT_WARN <bool¹> (default: $_skip_copyright_warn_default)
-        Do not print copyright warning when uploading files to
-        https://bsky.social
     ${_envvar_prefix}_SKIP_NI_EXIFTOOL <bool¹> (default: $_skip_ni_exiftool_default)
         Do not check if ExifTool is installed
         ⚠️  If Exiftool is not installed, the relevant metadata records will

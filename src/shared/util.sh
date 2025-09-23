@@ -1036,15 +1036,6 @@ function atfile.util.print_blob_url_output() {
     fi
 }
 
-function atfile.util.print_copyright_warning() {
-    if [[ $_skip_copyright_warn == 0 ]]; then
-        echo -e "╔════════════════════════════════════════╗
-║ You are uploading files to Bluesky PDS ║ 
-║    Do not upload copyrighted files!    ║ 
-╚════════════════════════════════════════╝"
-    fi
-}
-
 function atfile.util.print_override_envvar_debug() {
     pretty_name="$1"
     override_variable="$2"
