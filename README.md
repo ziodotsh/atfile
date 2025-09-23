@@ -120,7 +120,7 @@ When submitting Pull Requests, **target the `dev` branch**: `main` is the curren
 ---
 
 * **¹** You can bypass OS detection in one of two ways:
-    * Set `ATFILE_SKIP_UNSUPPORTED_OS=1`<br />Be careful! There's a reason some OSes are not supported
+    * Set `ATFILE_DISABLE_UNSUPPORTED_OS_WARN=1`<br />Be careful! There's a reason some OSes are not supported
     * Set `ATFILE_FORCE_OS=<os>`<br />This overrides the OS detected. Possible values: `bsd`, `haiku`, `linux`, `linux-mingw`, `linux-musl`, `linux-termux`, `macos`, `serenity`, and `solaris`.
 * **²** musl-powered distros do not use GNU/glibc packages, and have problems currently
     * Known musl distros: Alpine, Chimera, Dragora, Gentoo (musl), Morpheus, OpenWrt, postmarketOS, Sabotage, Void

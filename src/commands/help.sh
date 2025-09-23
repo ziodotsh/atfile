@@ -141,9 +141,7 @@ function atfile.help() {
         ⚠️  If MediaInfo is not installed, the relevant metadata records will
            not be created:
            * audio/*: $_nsid_meta#audio
-           * video/*: $_nsid_meta#video
-    ${_envvar_prefix}_SKIP_UNSUPPORTED_OS_WARN <bool¹> (default: $_skip_unsupported_os_warn)
-        Do not error when running on an unsupported OS\n
+           * video/*: $_nsid_meta#video\n
     ${_envvar_prefix}_ENDPOINT_APPVIEW <url> (default: ${_endpoint_appview_default}$([[ $_endpoint_appview_default == *"zio.blue" ]] && echo "²"))
         Endpoint of the Bluesky (or compatible) AppView
     ${_envvar_prefix}_ENDPOINT_JETSTREAM <url> (default: $_endpoint_jetstream_default$([[ $_endpoint_jetstream_default == *"zio.blue" ]] && echo "²"))
@@ -156,15 +154,17 @@ function atfile.help() {
         Endpoint of the PLC directory
     ${_envvar_prefix}_ENDPOINT_SOCIAL_APP <url> (default: ${_endpoint_social_app_default})
         Endpoint of the Bluesky (or compatible) social app\n
-    ${_envvar_prefix}_DEBUG <bool¹> (default: 0)
-        Print debug outputs
-        ⚠️  When output is JSON (${_envvar_prefix}_OUTPUT_JSON=1), sets to 0
     ${_envvar_prefix}_DISABLE_SETUP_DIR_CREATION <bool¹> (default: $_disable_setup_dir_creation)
         Disable directory creation during setup
+    ${_envvar_prefix}_DISABLE_UNSUPPORTED_OS_WARN <bool¹> (default: $_disable_unsupported_os_warn)
+        Do not error when running on an unsupported OS
     ${_envvar_prefix}_DISABLE_UPDATE_CHECKING <bool¹> (default: $_disable_update_checking_default)
         Disable periodic update checking when command finishes
     ${_envvar_prefix}_DISABLE_UPDATE_COMMAND <bool¹> (default: $_disable_update_command_default)
         Disable \`update\` command\n
+    ${_envvar_prefix}_DEBUG <bool¹> (default: 0)
+        Print debug outputs
+        ⚠️  When output is JSON (${_envvar_prefix}_OUTPUT_JSON=1), sets to 0\n
     ¹ A bool in Bash is 1 (true) or 0 (false)
     ² These servers are ran by @$handle. You can trust us!"
 

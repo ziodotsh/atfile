@@ -139,6 +139,7 @@ _max_list_fallback=100
 _devel_publish_default=0
 _disable_pbc_fallback_default=0
 _disable_setup_dir_creation_default=0
+_disable_unsupported_os_warn_default=0
 _disable_update_checking_default=0
 _disable_update_command_default=0
 _dist_username_default="$_meta_did"
@@ -160,13 +161,13 @@ _skip_auth_check_default=0
 _skip_ni_exiftool_default=0
 _skip_ni_md5sum_default=0
 _skip_ni_mediainfo_default=0
-_skip_unsupported_os_warn_default=0
 
 ### Set
 
 _devel_publish="$(atfile.util.get_envvar "${_envvar_prefix}_DEVEL_PUBLISH" $_devel_publish_default)"
 _disable_pbc_fallback="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_PBC_FALLBACK" $_disable_pbc_fallback_default)"
 _disable_setup_dir_creation="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_SETUP_DIR_CREATION" "$_disable_setup_dir_creation_default")"
+_disable_unsupported_os_warn="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_UNSUPPORTED_OS_WARN" "$_disable_unsupported_os_warn_default")"
 _disable_update_checking="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_UPDATE_CHECKING" $_disable_update_checking_default)"
 _disable_update_command="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_UPDATE_COMMAND" $_disable_update_command_default)"
 _dist_password="$(atfile.util.get_envvar "${_envvar_prefix}_DIST_PASSWORD")"
@@ -192,7 +193,6 @@ _skip_auth_check="$(atfile.util.get_envvar "${_envvar_prefix}_SKIP_AUTH_CHECK" "
 _skip_ni_exiftool="$(atfile.util.get_envvar "${_envvar_prefix}_SKIP_NI_EXIFTOOL" "$_skip_ni_exiftool_default")"
 _skip_ni_md5sum="$(atfile.util.get_envvar "${_envvar_prefix}_SKIP_NI_MD5SUM" "$_skip_ni_md5sum_default")"
 _skip_ni_mediainfo="$(atfile.util.get_envvar "${_envvar_prefix}_SKIP_NI_MEDIAINFO" "$_skip_ni_mediainfo_default")"
-_skip_unsupported_os_warn="$(atfile.util.get_envvar "${_envvar_prefix}_SKIP_UNSUPPORTED_OS_WARN" "$_skip_unsupported_os_warn_default")"
 _password="$(atfile.util.get_envvar "${_envvar_prefix}_PASSWORD")"
 _test_desktop_uas="Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0"
 _username="$(atfile.util.get_envvar "${_envvar_prefix}_USERNAME")"
@@ -259,10 +259,10 @@ esac
 ## OS detection
 
 if [[ $_os_supported == 0 ]]; then
-    if [[ $_skip_unsupported_os_warn == 0 ]]; then
-        atfile.die "Unsupported OS (${_os//unknown-/})\n↳ Set ${_envvar_prefix}_SKIP_UNSUPPORTED_OS_WARN=1 to ignore"
+    if [[ $_disable_unsupported_os_warn == 0 ]]; then
+        atfile.die "Unsupported OS (${_os//unknown-/})\n↳ Set ${_envvar_prefix}_DISABLE_UNSUPPORTED_OS_WARN=1 to ignore"
     else
-        atfile.say.debug "Skipping unsupported OS warning\n↳ ${_envvar_prefix}_SKIP_UNSUPPORTED_OS_WARN is set ($_skip_unsupported_os_warn)"
+        atfile.say.debug "Ignoring unsupported OS warning\n↳ ${_envvar_prefix}_DISABLE_UNSUPPORTED_OS_WARN set to '$_disable_unsupported_os_warn'"
     fi
 fi
 
