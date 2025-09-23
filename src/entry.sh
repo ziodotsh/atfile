@@ -205,12 +205,6 @@ _nsid_meta="${_nsid_prefix}.atfile.meta"
 _nsid_upload="${_nsid_prefix}.atfile.upload"
 _endpoint_social_app_name="Bluesky"
 
-case "$_endpoint_social_app" in
-    "https://blacksky.community") _endpoint_social_app_name="Blacksky" ;;
-    "https://deer.social") _endpoint_social_app_name="Deer" ;;
-    "https://zeppelin.social/") _endpoint_social_app_name="Zeppelin" ;;
-esac
-
 # Setup
 
 ## Envvar correction
@@ -239,6 +233,19 @@ esac
 [[ -n $_force_version ]] && \
     _version="$_force_version" &&\
     atfile.util.print_override_envvar_debug "Version" "_version"
+
+if [[ $_endpoint_appview != "$_endpoint_appview_default" ]] &&\
+   [[ $_endpoint_social_app == "$_endpoint_social_app_default" ]]; then
+    case "$_endpoint_appview" in
+        "https://bsky.zeppelin.social") _endpoint_social_app="https://zeppelin.social" ;;
+    esac
+fi
+
+case "$_endpoint_social_app" in
+    "https://blacksky.community") _endpoint_social_app_name="Blacksky" ;;
+    "https://deer.social") _endpoint_social_app_name="Deer" ;;
+    "https://zeppelin.social") _endpoint_social_app_name="Zeppelin" ;;
+esac
 
 ### Validation
 
