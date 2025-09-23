@@ -3,7 +3,7 @@
 </h1>
 
 <p align="center">
-    Store and retrieve files on the <a href="https://atproto.com/">ATmosphere</a> (like <a href="https://bsky.social">Bluesky</a>, <a href="https://sprk.so">Spark</a>, or <a href="https://tngl.sh">Tangled</a>)<br />
+    Store and retrieve files on the <a href="https://atproto.com/">ATmosphere</a> (like <a href="https://bsky.app">Bluesky</a>)<br />
     <em>Written entirely in Bash Shell. No <span title="Deno is pretty cool tho">NodeJS</span> here!</em>
 </p>
 
