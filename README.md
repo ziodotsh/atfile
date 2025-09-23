@@ -13,7 +13,7 @@
 
 ```sh
 curl -sSL https://zio.sh/atfile/install.sh | bash
-echo 'ATFILE_USERNAME="<your-atproto-username>"' > ~/.config/atfile.env # e.g. alice.bsky.social, did:plc:vdjlpwlhbnug4fnjodwr3vzh, did:web:twitter.com
+echo 'ATFILE_USERNAME="<your-atproto-username>"' > ~/.config/atfile.env # e.g. alice.bsky.social, did:plc:wshs7t2adsemcrrd4snkeqli, did:web:zio.sh
 echo 'ATFILE_PASSWORD="<your-atproto-password>"' >> ~/.config/atfile.env
 atfile help
 ```
