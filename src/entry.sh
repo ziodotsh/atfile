@@ -132,9 +132,6 @@ _prog_path="$(atfile.util.get_realpath "$0")"
 
 ### Fallbacks
 
-_endpoint_appview_fallback="https://api.bsky.app"
-_endpoint_jetstream_fallback="$(atfile.util.get_random_pbc_jetstream)"
-_endpoint_plc_directory_fallback="https://plc.directory"
 _max_list_fallback=100
 
 ### Defaults
@@ -150,7 +147,7 @@ _enable_update_git_clobber_default=0
 #_endpoint_appview_default="https://bsky.zio.blue"
 _endpoint_appview_default="https://api.bsky.app"
 #_endpoint_jetstream_default="wss://stream.zio.blue"
-_endpoint_jetstream_default="$_endpoint_jetstream_fallback"
+_endpoint_jetstream_default="$(atfile.util.get_random_pbc_jetstream)"
 _endpoint_plc_directory_default="https://plc.zio.blue"
 _endpoint_social_app_default="https://bsky.app"
 _fmt_blob_url_default="[server]/xrpc/com.atproto.sync.getBlob?did=[did]&cid=[cid]"
@@ -209,7 +206,9 @@ _nsid_upload="${_nsid_prefix}.atfile.upload"
 _endpoint_social_app_name="Bluesky"
 
 case "$_endpoint_social_app" in
+    "https://blacksky.community") _endpoint_social_app_name="Blacksky" ;;
     "https://deer.social") _endpoint_social_app_name="Deer" ;;
+    "https://zeppelin.social/") _endpoint_social_app_name="Zeppelin" ;;
 esac
 
 # Setup

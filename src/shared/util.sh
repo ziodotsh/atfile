@@ -269,13 +269,10 @@ function atfile.util.get_didplc_doc() {
     didplc_endpoint="$_endpoint_plc_directory"
     didplc_doc="$(atfile.util.get_didplc_doc.request_doc "$didplc_endpoint" "$actor")"
 
-    # shellcheck disable=SC2154
-    if [[ $_disable_pbc_fallback == 0 ]]; then
-        if [[ "$didplc_doc" != "{"* ]]; then
-            # shellcheck disable=SC2154
-            didplc_endpoint="$_endpoint_plc_directory_fallback"
-            didplc_doc="$(atfile.util.get_didplc_doc.request_doc "$didplc_endpoint" "$actor")"
-        fi
+    if [[ "$didplc_doc" != "{"* ]]; then
+        # shellcheck disable=SC2154
+        didplc_endpoint="https://plc.directory"
+        didplc_doc="$(atfile.util.get_didplc_doc.request_doc "$didplc_endpoint" "$actor")"
     fi
 
     echo "$didplc_doc" | jq ". += {\"directory\": \"$didplc_endpoint\"}"

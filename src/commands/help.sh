@@ -155,13 +155,7 @@ function atfile.help() {
     ${_envvar_prefix}_ENDPOINT_PLC_DIRECTORY <url> (default: ${_endpoint_plc_directory_default}$([[ $_endpoint_plc_directory_default == *"zio.blue" ]] && echo "²"))
         Endpoint of the PLC directory
     ${_envvar_prefix}_ENDPOINT_SOCIAL_APP <url> (default: ${_endpoint_social_app_default})
-        Endpoint of the Bluesky (or compatible) social app
-    ${_envvar_prefix}_DISABLE_PBC_FALLBACK <bool¹> (default: $_disable_pbc_fallback)
-        Disable the (hardcoded) usage of various Bluesky PBC-hosted fallbacks
-        if/when required. Currently, there are fallbacks for:
-        * ${_envvar_prefix}_ENDPOINT_APPVIEW ($_endpoint_appview_fallback)
-        * ${_envvar_prefix}_ENDPOINT_JETSTREAM ($_endpoint_jetstream_fallback)
-        * ${_envvar_prefix}_ENDPOINT_PLC_DIRECTORY ($_endpoint_plc_directory_fallback)\n
+        Endpoint of the Bluesky (or compatible) social app\n
     ${_envvar_prefix}_DEBUG <bool¹> (default: 0)
         Print debug outputs
         ⚠️  When output is JSON (${_envvar_prefix}_OUTPUT_JSON=1), sets to 0
