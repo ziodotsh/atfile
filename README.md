@@ -43,10 +43,9 @@ atfile help
         * Both GNU and BusyBox versions supported
     * [`websocat`](https://github.com/vi/websocat) _(optional: needed for `stream`)_
 * **ATProto account**
-  *  Both [Bluesky PBC-operated](https://bsky.social) and self-hosted accounts supported
-      * If you're using a `bsky.network` (`@*.bsky.social`) account,  limit the amount of files you upload to Bluesky PBC's servers. Heed the copyright warning: **do not upload copyrighted files**
-      * `did:web` accounts supported!
-    * Confirmed to work on [Bluesky PDS](https://github.com/bluesky-social/pds) and [millipds](https://github.com/DavidBuchanan314/millipds)
+    * Limit the amount of files you upload, and avoid copyrighted files, if using a managed PDS &mdash; such as [Blacksky](https://pds.blacksky.app), [Bluesky](https://bsky.social), [Spark](https://pds.sprk.so), [Tangled](https://tngl.sh), or any other independent PDS you don't own
+    * Supports accounts with `did:plc` and `did:web` identities
+    * Supports PDSs running [Bluesky PDS](https://github.com/bluesky-social/pds) and [millipds](https://github.com/DavidBuchanan314/millipds)
       * Other PDSs remain untested, but if they implement standard `com.atproto.*` endpoints, there should be no reason these won't work
       * Filesize limits cannot be automatically detected. By default, this is 100MB
           * To change this on Bluesky PDS, set `PDS_BLOB_UPLOAD_LIMIT=<bytes>`
