@@ -681,27 +681,32 @@ function atfile.util.get_pds_pretty() {
     unset pds_name
     unset pds_emoji
 
-    if [[ $pds_host == *".host.bsky.network" ]]; then
-        bsky_host="$(echo "$pds_host" | cut -d "." -f 1)"
-        bsky_region="$(echo "$pds_host" | cut -d "." -f 2)"
+    case "$pds_host" in
+        *".host.bsky.network")
+            bsky_host="$(echo "$pds_host" | cut -d "." -f 1)"
+            bsky_region="$(echo "$pds_host" | cut -d "." -f 2)"
 
-        pds_name="${bsky_host^} ($(atfile.util.get_region_pretty "$bsky_region"))"
-        pds_emoji="🍄"
-    elif [[ $pds_host == "atproto.brid.gy" ]]; then
-        pds_name="Bridgy Fed"
-        pds_emoji="🔀"
-    else
-        pds_oauth_url="$pds/oauth/authorize"
-        pds_oauth_page="$(curl -H "User-Agent: $(atfile.util.get_uas)" -s -L -X GET "$pds_oauth_url" | tr -d '\n')"
-        pds_customization_data="$(echo "$pds_oauth_page" | sed -s s/.*_customizationData\"]=//g | sed -s s/\;document\.currentScript\.remove.*//g)"
+            pds_name="${bsky_host^} ($(atfile.util.get_region_pretty "$bsky_region"))"
+            pds_emoji="🍄"
+            ;;
+        "at.app.wafrn.net") pds_name="Wafrn"; pds_emoji="🌸" ;;
+        "atproto.brid.gy") pds_name="Bridgy Fed"; pds_emoji="🔀" ;;
+        "blacksky.app") pds_name="Blacksky"; pds_emoji="⬛" ;;
+        "pds.sprk.so") pds_name="Spark"; pds_emoji="✨" ;;
+        "tngl.sh") pds_name="Tangled"; pds_emoji="🪢" ;;
+        *)
+            pds_oauth_url="$pds/oauth/authorize"
+            pds_oauth_page="$(curl -H "User-Agent: $(atfile.util.get_uas)" -s -L -X GET "$pds_oauth_url" | tr -d '\n')"
+            pds_customization_data="$(echo "$pds_oauth_page" | sed -n 's/.*window\["__customizationData"\]=JSON.parse("\(.*\)");.*/\1/p' | sed 's/\\"/"/g; s/\\\\/\\/g')"
 
-        if [[ $pds_customization_data == "{"* ]]; then
-            pds_name="$(echo "$pds_customization_data" | jq -r '.name')"
-            pds_emoji="🟦"
-        else
-            pds_name="$pds_host"
-        fi
-    fi
+            if [[ $pds_customization_data == "{"* ]]; then
+                pds_name="$(echo "$pds_customization_data" | jq -r '.name')"
+                pds_emoji="🟦"
+            else
+                pds_name="$pds_host"
+            fi
+            ;;
+    esac
 
                                 # BUG: Haiku Terminal has issues with emojis
     if [[ -n "$pds_emoji" ]] && [[ $_os != "haiku" ]]; then
