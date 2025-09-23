@@ -1,8 +1,26 @@
 #!/usr/bin/env bash
+# atfile-release=ignore
 
 function atfile.release() {
     # shellcheck disable=SC2154
     [[ $_os != "linux" ]] && atfile.die "Only available on Linux (GNU)\n↳ Detected OS: $_os"
+
+    function atfile.release.get_devel_value() {
+        local file="$1"
+        local value="$2"
+        local found_line
+
+        found_line="$(grep '^# atfile-release=' "$file" | head -n1)"
+        if [[ -n "$found_line" ]]; then
+            local devel_values="${found_line#*=}"
+            IFS=',' read -ra arr <<< "$devel_values"
+            for v in "${arr[@]}"; do
+                if [[ "$v" == "$value" ]]; then
+                    echo 1
+                fi
+            done
+        fi
+    }
 
     function atfile.release.replace_template_var() {
         string="$1"
@@ -54,18 +72,20 @@ function atfile.release() {
 
     for s in "${ATFILE_DEVEL_INCLUDES[@]}"
     do
-        if [[ "$s" != *"/src/commands/release.sh" ]]; then
-            if [[ -f "$s" ]]; then
-                echo "↳ Adding: $s"
+        if [[ -f "$s" ]]; then
+            if [[ $(atfile.release.get_devel_value "$s" "ignore" == 1 ) ]]; then
+                echo "↳ Ignoring:  $s"
+            else
+                echo "↳ Compiling: $s"
 
                 while IFS="" read -r line
                 do
                     include_line=1
 
                     if [[ $line == "#"* ]] ||\
-                       [[ $line == *"    #"* ]] ||\
-                       [[ $line == "    " ]] ||\
-                       [[ $line == "" ]]; then
+                        [[ $line == *"    #"* ]] ||\
+                        [[ $line == "    " ]] ||\
+                        [[ $line == "" ]]; then
                         include_line=0
                     fi
 
