@@ -694,7 +694,7 @@ function atfile.util.get_pds_pretty() {
         *)
             pds_oauth_url="$pds/oauth/authorize"
             pds_oauth_page="$(curl -H "User-Agent: $(atfile.util.get_uas)" -s -L -X GET "$pds_oauth_url" | tr -d '\n')"
-            pds_customization_data="$(echo "$pds_oauth_page" | sed -n 's/.*window\["__customizationData"\]=JSON.parse("\(.*\)");.*/\1/p' | sed 's/\\"/"/g; s/\\\\/\\/g')"
+            pds_customization_data="$(echo "$pds_oauth_page" | sed -n 's/.*window\["__customizationData"\]=JSON.parse("\(.*\)");.*/\1/p' | sed 's/\\"/"/g; s/\\\\/\\/g' | sed 's/");window\[".*$//')"
 
             if [[ $pds_customization_data == "{"* ]]; then
                 pds_name="$(echo "$pds_customization_data" | jq -r '.name')"
