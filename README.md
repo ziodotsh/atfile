@@ -124,5 +124,5 @@ When submitting Pull Requests, **target the `dev` branch**: `main` is the curren
     * Set `ATFILE_FORCE_OS=<os>`<br />This overrides the OS detected. Possible values: `bsd`, `haiku`, `linux`, `linux-mingw`, `linux-musl`, `linux-termux`, `macos`, `serenity`, and `solaris`.
 * **²** musl-powered distros do not use GNU/glibc packages, and have problems currently
     * Known musl distros: Alpine, Chimera, Dragora, Gentoo (musl), Morpheus, OpenWrt, postmarketOS, Sabotage, Void
-    * Bypassing OS detection (see ¹) will work, but dates will not be handled correctly
+    * Bypassing OS detection (see ¹) will cause unintended behavior
 * **³** As long as you have Bash installed, running from another shell will not be problematic ([`#!/usr/bin/env bash`](https://tangled.sh/@zio.sh/atfile/blob/main/atfile-install.sh#L1) forces Bash)
