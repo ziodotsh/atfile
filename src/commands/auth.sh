@@ -68,7 +68,7 @@ function atfile.auth() {
 
     if [[ -n $_server ]]; then
         # shellcheck disable=SC2154
-        if [[ $_skip_auth_check == 0 ]]; then
+        if [[ $_disable_auth_check == 0 ]]; then
             atfile.say.debug "Checking authentication is valid..."
             
             session="$(com.atproto.server.getSession)"
@@ -80,7 +80,7 @@ function atfile.auth() {
                 _username="$(echo "$session" | jq -r ".did")"
             fi
         else
-            atfile.say.debug "Skipping checking authentication validity\n↳ ${_envvar_prefix}_SKIP_AUTH_CHECK is set ($_skip_auth_check)"
+            atfile.say.debug "Skipping checking authentication validity\n↳ ${_envvar_prefix}_DISABLE_AUTH_CHECK is set ($_disable_auth_check)"
             if [[ "$_username" != "did:"* ]]; then
                 atfile.die "Cannot skip authentication validation without a DID\n↳ \$${_envvar_prefix}_USERNAME currently set to '$_username' (need \"did:<type>:<key>\")"
             fi

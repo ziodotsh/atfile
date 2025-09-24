@@ -34,12 +34,12 @@ atfile help
 * **Bash³:** 3.x or later
 * **Packages**
     * [`curl`](https://curl.se)
-    * [ExifTool (`exiftool`)](https://exiftool.org) _(optional: set `ATFILE_SKIP_NI_EXIFTOOL=1` to ignore)_
+    * [ExifTool (`exiftool`)](https://exiftool.org) _(optional: set `ATFILE_DISABLE_NI_EXIFTOOL=1` to ignore)_
     * [`file`](https://www.darwinsys.com/file) _(only on *BSD, macOS, or Linux)_
     * [GnuPG (`gpg`)](https://gnupg.org) _(optional: needed for `upload-crypt`, `fetch-crypt`)_
     * [`jq`](https://jqlang.github.io/jq)
-    * [MediaInfo (`mediainfo`)](https://mediaarea.net/en/MediaInfo) _(optional: set `ATFILE_SKIP_NI_MEDIAINFO=1` to ignore)_
-    * `md5sum` _(optional: set `ATFILE_SKIP_NI_MD5SUM=1` to ignore)_
+    * [MediaInfo (`mediainfo`)](https://mediaarea.net/en/MediaInfo) _(optional: set `ATFILE_DISABLE_NI_MEDIAINFO=1` to ignore)_
+    * `md5sum` _(optional: set `ATFILE_DISABLE_NI_MD5SUM=1` to ignore)_
         * Both GNU and BusyBox versions supported
     * [`websocat`](https://github.com/vi/websocat) _(optional: needed for `stream`)_
 * **ATProto account**

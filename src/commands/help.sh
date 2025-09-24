@@ -123,25 +123,7 @@ function atfile.help() {
     ${_envvar_prefix}_FMT_OUT_FILE <string> (default: $_fmt_out_file_default)
         Format for fetched filenames. Fragments:
         * [key]: Record key of uploaded file
-        * [name]: Original name of uploaded file
-    ${_envvar_prefix}_SKIP_AUTH_CHECK <bool¹> (default: $_skip_auth_check_default)
-        Skip session validation on startup
-        If you're confident your credentials are correct, and
-        \$${_envvar_prefix}_USERNAME is a DID (*not* a handle), this will
-        drastically improve performance!
-    ${_envvar_prefix}_SKIP_NI_EXIFTOOL <bool¹> (default: $_skip_ni_exiftool_default)
-        Do not check if ExifTool is installed
-        ⚠️  If Exiftool is not installed, the relevant metadata records will
-           not be created:
-           * image/*: $_nsid_meta#photo
-    ${_envvar_prefix}_SKIP_NI_MD5SUM <bool¹> (default: $_skip_ni_md5sum_default)
-        Do not check if MD5Sum is installed
-    ${_envvar_prefix}_SKIP_NI_MEDIAINFO <bool¹> (default: $_skip_ni_mediainfo_default)
-        Do not check if MediaInfo is installed
-        ⚠️  If MediaInfo is not installed, the relevant metadata records will
-           not be created:
-           * audio/*: $_nsid_meta#audio
-           * video/*: $_nsid_meta#video\n
+        * [name]: Original name of uploaded file\n
     ${_envvar_prefix}_ENDPOINT_APPVIEW <url> (default: ${_endpoint_appview_default}$([[ $_endpoint_appview_default == *"zio.blue" ]] && echo "²"))
         Endpoint of the Bluesky (or compatible) AppView
     ${_envvar_prefix}_ENDPOINT_JETSTREAM <url> (default: $_endpoint_jetstream_default$([[ $_endpoint_jetstream_default == *"zio.blue" ]] && echo "²"))
@@ -154,6 +136,24 @@ function atfile.help() {
         Endpoint of the PLC directory
     ${_envvar_prefix}_ENDPOINT_SOCIAL_APP <url> (default: ${_endpoint_social_app_default})
         Endpoint of the Bluesky (or compatible) social app\n
+    ${_envvar_prefix}_DISABLE_AUTH_CHECK <bool¹> (default: $_disable_auth_check_default)
+        Skip session validation on startup
+        If you're confident your credentials are correct, and
+        \$${_envvar_prefix}_USERNAME is a DID (*not* a handle), this will
+        drastically improve performance!
+    ${_envvar_prefix}_DISABLE_NI_EXIFTOOL <bool¹> (default: $_disable_ni_exiftool_default)
+        Do not check if ExifTool is installed
+        ⚠️  If Exiftool is not installed, the relevant metadata records will
+           not be created:
+           * image/*: $_nsid_meta#photo
+    ${_envvar_prefix}_DISABLE_NI_MD5SUM <bool¹> (default: $_disable_ni_md5sum_default)
+        Do not check if MD5Sum is installed
+    ${_envvar_prefix}_DISABLE_NI_MEDIAINFO <bool¹> (default: $_disable_ni_mediainfo_default)
+        Do not check if MediaInfo is installed
+        ⚠️  If MediaInfo is not installed, the relevant metadata records will
+           not be created:
+           * audio/*: $_nsid_meta#audio
+           * video/*: $_nsid_meta#video
     ${_envvar_prefix}_DISABLE_SETUP_DIR_CREATION <bool¹> (default: $_disable_setup_dir_creation)
         Disable directory creation during setup
     ${_envvar_prefix}_DISABLE_UNSUPPORTED_OS_WARN <bool¹> (default: $_disable_unsupported_os_warn)

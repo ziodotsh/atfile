@@ -137,7 +137,10 @@ _max_list_fallback=100
 ### Defaults
 
 _devel_publish_default=0
-_disable_pbc_fallback_default=0
+_disable_auth_check_default=0
+_disable_ni_exiftool_default=0
+_disable_ni_md5sum_default=0
+_disable_ni_mediainfo_default=0
 _disable_setup_dir_creation_default=0
 _disable_unsupported_os_warn_default=0
 _disable_update_checking_default=0
@@ -157,15 +160,14 @@ _enable_fingerprint_default=0
 _max_list_buffer=6
 _max_list_default=$(( $(atfile.util.get_term_rows) - _max_list_buffer ))
 _output_json_default=0
-_skip_auth_check_default=0
-_skip_ni_exiftool_default=0
-_skip_ni_md5sum_default=0
-_skip_ni_mediainfo_default=0
 
 ### Set
 
 _devel_publish="$(atfile.util.get_envvar "${_envvar_prefix}_DEVEL_PUBLISH" $_devel_publish_default)"
-_disable_pbc_fallback="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_PBC_FALLBACK" $_disable_pbc_fallback_default)"
+_disable_auth_check="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_AUTH_CHECK" "$_disable_auth_check_default")"
+_disable_ni_exiftool="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_NI_EXIFTOOL" "$_disable_ni_exiftool_default")"
+_disable_ni_md5sum="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_NI_MD5SUM" "$_disable_ni_md5sum_default")"
+_disable_ni_mediainfo="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_NI_MEDIAINFO" "$_disable_ni_mediainfo_default")"
 _disable_setup_dir_creation="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_SETUP_DIR_CREATION" "$_disable_setup_dir_creation_default")"
 _disable_unsupported_os_warn="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_UNSUPPORTED_OS_WARN" "$_disable_unsupported_os_warn_default")"
 _disable_update_checking="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_UPDATE_CHECKING" $_disable_update_checking_default)"
@@ -189,10 +191,6 @@ _force_version="$(atfile.util.get_envvar "${_envvar_prefix}_FORCE_VERSION")"
 _max_list="$(atfile.util.get_envvar "${_envvar_prefix}_MAX_LIST" "$_max_list_default")"
 _output_json="$(atfile.util.get_envvar "${_envvar_prefix}_OUTPUT_JSON" "$_output_json_default")"
 _server="$(atfile.util.get_envvar "${_envvar_prefix}_ENDPOINT_PDS")"
-_skip_auth_check="$(atfile.util.get_envvar "${_envvar_prefix}_SKIP_AUTH_CHECK" "$_skip_auth_check_default")"
-_skip_ni_exiftool="$(atfile.util.get_envvar "${_envvar_prefix}_SKIP_NI_EXIFTOOL" "$_skip_ni_exiftool_default")"
-_skip_ni_md5sum="$(atfile.util.get_envvar "${_envvar_prefix}_SKIP_NI_MD5SUM" "$_skip_ni_md5sum_default")"
-_skip_ni_mediainfo="$(atfile.util.get_envvar "${_envvar_prefix}_SKIP_NI_MEDIAINFO" "$_skip_ni_mediainfo_default")"
 _password="$(atfile.util.get_envvar "${_envvar_prefix}_PASSWORD")"
 _test_desktop_uas="Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0"
 _username="$(atfile.util.get_envvar "${_envvar_prefix}_USERNAME")"
@@ -282,7 +280,7 @@ _prog_hint_jq="https://jqlang.github.io/jq"
 atfile.util.check_prog "curl" "https://curl.se"
 [[ $_os != "haiku" && $_os != "solaris" ]] && atfile.util.check_prog "file" "https://www.darwinsys.com/file"
 atfile.util.check_prog "jq" "$_prog_hint_jq"
-[[ $_skip_ni_md5sum == 0 ]] && atfile.util.check_prog "md5sum" "" "${_envvar_prefix}_SKIP_NI_MD5SUM"
+[[ $_disable_ni_md5sum == 0 ]] && atfile.util.check_prog "md5sum" "" "${_envvar_prefix}_DISABLE_NI_MD5SUM"
 #[[ $_os == "haiku" ]] && atfile.util.check_prog "perl"
 
 # Main

@@ -64,9 +64,9 @@ function atfile.util.check_prog_gpg() {
 
 function atfile.util.check_prog_optional_metadata() {
     # shellcheck disable=SC2154
-    [[ $_skip_ni_exiftool == 0 ]] && atfile.util.check_prog "exiftool" "https://exiftool.org" "${_envvar_prefix}_SKIP_NI_EXIFTOOL"
+    [[ $_disable_ni_exiftool == 0 ]] && atfile.util.check_prog "exiftool" "https://exiftool.org" "${_envvar_prefix}_DISABLE_NI_EXIFTOOL"
     # shellcheck disable=SC2154
-    [[ $_skip_ni_mediainfo == 0 ]] && atfile.util.check_prog "mediainfo" "https://mediaarea.net/en/MediaInfo" "${_envvar_prefix}_SKIP_NI_MEDIAINFO"
+    [[ $_disable_ni_mediainfo == 0 ]] && atfile.util.check_prog "mediainfo" "https://mediaarea.net/en/MediaInfo" "${_envvar_prefix}_DISABLE_NI_MEDIAINFO"
 }
 
 function atfile.util.create_dir() {
