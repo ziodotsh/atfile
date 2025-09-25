@@ -181,6 +181,6 @@ function atfile.release() {
 
         atfile.say "↳ Bumping current version..."
         # shellcheck disable=SC2154
-        atfile.invoke.manage_record put "at://$_username/self.atfile.latest/self" "$latest_release_record" &> /dev/null
+        atfile.invoke.manage_record put "at://$_devel_dist_username/self.atfile.latest/self" "$latest_release_record" &> /dev/null
     fi
 }
