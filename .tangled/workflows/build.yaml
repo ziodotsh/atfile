@@ -1,0 +1,24 @@
+when:
+  - event: ["push", "manual"]
+    branch: ["main", "dev"]
+  - event: ["pull_request"]
+    branch: ["dev"]
+
+engine: "nixery"
+
+clone:
+  skip: false
+  depth: 1
+  submodules: false
+
+dependencies:
+  nixpkgs:
+    - bash
+    - shellcheck
+
+environment:
+  ATFILE_DEVEL_PUBLISH: "0"
+
+steps:
+  - name: "Build"
+    command: "./atfile.sh build"
