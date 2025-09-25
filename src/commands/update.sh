@@ -37,7 +37,7 @@ function atfile.update() {
     [[ $_output_json == 1 ]] && atfile.die "Command not available as JSON"
 
     # shellcheck disable=SC2154
-    update_did="$_dist_username"
+    update_did="$_devel_dist_username"
 
     atfile.util.override_actor "$update_did"
 
