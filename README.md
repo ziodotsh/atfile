@@ -90,7 +90,7 @@ Config locations are identical to those above (see **Automatic ("`curl|bash`")**
 
 **Using a development version against your ATProto account could potentially inadvertently damage records.**
 
-### Using
+### ⌨️ Using
 
 See `atfile help`.
 
