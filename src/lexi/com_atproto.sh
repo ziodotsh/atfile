@@ -62,7 +62,7 @@ function com.atproto.sync.getBlob() {
     did="$1"
     cid="$2"
 
-    atfile.xrpc.pds.get "com.atproto.sync.getBlob" "did=$did&cid=$cid" "*/*"
+    atfile.xrpc.pds.get "com.atproto.sync.getBlob" "cid=$cid&did=$did" "*/*"
 }
 
 function com.atproto.sync.listBlobs() {

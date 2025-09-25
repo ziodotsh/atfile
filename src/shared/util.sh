@@ -984,11 +984,7 @@ function atfile.util.override_actor() {
 
     _username="$(echo "$resolved_did" | cut -d "|" -f 1)"
     _server="$(echo "$resolved_did" | cut -d "|" -f 2)"
-
-    # shellcheck disable=SC2154
-    if [[ "$_fmt_blob_url" != "$_fmt_blob_url_default" ]]; then
-        export _fmt_blob_url="$_fmt_blob_url_default"
-    fi
+    _fmt_blob_url="$_fmt_blob_url_default"
 
     atfile.say.debug "Overridden identity\n↳ DID: $_username\n↳ PDS: $_server\n↳ Blob URL: $_fmt_blob_url"
 }

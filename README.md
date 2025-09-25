@@ -26,7 +26,7 @@ atfile help
     * 🟡 **Linux**: GNU, MinGW and Termux only; musl² not supported
     * 🟢 **macOS**: Compatible with built-in version of Bash (3.2)
     * 🔴 **Windows**: No native version available
-      * Run with MinGW (Cygwin, Git Bash, MSYS2, etc.) or WSL (See Linux caveats above)
+      * Run with MinGW (Cygwin, Git Bash, MSYS2, etc.) or WSL (see Linux caveats above)
     * 🟢 __*BSD__: FreeBSD, NetBSD, OpenBSD, and other *BSD's
     * 🟢 **Haiku**: [Yes, really](https://bsky.app/profile/did:plc:kv7sv4lynbv5s6gdhn5r5vcw/post/3lboqznyqgs26)
     * 🔴 **Solaris**: <span title="Don't we all?">Has issues</span>; low priority

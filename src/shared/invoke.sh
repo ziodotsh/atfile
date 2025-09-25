@@ -92,7 +92,8 @@ function atfile.invoke() {
                 atfile.invoke.get "${args[0]}"
                 ;;
             "install")
-                atfile.install
+                # TODO: Disable when installed (how?), similar to `release`
+                atfile.install "${args[0]}" "${args[1]}" "${args[2]}"
                 ;;
             "list")
                 if [[ "${args[0]}" == *.* || "${args[0]}" == did:* ]]; then

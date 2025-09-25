@@ -59,10 +59,12 @@ unset ATFILE_DEVEL_DIR
 unset ATFILE_DEVEL_ENTRY
 unset ATFILE_DEVEL_SOURCE
 
-#if [ -p /dev/stdin ] ||\
-#   [[ "$0" == "bash" || $0 == *"/bin/bash" ]]; then
-#    atfile.devel.die "Piping is not supported"
-#fi
+if [[ $ATFILE_DEVEL_ALLOW_PIPING != 1 ]]; then
+    if [ -p /dev/stdin ] ||\
+    [[ "$0" == "bash" || $0 == *"/bin/bash" ]]; then
+        atfile.devel.die "Piping is not supported\n       ↳ Set ATFILE_DEVEL_ALLOW_PIPING=1 to ignore"
+    fi
+fi
 
 if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
     ATFILE_DEVEL=1

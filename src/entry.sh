@@ -109,10 +109,10 @@ fi
 if [[ $_is_piped == 1 ]] ||\
    [[ "$1" == "install" ]]; then
     if [[ "$1" == "install" ]]; then
-        atfile.install "$2" "$3"
+        atfile.install "$2" "$3" "$4"
         install_exit="$?"
     else
-        atfile.install "$1" "$2"
+        atfile.install "$1" "$2" "$3"
         install_exit="$?"
     fi
 
