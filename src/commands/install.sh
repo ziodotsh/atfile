@@ -112,7 +112,7 @@ function atfile.install() {
     fi
 
     atfile.say "😎 Installed ATFile"
-    atfile.say "   ↳ Version: $latest_version"
+    atfile.say "   ↳ Version: $found_version"
     atfile.say "   ↳ Paths"
     atfile.say "    ↳ Install: $install_dir/$install_file"
     atfile.say "    ↳ Config:  $conf_dir/$_file_envvar"
