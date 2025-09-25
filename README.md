@@ -12,7 +12,7 @@
 ## ✨ Quick Start
 
 ```sh
-curl -sSL https://zio.sh/atfile/install.sh | bash
+curl -sSL https://zio.sh/atfile.sh | bash
 echo 'ATFILE_USERNAME="<your-atproto-username>"' > ~/.config/atfile.env # e.g. alice.bsky.social, did:plc:wshs7t2adsemcrrd4snkeqli, did:web:zio.sh
 echo 'ATFILE_PASSWORD="<your-atproto-password>"' >> ~/.config/atfile.env
 atfile help
@@ -59,7 +59,7 @@ There are three ways of installing ATFile. Either:
 #### Automatic ("`curl|bash`")
 
 ```
-curl -sSL https://zio.sh/atfile/install.sh | bash
+curl -sSL https://zio.sh/atfile.sh | bash
 ```
 
 This will automatically fetch the latest version of ATFile and install it in an appropriate location, as well as creating a blank configuration file. Once downloaded and installed, the locations used will be output. They are as follows:
