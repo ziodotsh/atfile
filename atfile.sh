@@ -36,7 +36,7 @@
 author="zio"
 did="did:web:zio.sh"
 repo="https://tangled.sh/@zio.sh/atfile"
-version="0.12"
+version="0.12.1"
 year="$(date +%Y)"
 
 # Entry
