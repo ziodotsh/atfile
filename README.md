@@ -75,7 +75,6 @@ This will automatically fetch the latest version of ATFile and install it in an 
 * **Haiku**
   * Install: `/boot/system/non-packaged/bin/atfile`
   * Config: `$HOME/config/settings/atfile.env`
-    * `$HOME` is **always** `/home` on Haiku
 
 #### Manually
 
@@ -99,13 +98,40 @@ See `atfile help`.
 
 To compile, run `./atfile.sh build`. The built version will be available at `./bin/atfile-<version>[+git.<hash>].sh`.
 
-_(That was easy, huh?)_
+### Environment variables
+
+Various environment variables can be exported to control various aspects of the development version. These are as follows:
+
+* `ATFILE_DEVEL_ENABLE_PIPING` <em>&lt;int&gt; (default: `0`)</em><br />Allow piping (useful to test installation) _(e.g. `cat ./atfile.sh | bash`)_
+* `ATFILE_DEVEL_ENABLE_PUBLISH` <em>&lt;int&gt; (default: `0`)</em><br />Publish build to ATProto repository (to allow for updating) as the last step when running `release`. Several requirements must be fulfilled to succeed:
+  * `ATFILE_DEVEL_DIST_USERNAME` must be set<br />By default, this is set to `$did` in `atfile.sh` (see **🏗️ Building ➔ Meta**). Ideally, you should not set this variable as updates in the built version will not be fetched from the correct place
+  * `ATFILE_DEVEL_DIST_PASSWORD` must be set
+  * No tests should return an **Error** (**Warning** is acceptable)
+  * Git commit must be <a href="https://git-scm.com/docs/git-tag">tagged</a>
+
+Other `ATFILE_DEVEL_` environment variables are visible in the codebase, but these are computed internally and cannot be set/modified.
+
+### Directives
+
+Various build directives can be set in files to control various aspects of the development version. These are set with `# atfile-devel=` directive at the top of the file, using commas to separate values. These are as follows:
+
+* `ignore-build`<br />Do not include file in the final compiled build
+
+### Meta
+
+Various meta variables can be set to be available in the final compiled build (usually found in `help`). These are found in `atfile.sh` under `# Meta`. These variables are as follows:
+
+* `author` <em>&lt;string&gt;</em><br />Copyright author
+* `did` <em>&lt;did&gt;</em><br />DID of copyright author. Also used as the source for published builds, unless `ATFILE_DEVEL_DIST_USERNAME` is set (see **🏗️ Building ➔ Environment variables**)
+* `repo` <em>&lt;uri&gt;</em><br />Repository URL of source code
+* `version` <em>&lt;string&gt;</em><br />Version in the format of `<major>.<minor>[.<patch>]`. **Not following this format will cause unintended issues.** Git hashes (`+git.abc1234`) are added automatically during build when a <a href="https://git-scm.com/docs/git-tag">git tag</a> is **not** applied to the current commit
+* `year` <em>&lt;int&gt;</em><br />Copyright year
 
 ## ⌨️ Contributing
 
-Development mainly takes place on [Tangled](https://tangled.sh/@zio.sh/atfile), with [GitHub](https://github.com/ziodotsh/atfile) acting as a mirror. If possible, please use Tangled for your contributions: since it is powered by ATProto, you can log in using your Bluesky account.
+Development takes place on [Tangled (@zio.sh/atfile)](https://tangled.sh/@zio.sh/atfile), with [GitHub (ziodotsh/atfile)](https://github.com/ziodotsh/atfile) acting as a mirror. Use Tangled for your contributions, for both <a href="https://tangled.org/@zio.sh/atfile/issues">Issues</a> and <a href="https://tangled.org/@zio.sh/atfile/pulls">Pulls</a>. As Tangled is powered by ATProto, you already have an account (unsure? Try <a href="https://tangled.org/login">logging in with your Bluesky handle</a>).
 
-When submitting Pull Requests, **target the `dev` branch**: `main` is the current stable production version, and PRs will be rejected targeting this branch.
+When submitting Pulls, **target the `dev` branch**: `main` is the current stable production version, and Pulls will be rejected targeting this branch.
 
 ## 🤝 Acknowledgements
 

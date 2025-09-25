@@ -53,9 +53,9 @@ function atfile.help() {
         ℹ️  Make sure the necessary GPG key has been imported first"
 
     usage_commands_devel="Commands (Devel)
-    release
-        Build (and release) as one file (to ./bin)
-        ℹ️  Set ${_envvar_prefix}_DEVEL_PUBLISH=1 to upload release"
+    build
+        Build (and release, if requested) as one file (to ./bin)
+        ℹ️  Set ${_envvar_prefix}_DEVEL_ENABLE_PUBLISH=1 to upload release"
 
     usage_commands_lifecycle="Commands (Lifecycle)
     update

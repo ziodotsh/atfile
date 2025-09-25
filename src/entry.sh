@@ -136,7 +136,8 @@ _max_list_fallback=100
 
 ### Defaults
 
-_devel_publish_default=0
+_devel_dist_username_default="$_meta_did"
+_devel_enable_publish_default=0
 _disable_auth_check_default=0
 _disable_ni_exiftool_default=0
 _disable_ni_md5sum_default=0
@@ -145,7 +146,6 @@ _disable_setup_dir_creation_default=0
 _disable_unsupported_os_warn_default=0
 _disable_update_checking_default=0
 _disable_update_command_default=0
-_dist_username_default="$_meta_did"
 _enable_fingerprint_default=0
 _enable_update_git_clobber_default=0
 #_endpoint_appview_default="https://bsky.zio.blue"
@@ -163,7 +163,9 @@ _output_json_default=0
 
 ### Set
 
-_devel_publish="$(atfile.util.get_envvar "${_envvar_prefix}_DEVEL_PUBLISH" $_devel_publish_default)"
+_devel_dist_password="$(atfile.util.get_envvar "${_envvar_prefix}_DEVEL_DIST_PASSWORD")"
+_devel_dist_username="$(atfile.util.get_envvar "${_envvar_prefix}_DEVEL_DIST_USERNAME" $_devel_dist_username_default)"
+_devel_enable_publish="$(atfile.util.get_envvar "${_envvar_prefix}_DEVEL_ENABLE_PUBLISH" $_devel_enable_publish_default)"
 _disable_auth_check="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_AUTH_CHECK" "$_disable_auth_check_default")"
 _disable_ni_exiftool="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_NI_EXIFTOOL" "$_disable_ni_exiftool_default")"
 _disable_ni_md5sum="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_NI_MD5SUM" "$_disable_ni_md5sum_default")"
@@ -172,8 +174,6 @@ _disable_setup_dir_creation="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE
 _disable_unsupported_os_warn="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_UNSUPPORTED_OS_WARN" "$_disable_unsupported_os_warn_default")"
 _disable_update_checking="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_UPDATE_CHECKING" $_disable_update_checking_default)"
 _disable_update_command="$(atfile.util.get_envvar "${_envvar_prefix}_DISABLE_UPDATE_COMMAND" $_disable_update_command_default)"
-_dist_password="$(atfile.util.get_envvar "${_envvar_prefix}_DIST_PASSWORD")"
-_dist_username="$(atfile.util.get_envvar "${_envvar_prefix}_DIST_USERNAME" $_dist_username_default)"
 _enable_fingerprint="$(atfile.util.get_envvar "${_envvar_prefix}_ENABLE_FINGERPRINT" "$_enable_fingerprint_default")"
 _enable_update_git_clobber="$(atfile.util.get_envvar "${_envvar_prefix}_ENABLE_UPDATE_GIT_CLOBBER" "$_enable_update_git_clobber_default")"
 _endpoint_appview="$(atfile.util.get_envvar "${_envvar_prefix}_ENDPOINT_APPVIEW" "$_endpoint_appview_default")"
@@ -214,7 +214,7 @@ _endpoint_social_app_name="Bluesky"
     atfile.util.print_override_envvar_debug "Copyright Author" "_meta_author"
 [[ -n $_force_meta_did ]] && \
     _meta_did="$_force_meta_did" &&\
-    _dist_username="$(atfile.util.get_envvar "${_envvar_prefix}_DIST_USERNAME" "$_meta_did")" &&\
+    _devel_dist_username="$(atfile.util.get_envvar "${_envvar_prefix}_DEVEL_DIST_USERNAME" "$_meta_did")" &&\
     atfile.util.print_override_envvar_debug "DID" "_meta_did"
 [[ -n $_force_meta_repo ]] && \
     _meta_repo="$_force_meta_repo" &&\

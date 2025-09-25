@@ -17,7 +17,7 @@ dependencies:
     - shellcheck
 
 environment:
-  ATFILE_DEVEL_PUBLISH: "0"
+  ATFILE_DEVEL_ENABLE_PUBLISH: "0"
 
 steps:
   - name: "Build"

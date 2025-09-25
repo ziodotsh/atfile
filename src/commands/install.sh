@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# atfile-release=ignore
 
 function atfile.install() {
     override_path="$1"

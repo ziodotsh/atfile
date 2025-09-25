@@ -19,17 +19,9 @@
 #    it exists) is utilized as normal. Try running `./atfile.sh help`. To turn
 #    debug messages off, set ATFILE_DEBUG to '0'.
 #
-#   To produce a single-file build of ATFile, run `./atfile.sh release`: the
-#    resulting file will be created at './bin/atfile-$version.sh'. Set variables
-#    below (under '# Meta') to adjust various properties: these will be adjusted
-#    during build automatically.
-#
-#   Published releases are also done from here. This is done with:
-#    * Setting ATFILE_DEVEL_PUBLISH to '1'
-#    * Setting ATFILE_DIST_USERNAME to 'did:web:zio.sh' (default)
-#     * This account will become the source of updates for this published build
-#    * Setting ATFILE_DIST_PASSWORD to the above account's password
-#    * Running `./atfile.sh release`. After build, the resulting file is uploaded
+#   To produce a single-file build of ATFile, run `./atfile.sh build`: the
+#    resulting file will be created at './bin/atfile-$version.sh'.
+#    See README.md ➔ '🏗️ Building' for more details.
 #
 #   Being a fairly atypical codebase, please don't hesitate to get in touch if
 #    you're wanting to contribute but bewildered by this hot mess. Message
@@ -58,11 +50,12 @@ unset ATFILE_DEVEL
 unset ATFILE_DEVEL_DIR
 unset ATFILE_DEVEL_ENTRY
 unset ATFILE_DEVEL_SOURCE
+[[ -z "$ATFILE_DEVEL_ENABLE_PIPING" ]] && ATFILE_DEVEL_ENABLE_PIPING=0
 
-if [[ $ATFILE_DEVEL_ALLOW_PIPING != 1 ]]; then
+if [[ $ATFILE_DEVEL_ENABLE_PIPING != 1 ]]; then
     if [ -p /dev/stdin ] ||\
     [[ "$0" == "bash" || $0 == *"/bin/bash" ]]; then
-        atfile.devel.die "Piping is not supported\n       ↳ Set ATFILE_DEVEL_ALLOW_PIPING=1 to ignore"
+        atfile.devel.die "Piping is disabled\n       ↳ Set ATFILE_DEVEL_ENABLE_PIPING=1 to ignore"
     fi
 fi
 

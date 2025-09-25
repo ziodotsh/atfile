@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# atfile-release=ignore
+# atfile-devel=ignore-build
 
 function atfile.release() {
     # shellcheck disable=SC2154
@@ -10,7 +10,7 @@ function atfile.release() {
         local value="$2"
         local found_line
 
-        found_line="$(grep '^# atfile-release=' "$file" | head -n1)"
+        found_line="$(grep '^# atfile-devel=' "$file" | head -n1)"
         if [[ -n "$found_line" ]]; then
             local devel_values="${found_line#*=}"
             IFS=',' read -ra arr <<< "$devel_values"
@@ -73,7 +73,7 @@ function atfile.release() {
     for s in "${ATFILE_DEVEL_INCLUDES[@]}"
     do
         if [[ -f "$s" ]]; then
-            if [[ $(atfile.release.get_devel_value "$s" "ignore" == 1 ) ]]; then
+            if [[ $(atfile.release.get_devel_value "$s" "ignore-build" == 1 ) ]]; then
                 echo "↳ Ignoring:  $s"
             else
                 echo "↳ Compiling: $s"
@@ -157,13 +157,13 @@ function atfile.release() {
     chmod +x "$dist_path"
 
     # shellcheck disable=SC2154
-    if [[ $_devel_publish == 1 ]]; then
+    if [[ $_devel_enable_publish == 1 ]]; then
         if [[ $test_error_count -gt 0 ]]; then
             atfile.die "Unable to publish ($test_error_count errors detected)"
         fi
 
         atfile.say "---\n✨ Updating..."
-        atfile.auth "$_dist_username" "$_dist_password"
+        atfile.auth "$_devel_dist_username" "$_devel_dist_password"
         [[ $_version == *"+"* ]] && atfile.die "Cannot publish a Git version ($_version)"
 
         atfile.say "↳ Uploading '$dist_path'..."
