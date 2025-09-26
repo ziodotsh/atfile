@@ -179,7 +179,7 @@ function atfile.release() {
     \"checksum\": \"$checksum\"
 }"
 
-        atfile.say "↳ Bumping current version..."
+        atfile.say "---\n⬆️ Bumping..."
         # shellcheck disable=SC2154
         atfile.record update "at://$_devel_dist_username/self.atfile.latest/self" "$latest_release_record"
     fi
