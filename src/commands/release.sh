@@ -181,7 +181,7 @@ function atfile.release() {
 
         atfile.say "↳ Bumping current version..."
         # shellcheck disable=SC2154
-        latest_release="$(atfile.invoke.manage_record put "at://$_devel_dist_username/self.atfile.latest/self" "$latest_release_record")"
+        latest_release="$(atfile.record put "at://$_devel_dist_username/self.atfile.latest/self" "$latest_release_record")"
         error="$(atfile.util.get_xrpc_error $? "$latest_release")"
         [[ -n "$error" ]] && atfile.die.xrpc_error "Unable to bump latest release" "$latest_release"
     fi
