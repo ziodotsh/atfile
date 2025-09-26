@@ -5,6 +5,7 @@ function atfile.invoke() {
     shift
     args=("$@")
 
+    # shellcheck disable=SC2154
     if [[ $_is_sourced == 0 ]] && [[ $ATFILE_DEVEL_NO_INVOKE != 1 ]]; then
         atfile.say.debug "Invoking '$command'...\n↳ Arguments: ${args[*]}"
 
