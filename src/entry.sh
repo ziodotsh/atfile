@@ -304,9 +304,9 @@ if [[ $_is_sourced == 0 ]]; then
         "sb") _command="something-broke" ;;
         "js") _command="stream" ;;
         "ul"|"u") _command="upload" ;;
+        "--update"|"-U") _command="update" ;;
         "ub") _command="upload-blob" ;;
         "uc") _command="upload-crypt" ;;
-        "--update"|"-U") _command="update" ;;
         "get-url"|"b") _command="url" ;;
         "--version"|"-V") _command="version" ;;
     esac
