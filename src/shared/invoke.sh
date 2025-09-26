@@ -28,6 +28,13 @@ function atfile.invoke() {
                     atfile.bsky_profile "${args[0]}"
                 fi
                 ;;
+            "build")
+                if [[ $ATFILE_DEVEL == 1 ]]; then
+                    atfile.build
+                else
+                    atfile.die.unknown_command "$command"
+                fi
+                ;;
             "cat")
                 [[ -z "${args[0]}" ]] && atfile.die "<key> not set"
                 if [[ -n "${args[1]}" ]]; then
@@ -129,13 +136,6 @@ function atfile.invoke() {
                     "rm"|"delete"|"d") atfile.record "delete" "${args[1]}" ;;
                     *) atfile.die.unknown_command "$(echo "$command ${args[0]}" | xargs)" ;;
                 esac
-                ;;
-            "release")
-                if [[ $ATFILE_DEVEL == 1 ]]; then
-                    atfile.release
-                else
-                    atfile.die.unknown_command "$command"
-                fi
                 ;;
             "resolve")
                 atfile.resolve "${args[0]}"
