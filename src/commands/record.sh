@@ -48,6 +48,8 @@ function atfile.record() {
     at_collection="$(atfile.util.parse_at_uri "$at_uri" "collection")"
     at_rkey="$(atfile.util.parse_at_uri "$at_uri" "rkey")"
 
+    atfile.say.debug "Resolved AT URI\n↳ Actor: $at_actor\n↳ Collection: $at_collection\n↳ RKey: $at_rkey"
+
     case "$sub_command" in
         "create")
             if [[ -z "$at_rkey" ]]; then

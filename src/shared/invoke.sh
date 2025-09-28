@@ -5,6 +5,7 @@ function atfile.invoke() {
     shift
     args=("$@")
 
+    # shellcheck disable=SC2154
     if [[ $_is_sourced == 0 ]] && [[ $ATFILE_DEVEL_NO_INVOKE != 1 ]]; then
         atfile.say.debug "Invoking '$command'...\n↳ Arguments: ${args[*]}"
 
@@ -25,6 +26,13 @@ function atfile.invoke() {
                     atfile.bsky_profile "$_username"
                 else
                     atfile.bsky_profile "${args[0]}"
+                fi
+                ;;
+            "build")
+                if [[ $ATFILE_DEVEL == 1 ]]; then
+                    atfile.build
+                else
+                    atfile.die.unknown_command "$command"
                 fi
                 ;;
             "cat")
@@ -128,13 +136,6 @@ function atfile.invoke() {
                     "rm"|"delete"|"d") atfile.record "delete" "${args[1]}" ;;
                     *) atfile.die.unknown_command "$(echo "$command ${args[0]}" | xargs)" ;;
                 esac
-                ;;
-            "release")
-                if [[ $ATFILE_DEVEL == 1 ]]; then
-                    atfile.release
-                else
-                    atfile.die.unknown_command "$command"
-                fi
                 ;;
             "resolve")
                 atfile.resolve "${args[0]}"

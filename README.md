@@ -102,9 +102,11 @@ To compile, run `./atfile.sh build`. The built version will be available at `./b
 
 Various environment variables can be exported to control various aspects of the development version. These are as follows:
 
+* `ATFILE_DEVEL_DIST_USERNAME` <em>&lt;string&gt;</em><br />_(Todo)_. During runtime, this is set to `$did` in `atfile.sh` (see **🏗️ Building ➔ Meta**). Ideally, you should not set this variable as updates in the built version will not be fetched from the correct place
+* `ATFILE_DEVEL_DIST_PASSWORD` <em>&lt;string&gt;</em><br />_(Todo)_
 * `ATFILE_DEVEL_ENABLE_PIPING` <em>&lt;int&gt; (default: `0`)</em><br />Allow piping (useful to test installation) _(e.g. `cat ./atfile.sh | bash`)_
 * `ATFILE_DEVEL_ENABLE_PUBLISH` <em>&lt;int&gt; (default: `0`)</em><br />Publish build to ATProto repository (to allow for updating) as the last step when running `release`. Several requirements must be fulfilled to succeed:
-  * `ATFILE_DEVEL_DIST_USERNAME` must be set<br />By default, this is set to `$did` in `atfile.sh` (see **🏗️ Building ➔ Meta**). Ideally, you should not set this variable as updates in the built version will not be fetched from the correct place
+  * `ATFILE_DEVEL_DIST_USERNAME` must be set
   * `ATFILE_DEVEL_DIST_PASSWORD` must be set
   * No tests should return an **Error** (**Warning** is acceptable)
   * Git commit must be <a href="https://git-scm.com/docs/git-tag">tagged</a>

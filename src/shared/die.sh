@@ -3,12 +3,14 @@
 function atfile.die() {
     message="$1"
 
+    # shellcheck disable=SC2154
     if [[ $_output_json != 1 ]]; then
         atfile.say.die "$message"
     else
         echo -e "{ \"error\": \"$1\" }" | jq
     fi
     
+    # shellcheck disable=SC2154
     [[ $_is_sourced == 0 ]] && exit 255
 }
 
@@ -50,5 +52,5 @@ function atfile.die.xrpc_error() {
 
 function atfile.die.unknown_command() {
     command="$1"
-    atfile.die "Unknown command '$1'"
+    atfile.die "Unknown command '$command'"
 }

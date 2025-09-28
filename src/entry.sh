@@ -291,6 +291,7 @@ if [[ $_is_sourced == 0 ]]; then
     previous_command="$_command"
 
     case "$_command" in
+        "release") _command="build" ;;
         "open"|"print"|"c") _command="cat" ;;
         "rm") _command="delete" ;;
         "download"|"f"|"d") _command="fetch" ;;
@@ -299,14 +300,13 @@ if [[ $_is_sourced == 0 ]]; then
         "--help"|"-h") _command="help" ;;
         "get"|"i") _command="info" ;;
         "ls") _command="list" ;;
-        "build") _command="release" ;;
         "did") _command="resolve" ;;
         "sb") _command="something-broke" ;;
         "js") _command="stream" ;;
         "ul"|"u") _command="upload" ;;
+        "--update"|"-U") _command="update" ;;
         "ub") _command="upload-blob" ;;
         "uc") _command="upload-crypt" ;;
-        "--update"|"-U") _command="update" ;;
         "get-url"|"b") _command="url" ;;
         "--version"|"-V") _command="version" ;;
     esac
