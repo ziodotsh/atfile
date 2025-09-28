@@ -42,7 +42,7 @@ function atfile.install() {
     esac
 
     if [[ $# -gt 0 ]]; then
-        atfile.say.debug "Overriden variables\n↳ Path: $override_path\n↳ Version: $override_version\n↳ DID: $override_did"
+        atfile.say.debug "Overridden variables\n↳ Path: $override_path\n↳ Version: $override_version\n↳ DID: $override_did"
     fi
 
     atfile.say.debug "Setting up..."
