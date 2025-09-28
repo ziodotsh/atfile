@@ -94,9 +94,10 @@ function atfile.install() {
 
     atfile.say.debug "Found latest version\n↳ Version: $found_version ($parsed_found_version)\n↳ Source: $source_did\n↳ Blob: $found_version_blob"
 
-    atfile.say.debug "Download '$blob_url'..."
+    atfile.say.debug "Downloading...\n↳ Source: $blob_url\n↳ Dest.:  ${install_dir}/$install_file"
 
     curl -s -o "${install_dir}/$install_file" "$blob_url"
+    # shellcheck disable=SC2181
     [[ $? != 0 ]] && atfile.die "Unable to download"
 
     atfile.say.debug "Installing...\n↳ OS: $_os\n↳ Install: $install_dir/$install_file\n↳ Config: $conf_dir/$_file_envvar"
