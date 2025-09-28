@@ -26,7 +26,10 @@ function atfile.install() {
 
     case $_os in
         "linux-termux")
-            install_dir="$PREFIX/local/bin"
+            # NOTE: The correct path would be '$PREFIX/local/bin would be more correct,
+            #       however, '$PREFIX/local' doesn't exist by default on Termux (and thus,
+            #       not in $PATH), so we'll install it in '$PREFIX/bin' instead
+            install_dir="$PREFIX/bin"
             ;;
         "haiku")
             install_dir="/boot/system/non-packaged/bin"
