@@ -25,6 +25,9 @@ function atfile.install() {
     fi
 
     case $_os in
+        "linux-termux")
+            install_dir="$PREFIX/local/bin"
+            ;;
         "haiku")
             install_dir="/boot/system/non-packaged/bin"
             ;;
@@ -45,6 +48,7 @@ function atfile.install() {
     atfile.say.debug "Setting up..."
 
     [[ -n "$override_path" ]] && install_dir="$override_path"
+    mkdir -p "$install_dir"
     mkdir -p "$conf_dir"
     # shellcheck disable=SC2154
     touch "$conf_dir/$_file_envvar"
