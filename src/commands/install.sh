@@ -26,7 +26,7 @@ function atfile.install() {
 
     case $_os in
         "linux-termux")
-            # NOTE: The correct path would be '$PREFIX/local/bin would be more correct,
+            # NOTE: The correct path of '$PREFIX/local/bin' would be more correct,
             #       however, '$PREFIX/local' doesn't exist by default on Termux (and thus,
             #       not in $PATH), so we'll install it in '$PREFIX/bin' instead
             install_dir="$PREFIX/bin"

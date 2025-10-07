@@ -121,7 +121,7 @@ Various build directives can be set in files to control various aspects of the d
 
 ### Meta
 
-Various meta variables can be set to be available in the final compiled build (usually found in `help`). These are found in `atfile.sh` under `# Meta`. These variables are as follows:
+Various meta variables can be set to be available in the final compiled build (usually found in `help`). These are found in `atfile.sh` under `# Meta`. These are as follows:
 
 * `author` <em>&lt;string&gt;</em><br />Copyright author
 * `did` <em>&lt;did&gt;</em><br />DID of copyright author. Also used as the source for published builds, unless `ATFILE_DEVEL_DIST_USERNAME` is set (see **🏗️ Building ➔ Environment variables**)
