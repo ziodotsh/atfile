@@ -17,6 +17,9 @@ _command="$1"
 _command_args=("${@:2}")
 _os="$(atfile.util.get_os)"
 _os_supported=0
+_hook_post_start_path="$(atfile.util.get_envvar "${_envvar_prefix}_HOOK_POST_START_PATH")"
+_hook_pre_exit_path="$(atfile.util.get_envvar "${_envvar_prefix}_HOOK_PRE_EXIT_PATH")"
+_hook_pre_start_path="$(atfile.util.get_envvar "${_envvar_prefix}_HOOK_PRE_START_PATH")"
 _is_piped=0
 _is_sourced=0
 _meta_author="{:meta_author:}"
@@ -29,6 +32,7 @@ _version="{:version:}"
 ## "Hello, world!"
 
 atfile.say.debug "Reticulating splines..."
+atfile.util.source_hook "$_hook_pre_start_path"
 
 ## Paths
 
@@ -108,6 +112,8 @@ fi
 
 if [[ $_is_piped == 1 ]] ||\
    [[ "$1" == "install" ]]; then
+    atfile.util.source_hook "$_hook_post_start_path"
+
     if [[ "$1" == "install" ]]; then
         atfile.install "$2" "$3" "$4"
         install_exit="$?"
@@ -116,7 +122,9 @@ if [[ $_is_piped == 1 ]] ||\
         install_exit="$?"
     fi
 
+    atfile.util.source_hook "$_hook_pre_exit_path"
     atfile.util.print_seconds_since_start_debug
+
     exit $install_exit
 fi
 
@@ -328,9 +336,12 @@ fi
 
 ## Invoke
 
+atfile.util.source_hook "$_hook_post_start_path"
+
 if [[ $_is_sourced == 0 ]]; then
     atfile.auth
     atfile.invoke "$_command" "${_command_args[@]}"
 fi
 
+atfile.util.source_hook "$_hook_pre_exit_path"
 atfile.util.print_seconds_since_start_debug

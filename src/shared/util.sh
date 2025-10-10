@@ -1124,6 +1124,16 @@ function atfile.util.resolve_identity() {
     fi
 }
 
+function atfile.util.source_hook() {
+    file="$1"
+
+    if [[ -f "$file" ]]; then
+        atfile.say.debug "Sourcing: $file"
+        # shellcheck disable=SC1090
+        . "$file"
+    fi
+}
+
 function atfile.util.write_cache() {
     file="$1"
     file_path="$_path_cache/$1"
