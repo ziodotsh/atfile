@@ -15,6 +15,7 @@ dependencies:
   nixpkgs:
     - bash
     - curl
+    - file
     - git
     - jq
     - shellcheck
