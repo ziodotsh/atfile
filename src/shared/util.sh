@@ -1127,10 +1127,14 @@ function atfile.util.resolve_identity() {
 function atfile.util.source_hook() {
     file="$1"
 
-    if [[ -f "$file" ]]; then
+    if [[ -n "$file" ]]; then
         atfile.say.debug "Sourcing: $file"
-        # shellcheck disable=SC1090
-        . "$file"
+        if [[ -f "$file" ]]; then
+            # shellcheck disable=SC1090
+            . "$file"
+        else
+            atfile.die "Unable to source '$file'"
+        fi
     fi
 }
 
