@@ -14,14 +14,14 @@ clone:
 dependencies:
   nixpkgs:
     - bash
+    - coreutils
     - curl
     - file
     - git
-    - grep
+    - gnugrep
+    - gnused
     - hostname
     - jq
-    - md5sum
-    - sed
     - shellcheck
 
 environment:
