@@ -144,6 +144,11 @@ function atfile.build() {
 
     test_total_count=$(( test_error_count + test_info_count + test_style_count + test_warning_count ))
 
+    if [[ $test_error_count -gt 0 ]]; then
+        atfile.die "❌ Build failed ($test_error_count errors detected)"
+        rm -f "$dist_path"
+    fi
+
     echo -e "---\n✅ Built: $_version
 ↳ Path: ./$dist_path_relative
  ↳ Check: $checksum
@@ -161,10 +166,6 @@ function atfile.build() {
 
     # shellcheck disable=SC2154
     if [[ $_devel_enable_publish == 1 ]]; then
-        if [[ $test_error_count -gt 0 ]]; then
-            atfile.die "Unable to publish ($test_error_count errors detected)"
-        fi
-
         atfile.say "---\n✨ Updating..."
         atfile.auth "$_devel_dist_username" "$_devel_dist_password"
         [[ $_version == *"+"* ]] && atfile.die "Cannot publish a Git version ($_version)"
