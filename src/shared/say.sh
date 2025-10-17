@@ -10,6 +10,12 @@ function atfile.say() {
     
     prefix_length=0
 
+    if [[ -n $_ci ]]; then
+        unset color_prefix
+        unset color_message
+        unset color_prefix_message
+    fi
+
     # shellcheck disable=SC2154
     if [[ $_os == "haiku" ]]; then
         message="${message//↳/>}"
