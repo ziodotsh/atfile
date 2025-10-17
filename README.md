@@ -67,6 +67,7 @@ This will automatically fetch the latest version of ATFile and install it in an 
 * __Linux/*BSD/Solaris/SerenityOS__
   * Install: `$HOME/.local/bin/atfile`
     * As `sudo`/`root`: `/usr/local/bin/atfile`
+    * On **Termux:** `/usr/bin/atfile`
   * Config: `$HOME/.config/atfile.env`, **or** `$XDG_CONFIG_HOME/atfile.env` (if set)
 * **macOS**
   * Install: `$HOME/.local/bin/atfile`
