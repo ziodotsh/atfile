@@ -34,7 +34,7 @@ function atfile.build() {
     atfile.util.check_prog "grep"
     atfile.util.check_prog "hostname"
     atfile.util.check_prog "md5sum"
-    atfile.util.check_rpgo "sed"
+    atfile.util.check_prog "sed"
     atfile.util.check_prog "shellcheck"
 
     id="$(atfile.util.get_random 13)"
