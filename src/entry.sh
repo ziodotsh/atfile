@@ -71,10 +71,6 @@ _path_blobs_tmp="$_path_blobs_tmp/at-blobs"
 _path_cache="$_path_cache/atfile"
 _path_envvar="$(atfile.util.get_envvar "${_envvar_prefix}_PATH_CONF" "$_path_envvar/$_file_envvar")" 
 
-## CI detection
-
-atfile.say.debug "Detected CI: $_ci"
-
 ## OS detection
 
 atfile.say.debug "Detected OS: $_os"
@@ -88,6 +84,10 @@ if [[ $_os != "unknown-"* ]] &&\
    [[ $_os == "macos" ]] ; then
     _os_supported=1
 fi
+
+## CI detection
+
+[[ -n "$_ci" ]] && atfile.say.debug "Detected CI: $_ci"
 
 ## Pipe detection
 

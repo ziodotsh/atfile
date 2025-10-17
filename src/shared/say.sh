@@ -48,8 +48,11 @@ function atfile.say() {
     fi
     
     message="${message//\\n/\\n$(atfile.util.repeat_char " " "$prefix_length")}"
+    message="${prefix}${color_message}$message\033[0m${suffix}"
+
+    [[ -n "$_ci" ]] && message="${message//\\033[0m/}"
     
-    echo -n -e "${prefix}${color_message}$message\033[0m${suffix}"
+    echo -n -e "$message"
 }
 
 function atfile.say.debug() {
@@ -58,6 +61,7 @@ function atfile.say.debug() {
 
     [[ -z "$prefix" ]] && prefix="Debug"
 
+    # shellcheck disable=SC2154
     if [[ $_debug == 1 ]]; then
         atfile.say "$message" "$prefix" 35 >&2
     fi
