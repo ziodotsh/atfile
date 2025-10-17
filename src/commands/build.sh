@@ -145,8 +145,10 @@ function atfile.build() {
     test_total_count=$(( test_error_count + test_info_count + test_style_count + test_warning_count ))
 
     if [[ $test_error_count -gt 0 ]]; then
-        atfile.die "Unable to build ($test_error_count errors detected)"
+        atfile.say "---"
+        atfile.say "⛔ Build failed" "" 31 31 1
         rm -f "$dist_path"
+        exit 255
     fi
 
     echo -e "---\n✅ Built: $_version
