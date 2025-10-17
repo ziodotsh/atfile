@@ -31,10 +31,10 @@ function atfile.auth() {
             # NOTE: Speeds things up a little if the command doesn't need actor resolving
             if [[ -z $_command ]] ||\
                [[ $_command == "ai" ]] ||\
+               [[ $_command == "build" ]] ||\
                [[ $_command == "handle" ]] ||\
                [[ $_command == "help" ]] ||\
                [[ $_command == "now" ]] ||\
-               [[ $_command == "release" ]] ||\
                [[ $_command == "resolve" ]] ||\
                [[ $_command == "scrape" ]] ||\
                [[ $_command == "something-broke" ]] ||\
