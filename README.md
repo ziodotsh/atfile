@@ -140,8 +140,7 @@ When submitting Pulls, **target the `dev` branch**: `main` is the current stable
 
 * **Paul Frazee** &mdash; [🦋 @pfrazee.com](https://bsky.app/profile/did:plc:ragtjsm2j2vknwkz3zp4oxrd)<br /><a href="https://bsky.app/profile/did:plc:ragtjsm2j2vknwkz3zp4oxrd/post/3l63zzvthqj2o">His kind words</a>
 * **Laurens Hof** &mdash; [🦋 @laurenshof.online](https://bsky.app/profile/did:plc:mdjhvva6vlrswsj26cftjttd)<br />Featuring ATFile on [The Fediverse Report](https://fediversereport.com): _["Last Week in the ATmosphere – Oct 2024 week 4"](https://fediversereport.com/last-week-in-the-atmosphere-oct-2024-week-4/)_
-* **Samir** &mdash; [🐙 @bdotsamir](https://github.com/bdotsamir)<br />Testing, and diagnosing problems with, support for macOS (`macos`)
-* **Astra** &mdash; [🦋 @astra.blue](https://bsky.app/profile/did:plc:ejy6lkhb72rxvkk57tnrmpjl)<br />[Various PRs](https://github.com/ziodotsh/atfile/pulls?q=is%3Apr+author%3Aastravexton); testing, and diagnosing problems with, support for MinGW (`linux-mingw`) and Termux (`linux-termux`)
+* All contributors on [Tangled](https://tangled.org/@zio.sh/atfile/pulls) and [GitHub](https://github.com/ziodotsh/atfile/pulls)
 * _(Forgot about you? [You know what to do](https://tangled.sh/@zio.sh/atfile/pulls/new))_
 
 ---
@@ -152,4 +151,4 @@ When submitting Pulls, **target the `dev` branch**: `main` is the current stable
 * **²** musl-powered distros do not use GNU/glibc packages, and have problems currently
     * Known musl distros: Alpine, Chimera, Dragora, Gentoo (musl), Morpheus, OpenWrt, postmarketOS, Sabotage, Void
     * Bypassing OS detection (see ¹) will cause unintended behavior
-* **³** As long as you have Bash installed, running from another shell will not be problematic ([`#!/usr/bin/env bash`](https://tangled.sh/@zio.sh/atfile/blob/main/atfile-install.sh#L1) forces Bash)
+* **³** As long as you have Bash installed, running from another shell will not be problematic ([`#!/usr/bin/env bash`](https://tangled.sh/@zio.sh/atfile/blob/main/atfile.sh#L1) forces Bash)
