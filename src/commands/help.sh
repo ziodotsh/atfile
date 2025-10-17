@@ -163,11 +163,11 @@ function atfile.help() {
     ${_envvar_prefix}_DISABLE_UPDATE_COMMAND <bool¹> (default: $_disable_update_command_default)
         Disable \`update\` command\n
     ${_envvar_prefix}_HOOK_PRE_START_PATH <path>
-        ...
+        Path of script to execute on startup
     ${_envvar_prefix}_HOOK_POST_START_PATH <path>
-        ...
+        Path of script to execute before command invocation
     ${_envvar_prefix}_HOOK_PRE_EXIT_PATH <path>
-        ...\n
+        Path of script to execute before exit\n
     ${_envvar_prefix}_DEBUG <bool¹> (default: 0)
         Print debug outputs
         ⚠️  When output is JSON (${_envvar_prefix}_OUTPUT_JSON=1), sets to 0\n
