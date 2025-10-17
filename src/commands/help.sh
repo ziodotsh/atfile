@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-function atfile.help() {{}
+function atfile.help() {
     # shellcheck disable=SC2154
     if [[ $_output_json == 1 ]]; then
         atfile.die "Command not available as JSON"
