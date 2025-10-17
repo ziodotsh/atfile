@@ -199,6 +199,10 @@ function atfile.util.get_cdn_uri() {
     echo "$cdn_uri"
 }
 
+function atfile.util.get_ci() {
+    [[ -d "/tangled/workspace" ]] && echo "tangled"
+}
+
 # TODO: Support BusyBox's shit `date` command
 #       `date -u +"$format" -s "1996-08-11 01:23:34"`
 function atfile.util.get_date() {

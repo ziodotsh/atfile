@@ -13,6 +13,7 @@ _force_os="$(atfile.util.get_envvar "${_envvar_prefix}_FORCE_OS")" # 3
 
 ### Combination
 
+_ci="$(atfile.util.get_ci)"
 _command="$1"
 _command_args=("${@:2}")
 _os="$(atfile.util.get_os)"
@@ -69,6 +70,10 @@ fi
 _path_blobs_tmp="$_path_blobs_tmp/at-blobs"
 _path_cache="$_path_cache/atfile"
 _path_envvar="$(atfile.util.get_envvar "${_envvar_prefix}_PATH_CONF" "$_path_envvar/$_file_envvar")" 
+
+## CI detection
+
+atfile.say.debug "Detected CI: $_ci"
 
 ## OS detection
 
