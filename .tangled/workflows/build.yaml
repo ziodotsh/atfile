@@ -31,7 +31,9 @@ environment:
   ATFILE_DEVEL_ENABLE_PUBLISH: "0"
 
 steps:
-  - name: "Debug"
+  - name: "ATFile: List files for @zio.sh"
+    command: "./atfile.sh ls zio.sh"
+  - name: "ATFile: Print debug output"
     command: "./atfile.sh something-broke"
-  - name: "Build"
+  - name: "ATFile: Build"
     command: "./atfile.sh build"
