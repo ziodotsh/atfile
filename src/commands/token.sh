@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-function atfile.invoke.token() {
+function atfile.token() {
     atfile.xrpc.pds.jwt
 }

@@ -139,10 +139,10 @@ function atfile.invoke() {
                 atfile.stream "${args[0]}" "${args[1]}" "${args[2]}" "${args[3]}"
                 ;;
             "token")
-                atfile.invoke.token
+                atfile.token
                 ;;
             "toggle-mime")
-                atfile.invoke.toggle_desktop
+                atfile.toggle_desktop
                 ;;
             "upload")
                 atfile.util.check_prog_optional_metadata
