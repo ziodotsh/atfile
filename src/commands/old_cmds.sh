@@ -357,7 +357,7 @@ function atfile.invoke.handle_atfile() {
 
                     download_success=1
                     # shellcheck disable=SC2154
-                    tmp_path="$_path_blobs_tmp/$blob_cid$(atfile.util.get_cache_path "$blob_cid")"
+                    tmp_path="$_path_blobs_tmp/$blob_cid"
 
                     if ! [[ -f "$tmp_path" ]]; then
                         atfile.say.debug "Downloading '$blob_cid'..."
