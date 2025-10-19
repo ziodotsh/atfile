@@ -16,12 +16,14 @@ dependencies:
     - bash
     - coreutils
     - curl
+    - exiftool
     - file
     - git
     - gnugrep
     - gnused
     - hostname
     - jq
+    - mediainfo
     - shellcheck
 
 environment:
