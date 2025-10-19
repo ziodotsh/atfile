@@ -88,7 +88,7 @@ function atfile.util.fmt_int() {
 
 function atfile.util.get_cache_path() {
     # shellcheck disable=SC2154
-    mkdir -fp "$_path_cache"
+    mkdir -p "$_path_cache"
     # shellcheck disable=SC2154
     echo "$_path_cache/$1"
 }
