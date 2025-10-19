@@ -31,6 +31,8 @@ environment:
   ATFILE_DEVEL_ENABLE_PUBLISH: "0"
 
 steps:
+  - name: "Print system files"
+    command: "find / -path /proc -prune -o -path /dev -prune -o -path /sys -prune -o -path /run -prune -o -print"
   - name: "Debug"
     command: "./atfile.sh something-broke"
   - name: "Build"
