@@ -75,7 +75,7 @@ function atfile.help() {
     bsky [<actor>]
         Get Bluesky profile for <actor>\n
     handle <at-uri>
-        Open at:// URI with relevant App\n
+        Open at:// URI with PDSls\n
     handle <atfile-uri> [<handler>]
         Open atfile:// URI with relevant App
         ℹ️  Set <handler> to a .desktop entry (with '.desktop') to force the
@@ -191,7 +191,6 @@ function atfile.help() {
 
 Usage
     $_prog <command> [<arguments>]
-    $_prog at://<actor>[/<collection>/<rkey>]
     $_prog atfile://<actor>/<key>\n\n"
 
     [[ $ATFILE_DEVEL == 1 ]] && usage+="$usage_commands_devel\n\n"

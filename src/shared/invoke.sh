@@ -68,24 +68,16 @@ function atfile.invoke() {
                 uri="${args[0]}"
                 protocol="$(atfile.util.get_uri_segment "$uri" protocol)"
 
-                if [[ $protocol == "https" ]]; then
-                    http_uri="$uri"
-                    uri="$(atfile.util.map_http_to_at "$http_uri")"
-
-                    atfile.say.debug "Mapping '$http_uri'..."
-                    
-                    if [[ -z "$uri" ]]; then
-                        atfile.die "Unable to map '$http_uri' to at:// URI"
-                    else
-                        protocol="$(atfile.util.get_uri_segment "$uri" protocol)"
-                    fi
-                fi
-
                 atfile.say.debug "Handling protocol '$protocol://'..."
 
                 case $protocol in
-                    "at") atfile.invoke.handle_aturi "$uri" ;;
-                    "atfile") atfile.invoke.handle_atfile "$uri" "${args[1]}" ;;
+                    "at")
+                        atfile.say.debug "Launching '$uri' in PDSls..."
+                        atfile.util.launch_uri "https://pdsls.dev/$uri"
+                        ;;
+                    "atfile")
+                        atfile.handle "$uri" "${args[1]}"
+                        ;;
                 esac
                 ;;
             "help")
