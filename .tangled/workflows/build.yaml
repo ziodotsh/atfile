@@ -28,5 +28,7 @@ environment:
   ATFILE_DEVEL_ENABLE_PUBLISH: "0"
 
 steps:
+  - name: "Debug"
+    command: "./atfile.sh something-broke"
   - name: "Build"
     command: "./atfile.sh build"

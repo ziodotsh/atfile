@@ -41,6 +41,8 @@ atfile help
     * [MediaInfo (`mediainfo`)](https://mediaarea.net/en/MediaInfo) _(optional: set `ATFILE_DISABLE_NI_MEDIAINFO=1` to ignore)_
     * `md5sum` _(optional: set `ATFILE_DISABLE_NI_MD5SUM=1` to ignore)_
         * Both GNU and BusyBox versions supported
+    * `sed`
+        * Only GNU version supported
     * [`websocat`](https://github.com/vi/websocat) _(optional: needed for `stream`)_
 * **ATProto account**
     * Limit the amount of files you upload, and avoid copyrighted files, if using a managed PDS<br /><em>(e.g. [Blacksky](https://pds.blacksky.app), [Bluesky](https://bsky.social), [Spark](https://pds.sprk.so), [Tangled](https://tngl.sh), or any other independent PDS you don't own)</eM>

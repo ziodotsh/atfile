@@ -19,11 +19,13 @@ function atfile.something_broke() {
     function atfile.something_broke.print_prog_version() {
         prog="$1"
         version_arg="$2"
+        head="1"
 
         [[ -z "$version_arg" ]] && version_arg="--version"
 
         if [ -x "$(command -v "$prog")" ]; then
-            eval "$prog $version_arg 2>&1"
+            version_output="$(eval "$prog $version_arg 2>&1")"
+            echo -e "$version_output" | head -n $head | sed "s/$prog //g"
         else
             echo "$prog_not_installed_placeholder"
         fi
@@ -34,30 +36,56 @@ function atfile.something_broke() {
         atfile.die "Command not available as JSON"
     fi
     
+    unset cut_version
     unset md5sum_version
+    unset sed_version
     finger_record="$(atfile.util.get_finger_record 1)"
+    git_version="$(atfile.something_broke.print_prog_version "git")"
+    hostname_version="$(atfile.something_broke.print_prog_version "hostname")"
     mediainfo_version="$(atfile.something_broke.print_prog_version "mediainfo")"
 
     # shellcheck disable=SC2154
     if [[ $_os == "linux-musl" ]]; then
         md5sum_version="$(atfile.something_broke.print_prog_version "md5sum" "--help")"
+        # TODO: cut, sed
     else
+        cut_version="$(atfile.something_broke.print_prog_version "cut")"
         md5sum_version="$(atfile.something_broke.print_prog_version "md5sum")"
+        sed_version="$(atfile.something_broke.print_prog_version "sed")"
+    fi
+
+    if [[ "$cut_version" != "$prog_not_installed_placeholder" ]]; then
+        if [[ "$cut_version" == *GNU* ]]; then
+            cut_version="$(echo "$cut_version" | cut -d " " -f 3) (GNU)"
+        else
+            cut_version="(Unsupported)"
+        fi
+    fi
+
+    if [[ "$git_version" != "$prog_not_installed_placeholder" ]]; then
+        git_version="$(echo "$git_version" | cut -d " " -f 2)"
     fi
     
     if [[ "$md5sum_version" != "$prog_not_installed_placeholder" ]]; then
-        md5sum_version="$(echo "$md5sum_version" | head -n 1)"
         if [[ "$md5sum_version" == *GNU* ]]; then
-            md5sum_version="$(echo "$md5sum_version" | cut -d " " -f 4) (GNU)"
+            md5sum_version="$(echo "$md5sum_version" | cut -d " " -f 3) (GNU)"
         elif [[ "$md5sum_version" == *BusyBox* ]]; then
-            md5sum_version="$(echo "$md5sum_version" | cut -d " " -f 2 | cut -d "v" -f 2) (BusyBox)"
+            md5sum_version="$(echo "$md5sum_version" | cut -d " " -f 1 | cut -d "v" -f 2) (BusyBox)"
         else
-            md5sum_version="(?)"
+            md5sum_version="(Unsupported)"
         fi
     fi
     
     if [[ "$mediainfo_version" != "$prog_not_installed_placeholder" ]]; then
         mediainfo_version="$(echo "$mediainfo_version" | grep "MediaInfoLib" | cut -d "v" -f 2)"
+    fi
+
+    if [[ "$sed_version" != "$prog_not_installed_placeholder" ]]; then
+        if [[ "$sed_version" == *GNU* ]]; then
+            sed_version="$(echo "$sed_version" | cut -d " " -f 3) (GNU)"
+        else
+            sed_version="(Unsupported)"
+        fi
     fi
     
     debug_output="ATFile
@@ -118,11 +146,15 @@ Environment
 ↳ Path: $PATH
 Deps
 ↳ Bash: $BASH_VERSION
-↳ curl: $(atfile.something_broke.print_prog_version "curl" "--version" | head -n 1 | cut -d " " -f 2)
+↳ curl: $(atfile.something_broke.print_prog_version "curl" "--version" | cut -d " " -f 1)
+↳ cut: $cut_version
 ↳ ExifTool: $(atfile.something_broke.print_prog_version "exiftool" "-ver")
+↳ Git: $git_version
+↳ hostname: $hostname_version
 ↳ jq: $(atfile.something_broke.print_prog_version "jq" | sed -e "s|jq-||g")
 ↳ md5sum: $md5sum_version
 ↳ MediaInfo: $mediainfo_version
+↳ sed: $sed_version
 Misc.
 ↳ Checksum: $([[ "$md5sum_version" != "$prog_not_installed_placeholder" ]] && md5sum "$_prog_path" || echo "(?)")
 ↳ Dimensions: $(atfile.util.get_term_cols) Cols / $(atfile.util.get_term_rows) Rows
