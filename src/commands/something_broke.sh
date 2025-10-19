@@ -47,7 +47,7 @@ function atfile.something_broke() {
     finger_record="$(atfile.util.get_finger_record 1)"
     git_version="$(atfile.something_broke.print_prog_version "git")"
     hostname_version="$(atfile.something_broke.print_prog_version "hostname")"
-    mediainfo_version="$(atfile.something_broke.print_prog_version "mediainfo" 0)"
+    mediainfo_version="$(atfile.something_broke.print_prog_version "mediainfo" "--version" 0)"
 
     # shellcheck disable=SC2154
     if [[ $_os == "linux-musl" ]]; then
