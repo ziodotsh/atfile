@@ -70,6 +70,12 @@ function atfile.something_broke() {
     if [[ "$git_version" != "$prog_not_installed_placeholder" ]]; then
         git_version="$(echo "$git_version" | cut -d " " -f 2)"
     fi
+
+    if [[ "$hostname_version" != "$prog_not_installed_placeholder" ]]; then
+        if [[ "$hostname_version" == *net-tools* ]]; then
+                hostname_version="$(echo "$hostname_version" | cut -d " " -f 2) (net-tools)"
+        fi
+    fi
     
     if [[ "$md5sum_version" != "$prog_not_installed_placeholder" ]]; then
         if [[ "$md5sum_version" == *GNU* ]]; then
