@@ -58,7 +58,7 @@ function atfile.build() {
     # shellcheck disable=SC2154
     dist_dir="$_prog_dir/bin"
     dist_path="$dist_dir/$dist_file"
-    dist_path_relative="$(realpath --relative-to="$(pwd)" "$dist_path")"
+    dist_path_relative="$(realpath --relative-to="$(pwd)" "$dist_path" 2>/dev/null)"
     parsed_version="$(atfile.util.parse_version "$_version")"
     version_record_id="atfile-$parsed_version"
 
@@ -67,6 +67,12 @@ function atfile.build() {
     test_style_count=0
     test_warning_count=0
     test_ignore_count=0
+
+    if [[ -z "$dist_path_relative" ]]; then
+        dist_path_relative="$dist_path"
+    else
+        dist_path_relative="./$dist_path_relative"
+    fi
 
     atfile.say "$(atfile.build.pad_emoji "⚒️" " ") Building..."
 
@@ -173,7 +179,7 @@ $end_message_suffix_string" "" 31 31 1
         exit 255
     else
         echo -e "$(atfile.build.pad_emoji "✅" "") Built: $_version
-↳ Path: ./$dist_path_relative
+↳ Path: $dist_path_relative
  ↳ Check: $checksum
  ↳ Size: $(atfile.util.get_file_size_pretty "$(stat -c %s "$dist_path")")
  ↳ Lines: $(atfile.util.fmt_int "$(wc -l < "$dist_path")")
