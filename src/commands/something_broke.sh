@@ -144,6 +144,7 @@ Environment
 ↳ OS: $_os ($(echo "$finger_record" | jq -r ".os"))
 ↳ Shell: $SHELL
 ↳ Path: $PATH
+↳ CI: $_ci
 Deps
 ↳ Bash: $BASH_VERSION
 ↳ curl: $(atfile.something_broke.print_prog_version "curl" "--version" | cut -d " " -f 1)
