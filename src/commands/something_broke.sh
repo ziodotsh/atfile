@@ -19,13 +19,18 @@ function atfile.something_broke() {
     function atfile.something_broke.print_prog_version() {
         prog="$1"
         version_arg="$2"
-        head="1"
-
+        head="$3"
+        
+        [[ -z "$head" ]] && head="1"
         [[ -z "$version_arg" ]] && version_arg="--version"
 
         if [ -x "$(command -v "$prog")" ]; then
             version_output="$(eval "$prog $version_arg 2>&1")"
-            echo -e "$version_output" | head -n $head | sed "s/$prog //g"
+            if [[ $head == 0 ]]; then
+                echo -e "$version_output"
+            else
+                echo -e "$version_output" | head -n "$head" | sed "s/$prog //g"
+            fi
         else
             echo "$prog_not_installed_placeholder"
         fi
