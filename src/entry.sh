@@ -277,13 +277,6 @@ if [[ $_os_supported == 0 ]]; then
     fi
 fi
 
-## Directory creation
-
-if [[ $_disable_setup_dir_creation == 0 ]]; then
-    atfile.util.create_dir "$_path_cache"
-    atfile.util.create_dir "$_path_blobs_tmp"
-fi
-
 ## Program detection
 
 _prog_hint_jq="https://jqlang.github.io/jq"

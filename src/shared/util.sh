@@ -183,6 +183,8 @@ function atfile.util.get_app_url_for_at_uri() {
 
 function atfile.util.get_cache_path() {
     # shellcheck disable=SC2154
+    mkdir -fp "$_path_cache"
+    # shellcheck disable=SC2154
     echo "$_path_cache/$1"
 }
 
