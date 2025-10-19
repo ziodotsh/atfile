@@ -18,7 +18,7 @@ dependencies:
     - curl
     - exiftool
     - file
-    - find
+    - findutils
     - git
     - gnugrep
     - gnused
