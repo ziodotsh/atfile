@@ -12,6 +12,7 @@ function atfile.util.build_out_filename() {
     key="$1"
     name="$2"
 
+    # shellcheck disable=SC2154
     echo "$_fmt_out_file" | sed -e "s|\[name\]|$name|g" -e "s|\[key\]|$key|g"
 }
 

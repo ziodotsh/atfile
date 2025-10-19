@@ -29,6 +29,7 @@ function atfile.install() {
             # NOTE: The correct path of '$PREFIX/local/bin' would be more correct,
             #       however, '$PREFIX/local' doesn't exist by default on Termux (and thus,
             #       not in $PATH), so we'll install it in '$PREFIX/bin' instead
+            # shellcheck disable=SC2153
             install_dir="$PREFIX/bin"
             ;;
         "haiku")
@@ -116,6 +117,7 @@ function atfile.install() {
         atfile.say.debug "Creating config file..."
     
         echo -e "ATFILE_USERNAME=<your-username>\nATFILE_PASSWORD=<your-password>" > "$conf_dir/$_file_envvar"
+        # shellcheck disable=SC2320
         [[ $? != 0 ]] && die "Unable to create config file ($conf_dir/$_file_envvar)"
     fi
 

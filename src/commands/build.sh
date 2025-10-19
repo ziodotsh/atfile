@@ -30,6 +30,18 @@ function atfile.build() {
         sed -s "s|{:$key:}|$value|g" <<< "$string"
     }
 
+    function atfile.build.pad_emoji() {
+        emoji="$1"
+        padding="$2"
+
+        # shellcheck disable=SC2154
+        if [[ $_ci == "tangled" ]]; then
+            atfile.say.inline "$emoji"
+        else
+            atfile.say.inline "$emoji$padding"
+        fi
+    }
+
     atfile.util.check_prog "git"
     atfile.util.check_prog "grep"
     atfile.util.check_prog "hostname"
@@ -56,7 +68,7 @@ function atfile.build() {
     test_warning_count=0
     test_ignore_count=0
 
-    atfile.say "⚒️  Building..."
+    atfile.say "$(atfile.build.pad_emoji "⚒️" " ") Building..."
 
     echo "↳ Creating '$dist_file'..."
     mkdir -p "$dist_dir"
@@ -133,10 +145,10 @@ function atfile.build() {
         message="$(echo "$item" | jq -r '.message')"
 
         case "$level" in
-            "error") level="🛑 Error"; (( test_error_count++ )) ;;
-            "info") level="ℹ️  Info"; (( test_info_count++ )) ;;
-            "style") level="🎨 Style"; (( test_style_count++ )) ;;
-            "warning") level="⚠️  Warning"; (( test_warning_count++ )) ;;
+            "error") level="$(atfile.build.pad_emoji "🛑" "") Error"; (( test_error_count++ )) ;;
+            "info") level="$(atfile.build.pad_emoji "ℹ️" " ") Info"; (( test_info_count++ )) ;;
+            "style") level="$(atfile.build.pad_emoji "🎨" "") Style"; (( test_style_count++ )) ;;
+            "warning") level="$(atfile.build.pad_emoji "⚠️" " ") Warning"; (( test_warning_count++ )) ;;
         esac
 
         echo "↳ $level ($line:$col): [SC$code] $message"
@@ -144,19 +156,7 @@ function atfile.build() {
 
     test_total_count=$(( test_error_count + test_info_count + test_style_count + test_warning_count ))
 
-    if [[ $test_error_count -gt 0 ]]; then
-        atfile.say "---"
-        atfile.say "⛔ Build failed" "" 31 31 1
-        rm -f "$dist_path"
-        exit 255
-    fi
-
-    echo -e "---\n✅ Built: $_version
-↳ Path: ./$dist_path_relative
- ↳ Check: $checksum
- ↳ Size: $(atfile.util.get_file_size_pretty "$(stat -c %s "$dist_path")")
- ↳ Lines: $(atfile.util.fmt_int "$(wc -l < "$dist_path")")
-↳ Issues: $(atfile.util.fmt_int "$test_total_count")
+    end_message_suffix_string="↳ Issues: $(atfile.util.fmt_int "$test_total_count")
  ↳ Error:   $(atfile.util.fmt_int "$test_error_count")
  ↳ Warning: $(atfile.util.fmt_int "$test_warning_count")
  ↳ Info:    $(atfile.util.fmt_int "$test_info_count")
@@ -164,11 +164,27 @@ function atfile.build() {
  ↳ Ignored: $(atfile.util.fmt_int "$test_ignore_count")
 ↳ ID: $id"
 
+    atfile.say "---"
+
+    if [[ $test_error_count -gt 0 ]]; then
+        atfile.say "$(atfile.build.pad_emoji "⛔" "") Failed: $_version
+$end_message_suffix_string" "" 31 31 1
+        rm -f "$dist_path"
+        exit 255
+    else
+        echo -e "$(atfile.build.pad_emoji "✅" "") Built: $_version
+↳ Path: ./$dist_path_relative
+ ↳ Check: $checksum
+ ↳ Size: $(atfile.util.get_file_size_pretty "$(stat -c %s "$dist_path")")
+ ↳ Lines: $(atfile.util.fmt_int "$(wc -l < "$dist_path")")
+$end_message_suffix_string"
+    fi
+
     chmod +x "$dist_path"
 
     # shellcheck disable=SC2154
     if [[ $_devel_enable_publish == 1 ]]; then
-        atfile.say "---\n✨ Updating..."
+        atfile.say "---\n$(atfile.build.pad_emoji "✨" "") Updating..."
         atfile.auth "$_devel_dist_username" "$_devel_dist_password"
         [[ $_version == *"+"* ]] && atfile.die "Cannot publish a Git version ($_version)"
 
@@ -185,7 +201,7 @@ function atfile.build() {
     \"checksum\": \"$checksum\"
 }"
 
-        atfile.say "---\n⬆️  Bumping..."
+        atfile.say "---\n$(atfile.build.pad_emoji "⬆️" " ") Bumping..."
         # shellcheck disable=SC2154
         atfile.record update "at://$_devel_dist_username/self.atfile.latest/self" "$latest_release_record"
     fi
