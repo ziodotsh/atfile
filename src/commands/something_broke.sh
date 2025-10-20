@@ -128,6 +128,7 @@ $(atfile.something_broke.print_envvar "ENABLE_UPDATE_GIT_CLOBBER" "$_enable_upda
 $(atfile.something_broke.print_envvar "ENDPOINT_APPVIEW" "$_endpoint_appview_default")
 $(atfile.something_broke.print_envvar "ENDPOINT_JETSTREAM" "$_endpoint_jetstream_default")
 $(atfile.something_broke.print_envvar "ENDPOINT_PDS")
+$(atfile.something_broke.print_envvar "ENDPOINT_PDSLS" "$_endpoint_pdsls_default")
 $(atfile.something_broke.print_envvar "ENDPOINT_PLC_DIRECTORY" "$_endpoint_plc_directory_default")
 $(atfile.something_broke.print_envvar "ENDPOINT_SOCIAL_APP" "$_endpoint_social_app_default")
 $(atfile.something_broke.print_envvar "FMT_BLOB_URL" "$_fmt_blob_url_default")
