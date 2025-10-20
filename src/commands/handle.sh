@@ -8,12 +8,12 @@ function atfile.handle() {
         handler="${1//.desktop/}"
         type="$2"
 
-        handlers=(
+        handlers_needing_tmp_file=(
             "app.drey.EarTag"
             "com.github.neithern.g4music"
         )
 
-        if [[ ${handlers[*]} =~ $handler ]]; then
+        if [[ ${handlers_needing_tmp_file[*]} =~ $handler ]]; then
             echo 1
         elif [[ $type == "text/"* ]]; then
             echo 1
