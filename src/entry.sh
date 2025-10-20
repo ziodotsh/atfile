@@ -165,6 +165,7 @@ _enable_update_git_clobber_default=0
 _endpoint_appview_default="https://api.bsky.app"
 #_endpoint_jetstream_default="wss://stream.zio.blue"
 _endpoint_jetstream_default="$(atfile.util.get_random_pbc_jetstream)"
+_endpoint_pdsls_default="https://pdsls.dev"
 _endpoint_plc_directory_default="https://plc.zio.blue"
 _endpoint_social_app_default="https://bsky.app"
 _fmt_blob_url_default="[server]/xrpc/com.atproto.sync.getBlob?did=[did]&cid=[cid]"
@@ -191,6 +192,7 @@ _enable_fingerprint="$(atfile.util.get_envvar "${_envvar_prefix}_ENABLE_FINGERPR
 _enable_update_git_clobber="$(atfile.util.get_envvar "${_envvar_prefix}_ENABLE_UPDATE_GIT_CLOBBER" "$_enable_update_git_clobber_default")"
 _endpoint_appview="$(atfile.util.get_envvar "${_envvar_prefix}_ENDPOINT_APPVIEW" "$_endpoint_appview_default")"
 _endpoint_jetstream="$(atfile.util.get_envvar "${_envvar_prefix}_ENDPOINT_JETSTREAM" "$_endpoint_jetstream_default")"
+_endpoint_pdsls="$(atfile.util.get_envvar "${_envvar_prefix}_ENDPOINT_PDSLS" "$_endpoint_pdsls_default")"
 _endpoint_plc_directory="$(atfile.util.get_envvar "${_envvar_prefix}_ENDPOINT_PLC_DIRECTORY" "$_endpoint_plc_directory_default")"
 _endpoint_social_app="$(atfile.util.get_envvar "${_envvar_prefix}_ENDPOINT_SOCIAL_APP" "$_endpoint_social_app_default")"
 _fmt_blob_url="$(atfile.util.get_envvar "${_envvar_prefix}_FMT_BLOB_URL" "$_fmt_blob_url_default")"
@@ -214,6 +216,7 @@ _nsid_prefix="blue.zio"
 _nsid_lock="${_nsid_prefix}.atfile.lock"
 _nsid_meta="${_nsid_prefix}.atfile.meta"
 _nsid_upload="${_nsid_prefix}.atfile.upload"
+_endpoint_pdsls_name="PDSls"
 _endpoint_social_app_name="Bluesky"
 
 # Setup

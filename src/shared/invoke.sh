@@ -72,8 +72,8 @@ function atfile.invoke() {
 
                 case $protocol in
                     "at")
-                        atfile.say.debug "Launching '$uri' in PDSls..."
-                        atfile.util.launch_uri "https://pdsls.dev/$uri"
+                        atfile.say.debug "Launching '$uri' in PDSls ($_endpoint_pdsls)..."
+                        atfile.util.launch_uri "$_endpoint_pdsls/$uri"
                         ;;
                     "atfile")
                         atfile.handle "$uri" "${args[1]}"

@@ -132,6 +132,8 @@ function atfile.help() {
         Endpoint of the PDS
         ℹ️  Your PDS is resolved from your username. Set to override it (or if
            resolving fails)
+    ${_envvar_prefix}_ENDPOINT_PDSLS <url> (default: ${_endpoint_pdsls_default})
+        Endpoint of PDSls
     ${_envvar_prefix}_ENDPOINT_PLC_DIRECTORY <url> (default: ${_endpoint_plc_directory_default}$([[ $_endpoint_plc_directory_default == *"zio.blue" ]] && echo "²"))
         Endpoint of the PLC directory
     ${_envvar_prefix}_ENDPOINT_SOCIAL_APP <url> (default: ${_endpoint_social_app_default})
