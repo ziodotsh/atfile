@@ -22,16 +22,19 @@ function atfile.handle() {
         fi
     }
 
+    # shellcheck disable=SC2154
     [[ $_output_json == 1 ]] && atfile.die "Command not available as JSON"
 
     actor="$(echo "$uri" | cut -d "/" -f 3)"
     key="$(echo "$uri" | cut -d "/" -f 4)"
 
+    # shellcheck disable=SC2154
     atfile.util.create_dir "$_path_blobs_tmp"
 
     if [[ -n "$actor" && -n "$key" ]]; then
         atfile.util.override_actor "$actor"
 
+        # shellcheck disable=SC2154
         atfile.say.debug "Getting record...\n↳ NSID: $_nsid_upload\n↳ Repo: $_username\n↳ Key: $key"
         record="$(com.atproto.repo.getRecord "$_username" "$_nsid_upload" "$key")"
         error="$(atfile.util.get_xrpc_error $? "$record")"
@@ -41,6 +44,7 @@ function atfile.handle() {
         blob_uri="$(atfile.util.build_blob_uri "$_username" "$blob_cid")"
         file_type="$(echo "$record" | jq -r '.value.file.mimeType')"
 
+        # shellcheck disable=SC2154
         if [[ $_os == "linux"* ]] && \
             [ -x "$(command -v xdg-mime)" ] && \
             [ -x "$(command -v xdg-open)" ] && \
